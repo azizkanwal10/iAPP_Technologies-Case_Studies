@@ -185,11 +185,34 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
 }
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.ihero h1{max-width:13ch}
+.company{padding:clamp(64px,8vw,104px) 0 0}
+.cohead{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:40px}
+@media (max-width:820px){.cohead{grid-template-columns:1fr}}
+.cohead h2{font-size:clamp(34px,4.6vw,60px);line-height:.98;letter-spacing:-.03em;font-weight:850;font-variation-settings:'wdth' 120;margin:0}
+.cohead p{margin:0;color:var(--muted);max-width:52ch}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;border-top:2px solid var(--ink);margin-bottom:48px}
+.facts div{padding:20px 20px 22px 0}
+.facts strong{display:block;font-size:clamp(32px,3.8vw,48px);line-height:1;font-weight:800;font-variation-settings:'wdth' 118;letter-spacing:-.03em}
+.facts span{color:var(--muted);font-size:16px}
+.svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.svc>div{background:var(--paper2);border:1px solid var(--rule);border-radius:20px;padding:24px}
+.svc h3{margin:0 0 8px;font-size:21px;line-height:1.25;font-weight:750}
+.svc p{margin:0;color:var(--muted);font-size:17px}
+.svc .ai{grid-column:1/-1;background:var(--ink);color:var(--paper);border-color:var(--ink);padding:clamp(24px,3.5vw,40px)}
+.svc .ai h3{font-size:clamp(26px,3vw,36px);font-weight:850;font-variation-settings:'wdth' 118;letter-spacing:-.02em}
+.svc .ai p{color:var(--paper);opacity:.85;max-width:64ch;font-size:18px}
+.svc .ai ul{display:flex;flex-wrap:wrap;gap:10px;list-style:none;padding:0;margin:20px 0 0}
+.svc .ai li{border:1.5px solid currentColor;border-radius:999px;padding:6px 14px;font-size:15px;font-weight:600;opacity:.95}
+.live{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.livebtn{display:inline-flex;align-items:center;min-height:46px;padding:10px 20px;border-radius:999px;background:#fff;color:#14171D;text-decoration:none;font-weight:650;font-size:16px}
+.livebtn:hover{opacity:.9}
+.seelive{font-size:18px;margin:0 0 12px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style></head><body><div style="--c:#0F6B5C"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
 <nav aria-label="Main"><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
 <div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6.5h12v9h-12z"/><path d="M13.5 9.5h4l3 3.2v2.8h-7"/><circle cx="5.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/></svg></div><div><b>Case study</b>Logistics SaaS, Web platform for many companies</div></div>
-<h1>Transwayz</h1><p class="lede">One system for trucking companies to run the whole life of a load, from customer order to driver pay.</p></div><figure class="mock web" style="margin:0"><div class="browser" role="img" aria-label="Illustration of the Transwayz dispatch dashboard"><div class="bdots"><i></i><i></i><i></i></div><div class="dash">
+<h1>Transwayz</h1><p class="lede">One system for trucking companies to run the whole life of a load, from customer order to driver pay.</p><div class="live"><a class="livebtn" href="https://transwayz.com/" target="_blank" rel="noopener">Visit transwayz.com</a></div></div><figure class="mock web" style="margin:0"><div class="browser" role="img" aria-label="Illustration of the Transwayz dispatch dashboard"><div class="bdots"><i></i><i></i><i></i></div><div class="dash">
 <div class="side"><b>Transwayz</b><span>Dashboard</span><span>Orders</span><span class="on">Trips</span><span>Accounting</span><span>IFTA</span><span>Reports</span></div>
 <div class="main"><div class="kp"><div><span>In transit</span><b>24</b></div><div><span>At pickup</span><b>9</b></div><div><span>Delivered today</span><b>31</b></div></div>
 <div class="cols"><div class="col"><span>Dispatched</span><div class="trip">Order 4812<br>Dallas to Tulsa</div><div class="trip">Order 4815<br>Reno to Boise</div></div>
@@ -203,10 +226,10 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
 <section class="sec"><h2>What made it hard</h2><div class="hard"><div><h3>Many companies, one system</h3><p>Every carrier shares the same platform, so data separation had to be built into the foundation: each company sees only its own customers, trips and money.</p></div><div><h3>Data from the truck itself</h3><p>Location and legal driving hours live in electronic logging devices from different vendors. Dispatch needed that data automatically, not re-typed.</p></div><div><h3>Money in, money out</h3><p>Customer invoices, driver pay, carrier pay, vendor bills and bank matching all had to close the loop on the same trip record.</p></div><div><h3>Compliance paperwork</h3><p>Fuel tax (IFTA) reporting needs miles by state or province, pulled from real trip and fuel data rather than estimates.</p></div></div></section>
 <section class="sec"><h2>What we built</h2><div class="feat"><div><h3>Orders</h3><p>Multi-stop pickups and deliveries, copy and reverse for return trips, recurring daily or weekly orders, drafts, and bulk import from spreadsheets.</p></div><div><h3>Trips and dispatch</h3><p>Assign a driver, truck and trailer or an outside carrier. Every stage is time-stamped, from planned to completed, with documents, photos and a printable trip sheet.</p></div><div><h3>Live map and driving hours</h3><p>Trucks on a live map, with each driver's remaining legal hours visible before a load is assigned.</p></div><div><h3>ELD connections</h3><p>Location and hours pulled in automatically from Samsara, Motive, Geotab, Omnitracs, PeopleNet, Isaac and Fleet Hunt.</p></div><div><h3>Accounting</h3><p>Invoices emailed as PDFs, driver settlements with bonuses and deductions, carrier pay, vendor bills, automatic paid status and bank reconciliation.</p></div><div><h3>IFTA and reporting</h3><p>Fuel-tax and mileage reports by state, plus sales, trip profitability, fuel economy and unpaid-invoice ageing with spreadsheet and PDF export.</p></div><div><h3>Access and audit</h3><p>Admin approval for new users, five role-based views, and an activity log that records who changed what and when.</p></div><div><h3>Marketing site and blog</h3><p>A public website and blog so the Transwayz team can attract and convert new carriers.</p></div></div></section>
 <section class="sec"><h2>How we worked</h2><ol class="steps"><li><div><h3>Map the load</h3><p>We modelled the real business flow first: order, trip, delivery, invoice, settlement, report. Every screen hangs off that chain.</p></div></li><li><div><h3>Design by role</h3><p>Admin, Dispatcher, Driver, Accounts and Reports each get only the screens they need, which keeps a dense product calm to use.</p></div></li><li><div><h3>Integrate the fleet</h3><p>ELD providers were connected one by one so trip status and driving hours flow in without manual entry.</p></div></li><li><div><h3>Close the books</h3><p>Accounting, reconciliation and IFTA were built on the same trip data, so operations and finance never disagree.</p></div></li></ol></section>
-<section class="sec" style="border-bottom:0"><h2>Where it landed</h2><div><p class="outcome">A single place where a carrier can take an order, dispatch it, watch it move, bill for it and pay everyone involved, with reports that show how the business is doing.</p><div style="height:28px"></div><ul class="chips" aria-label="Platforms"><li>Web app</li><li>Multi-tenant</li><li>PDF and spreadsheet export</li><li>Public website and blog</li></ul><div class="links"><a class="ghost" href="https://transwayz.com/" target="_blank" rel="noopener">Visit transwayz.com</a></div></div></section>
+<section class="sec" style="border-bottom:0"><h2>Where it landed</h2><div><p class="outcome">A single place where a carrier can take an order, dispatch it, watch it move, bill for it and pay everyone involved, with reports that show how the business is doing.</p><div style="height:28px"></div><ul class="chips" aria-label="Platforms"><li>Web app</li><li>Multi-tenant</li><li>PDF and spreadsheet export</li><li>Public website and blog</li></ul><h3 class="seelive">See it live</h3><div class="links"><a class="ghost" href="https://transwayz.com/" target="_blank" rel="noopener">Visit transwayz.com</a></div></div></section>
 <a class="next" href="/beatstars" style="--c:#2340C9"><span>Next case study</span><b>BeatStars</b></a>
 </main><section class="wrap cta"><h2>Have a product that needs to reach millions?</h2>
-<div><p>Tell us what you are building. We will come back with a plan, a team and a realistic timeline.</p><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></div></section><footer><div class="wrap"><span>© 2012–2026 iApp Technologies LLP</span>
-<span><a href="mailto:salesteam@iapptechnologiesllp.com">salesteam@iapptechnologiesllp.com</a></span>
-<span><a href="tel:+18333429966">+1 833 342 9966</a> &nbsp; <a href="tel:+917092000040">+91 70920 00040</a></span>
-<span>USA, India, Canada and Australia</span></div></footer></div></body></html>
+<div><p>Tell us what you are building. We will come back with a plan, a team and a realistic timeline.</p><div class="links"><a class="btn" href="mailto:aziz.k@iapptechnologiesllp.com">Email us</a><a class="ghost" href="tel:+917009592313">+91 70095 92313</a></div></div></section><footer><div class="wrap"><span>© 2012–2026 iApp Technologies LLP</span>
+<span><a href="mailto:aziz.k@iapptechnologiesllp.com">aziz.k@iapptechnologiesllp.com</a></span>
+<span><a href="tel:+917009592313">+91 70095 92313</a></span>
+<span>Offices in the USA, India, Canada and Australia</span></div></footer></div></body></html>

@@ -185,11 +185,34 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
 }
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.ihero h1{max-width:13ch}
+.company{padding:clamp(64px,8vw,104px) 0 0}
+.cohead{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:40px}
+@media (max-width:820px){.cohead{grid-template-columns:1fr}}
+.cohead h2{font-size:clamp(34px,4.6vw,60px);line-height:.98;letter-spacing:-.03em;font-weight:850;font-variation-settings:'wdth' 120;margin:0}
+.cohead p{margin:0;color:var(--muted);max-width:52ch}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;border-top:2px solid var(--ink);margin-bottom:48px}
+.facts div{padding:20px 20px 22px 0}
+.facts strong{display:block;font-size:clamp(32px,3.8vw,48px);line-height:1;font-weight:800;font-variation-settings:'wdth' 118;letter-spacing:-.03em}
+.facts span{color:var(--muted);font-size:16px}
+.svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.svc>div{background:var(--paper2);border:1px solid var(--rule);border-radius:20px;padding:24px}
+.svc h3{margin:0 0 8px;font-size:21px;line-height:1.25;font-weight:750}
+.svc p{margin:0;color:var(--muted);font-size:17px}
+.svc .ai{grid-column:1/-1;background:var(--ink);color:var(--paper);border-color:var(--ink);padding:clamp(24px,3.5vw,40px)}
+.svc .ai h3{font-size:clamp(26px,3vw,36px);font-weight:850;font-variation-settings:'wdth' 118;letter-spacing:-.02em}
+.svc .ai p{color:var(--paper);opacity:.85;max-width:64ch;font-size:18px}
+.svc .ai ul{display:flex;flex-wrap:wrap;gap:10px;list-style:none;padding:0;margin:20px 0 0}
+.svc .ai li{border:1.5px solid currentColor;border-radius:999px;padding:6px 14px;font-size:15px;font-weight:600;opacity:.95}
+.live{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.livebtn{display:inline-flex;align-items:center;min-height:46px;padding:10px 20px;border-radius:999px;background:#fff;color:#14171D;text-decoration:none;font-weight:650;font-size:16px}
+.livebtn:hover{opacity:.9}
+.seelive{font-size:18px;margin:0 0 12px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style></head><body><div style="--c:#6236C9"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
 <nav aria-label="Main"><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
 <div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="9.5" cy="8.5" r="1.8"/><path d="M4 17l5-5 4 4 2.5-2.5L20 18"/></svg></div><div><b>Case study</b>Graphics and design, iPhone, iPad and Mac</div></div>
-<h1>Poster Maker</h1><p class="lede">Type an idea, get a poster. Design flyers, logos and social posts in minutes with AI.</p></div><figure class="mock" style="margin:0"><div class="phone" role="img" aria-label="Illustration of the Poster Maker app"><div class="screen"><div class="island"></div><div class="sc"><div class="prompt">Neon party flyer<i></i></div><div class="canvas"><div class="blob"></div><div class="blob2"></div><b>Friday<br>night<br>lights</b><span>Rooftop, 9 pm</span></div>
+<h1>Poster Maker</h1><p class="lede">Type an idea, get a poster. Design flyers, logos and social posts in minutes with AI.</p><div class="live"><a class="livebtn" href="https://apps.apple.com/us/app/poster-maker-ai-flyer-design/id1241339881" target="_blank" rel="noopener">Download on the App Store</a></div></div><figure class="mock" style="margin:0"><div class="phone" role="img" aria-label="Illustration of the Poster Maker app"><div class="screen"><div class="island"></div><div class="sc"><div class="prompt">Neon party flyer<i></i></div><div class="canvas"><div class="blob"></div><div class="blob2"></div><b>Friday<br>night<br>lights</b><span>Rooftop, 9 pm</span></div>
 <div class="strip"><i></i><i></i><i></i><i></i></div></div></div></div><figcaption class="caption">Illustrative interface</figcaption></figure></div>
 <div class="storerow"><div><strong>2.83M</strong><span>downloads</span></div><div><strong>4.6</strong><span>App Store rating</span></div><div><strong>20K</strong><span>App Store ratings</span></div><div><strong>20,000+</strong><span>templates</span></div></div></div></div>
 <main class="wrap">
@@ -197,10 +220,10 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
 <section class="sec"><h2>What made it hard</h2><div class="hard"><div><h3>Blank-canvas anxiety</h3><p>An empty editor stops non-designers cold, so every flow needed a strong starting point.</p></div><div><h3>A huge library that stays fast</h3><p>Tens of thousands of templates, fonts and assets had to load quickly on any device.</p></div><div><h3>AI that stays editable</h3><p>AI output had to land as a normal editable design, not a flat image.</p></div></div></section>
 <section class="sec"><h2>What we built</h2><div class="feat"><div><h3>AI poster generation</h3><p>Describe it, for example a neon party flyer, and get an editable design.</p></div><div><h3>20,000+ templates</h3><p>Posters, flyers, logos, business cards, invitations, banners and social posts.</p></div><div><h3>Drag-and-drop editor</h3><p>Change text, swap images, adjust colours, add icons, with 100+ designer fonts.</p></div><div><h3>AI design tools</h3><p>Background remover, object eraser, image upscaler, photo colouriser and AI art.</p></div><div><h3>AI product branding</h3><p>Product posters and promotional creatives generated in seconds.</p></div><div><h3>Video and motion</h3><p>Photo-to-video and a video editor for moving content.</p></div></div></section>
 <section class="sec"><h2>How we worked</h2><ol class="steps"><li><div><h3>Start from a template</h3><p>Every path begins with a strong layout, so users edit rather than invent.</p></div></li><li><div><h3>Layer AI into the editor</h3><p>AI studio, carousel suggestions and history sit alongside the familiar editor.</p></div></li><li><div><h3>Keep it light</h3><p>Reduced app size, faster template loading and broad iOS support kept older devices in play.</p></div></li></ol></section>
-<section class="sec" style="border-bottom:0"><h2>Where it landed</h2><div><p class="outcome">Close to three million downloads and a 4.6 rating across 20,000 App Store reviews, in 28 languages.</p><div style="height:28px"></div><ul class="chips" aria-label="Platforms"><li>iPhone</li><li>iPad</li><li>Mac</li><li>Apple Vision</li><li>28 languages</li></ul><div class="links"><a class="ghost" href="https://apps.apple.com/us/app/poster-maker-ai-flyer-design/id1241339881" target="_blank" rel="noopener">App Store</a></div></div></section>
+<section class="sec" style="border-bottom:0"><h2>Where it landed</h2><div><p class="outcome">Close to three million downloads and a 4.6 rating across 20,000 App Store reviews, in 28 languages.</p><div style="height:28px"></div><ul class="chips" aria-label="Platforms"><li>iPhone</li><li>iPad</li><li>Mac</li><li>Apple Vision</li><li>28 languages</li></ul><h3 class="seelive">See it live</h3><div class="links"><a class="ghost" href="https://apps.apple.com/us/app/poster-maker-ai-flyer-design/id1241339881" target="_blank" rel="noopener">Download on the App Store</a></div></div></section>
 <a class="next" href="/transwayz" style="--c:#0F6B5C"><span>Next case study</span><b>Transwayz</b></a>
 </main><section class="wrap cta"><h2>Have a product that needs to reach millions?</h2>
-<div><p>Tell us what you are building. We will come back with a plan, a team and a realistic timeline.</p><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></div></section><footer><div class="wrap"><span>© 2012–2026 iApp Technologies LLP</span>
-<span><a href="mailto:salesteam@iapptechnologiesllp.com">salesteam@iapptechnologiesllp.com</a></span>
-<span><a href="tel:+18333429966">+1 833 342 9966</a> &nbsp; <a href="tel:+917092000040">+91 70920 00040</a></span>
-<span>USA, India, Canada and Australia</span></div></footer></div></body></html>
+<div><p>Tell us what you are building. We will come back with a plan, a team and a realistic timeline.</p><div class="links"><a class="btn" href="mailto:aziz.k@iapptechnologiesllp.com">Email us</a><a class="ghost" href="tel:+917009592313">+91 70095 92313</a></div></div></section><footer><div class="wrap"><span>© 2012–2026 iApp Technologies LLP</span>
+<span><a href="mailto:aziz.k@iapptechnologiesllp.com">aziz.k@iapptechnologiesllp.com</a></span>
+<span><a href="tel:+917009592313">+91 70095 92313</a></span>
+<span>Offices in the USA, India, Canada and Australia</span></div></footer></div></body></html>

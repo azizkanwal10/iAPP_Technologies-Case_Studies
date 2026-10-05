@@ -185,11 +185,34 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
 }
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.ihero h1{max-width:13ch}
+.company{padding:clamp(64px,8vw,104px) 0 0}
+.cohead{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:40px}
+@media (max-width:820px){.cohead{grid-template-columns:1fr}}
+.cohead h2{font-size:clamp(34px,4.6vw,60px);line-height:.98;letter-spacing:-.03em;font-weight:850;font-variation-settings:'wdth' 120;margin:0}
+.cohead p{margin:0;color:var(--muted);max-width:52ch}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;border-top:2px solid var(--ink);margin-bottom:48px}
+.facts div{padding:20px 20px 22px 0}
+.facts strong{display:block;font-size:clamp(32px,3.8vw,48px);line-height:1;font-weight:800;font-variation-settings:'wdth' 118;letter-spacing:-.03em}
+.facts span{color:var(--muted);font-size:16px}
+.svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.svc>div{background:var(--paper2);border:1px solid var(--rule);border-radius:20px;padding:24px}
+.svc h3{margin:0 0 8px;font-size:21px;line-height:1.25;font-weight:750}
+.svc p{margin:0;color:var(--muted);font-size:17px}
+.svc .ai{grid-column:1/-1;background:var(--ink);color:var(--paper);border-color:var(--ink);padding:clamp(24px,3.5vw,40px)}
+.svc .ai h3{font-size:clamp(26px,3vw,36px);font-weight:850;font-variation-settings:'wdth' 118;letter-spacing:-.02em}
+.svc .ai p{color:var(--paper);opacity:.85;max-width:64ch;font-size:18px}
+.svc .ai ul{display:flex;flex-wrap:wrap;gap:10px;list-style:none;padding:0;margin:20px 0 0}
+.svc .ai li{border:1.5px solid currentColor;border-radius:999px;padding:6px 14px;font-size:15px;font-weight:600;opacity:.95}
+.live{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.livebtn{display:inline-flex;align-items:center;min-height:46px;padding:10px 20px;border-radius:999px;background:#fff;color:#14171D;text-decoration:none;font-weight:650;font-size:16px}
+.livebtn:hover{opacity:.9}
+.seelive{font-size:18px;margin:0 0 12px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style></head><body><div style="--c:#B4470F"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
 <nav aria-label="Main"><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
 <div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/></svg></div><div><b>Case study</b>Utilities, iPhone, iPad and Mac</div></div>
-<h1>Screen Recorder</h1><p class="lede">Record, react, edit and stream your screen from one app.</p></div><figure class="mock" style="margin:0"><div class="phone" role="img" aria-label="Illustration of the Screen Recorder app"><div class="screen"><div class="island"></div><div class="sc"><h4>Record</h4><div class="rec"><div style="display:grid;gap:14px;justify-items:center"><div class="recbtn"><i></i></div><div class="timer">00:42</div></div></div>
+<h1>Screen Recorder</h1><p class="lede">Record, react, edit and stream your screen from one app.</p><div class="live"><a class="livebtn" href="https://apps.apple.com/us/app/screen-recorder/id1578839671" target="_blank" rel="noopener">Download on the App Store</a></div></div><figure class="mock" style="margin:0"><div class="phone" role="img" aria-label="Illustration of the Screen Recorder app"><div class="screen"><div class="island"></div><div class="sc"><h4>Record</h4><div class="rec"><div style="display:grid;gap:14px;justify-items:center"><div class="recbtn"><i></i></div><div class="timer">00:42</div></div></div>
 <div class="toggles"><div>Face cam<span class="sw"></span></div><div>Microphone<span class="sw"></span></div><div>Live stream<span class="sw off"></span></div></div></div></div></div><figcaption class="caption">Illustrative interface</figcaption></figure></div>
 <div class="storerow"><div><strong>3.06M</strong><span>downloads</span></div><div><strong>4.6</strong><span>App Store rating</span></div><div><strong>2.8K</strong><span>App Store ratings</span></div><div><strong>9</strong><span>languages</span></div></div></div></div>
 <main class="wrap">
@@ -197,10 +220,10 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
 <section class="sec"><h2>What made it hard</h2><div class="hard"><div><h3>Recording without lag</h3><p>Capture has to stay smooth while a game or video is running, and start or stop from a floating control.</p></div><div><h3>Reaction on top of content</h3><p>Face-cam and voice commentary must line up with the recording and be adjustable clip by clip.</p></div><div><h3>Editing on a small screen</h3><p>Trimming, merging, music, text, speed and transitions needed to fit comfortably on a phone.</p></div></div></section>
 <section class="sec"><h2>What we built</h2><div class="feat"><div><h3>One-tap recording</h3><p>Start and stop from the notification bar or a floating window, with external audio.</p></div><div><h3>Live streaming</h3><p>Stream your screen to YouTube, Facebook and Twitch.</p></div><div><h3>Reaction camera</h3><p>Face-cam overlay and real-time voice commentary on any video, web page or photo.</p></div><div><h3>Video editor</h3><p>Trim, merge, add music, text and subtitles, stickers, watermarks, filters, speed changes, crop and transitions.</p></div><div><h3>Long screenshots</h3><p>Stitch photos or generate long screenshots straight from a recording.</p></div><div><h3>AI video module</h3><p>Smart editing and automatic improvements to recordings.</p></div></div></section>
 <section class="sec"><h2>How we worked</h2><ol class="steps"><li><div><h3>Protect the capture</h3><p>Performance and stability came first, with recurring work on recording smoothness and crash fixes.</p></div></li><li><div><h3>Make reactions first-class</h3><p>The reaction camera and commentary were rebuilt as their own module.</p></div></li><li><div><h3>Localise and refresh</h3><p>A modern UI refresh and localisation into nine languages widened the audience.</p></div></li></ol></section>
-<section class="sec" style="border-bottom:0"><h2>Where it landed</h2><div><p class="outcome">More than three million downloads and a 4.6 average rating on the App Store.</p><div style="height:28px"></div><ul class="chips" aria-label="Platforms"><li>iPhone</li><li>iPad</li><li>Mac</li><li>Apple Vision</li><li>9 languages</li></ul><div class="links"><a class="ghost" href="https://apps.apple.com/us/app/screen-recorder/id1578839671" target="_blank" rel="noopener">App Store</a></div></div></section>
+<section class="sec" style="border-bottom:0"><h2>Where it landed</h2><div><p class="outcome">More than three million downloads and a 4.6 average rating on the App Store.</p><div style="height:28px"></div><ul class="chips" aria-label="Platforms"><li>iPhone</li><li>iPad</li><li>Mac</li><li>Apple Vision</li><li>9 languages</li></ul><h3 class="seelive">See it live</h3><div class="links"><a class="ghost" href="https://apps.apple.com/us/app/screen-recorder/id1578839671" target="_blank" rel="noopener">Download on the App Store</a></div></div></section>
 <a class="next" href="/poster-maker" style="--c:#6236C9"><span>Next case study</span><b>Poster Maker</b></a>
 </main><section class="wrap cta"><h2>Have a product that needs to reach millions?</h2>
-<div><p>Tell us what you are building. We will come back with a plan, a team and a realistic timeline.</p><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></div></section><footer><div class="wrap"><span>© 2012–2026 iApp Technologies LLP</span>
-<span><a href="mailto:salesteam@iapptechnologiesllp.com">salesteam@iapptechnologiesllp.com</a></span>
-<span><a href="tel:+18333429966">+1 833 342 9966</a> &nbsp; <a href="tel:+917092000040">+91 70920 00040</a></span>
-<span>USA, India, Canada and Australia</span></div></footer></div></body></html>
+<div><p>Tell us what you are building. We will come back with a plan, a team and a realistic timeline.</p><div class="links"><a class="btn" href="mailto:aziz.k@iapptechnologiesllp.com">Email us</a><a class="ghost" href="tel:+917009592313">+91 70095 92313</a></div></div></section><footer><div class="wrap"><span>© 2012–2026 iApp Technologies LLP</span>
+<span><a href="mailto:aziz.k@iapptechnologiesllp.com">aziz.k@iapptechnologiesllp.com</a></span>
+<span><a href="tel:+917009592313">+91 70095 92313</a></span>
+<span>Offices in the USA, India, Canada and Australia</span></div></footer></div></body></html>
