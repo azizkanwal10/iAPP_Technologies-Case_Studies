@@ -224,23 +224,55 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
 .livebtn{display:inline-flex;align-items:center;min-height:46px;padding:10px 20px;border-radius:999px;background:#fff;color:#14171D;text-decoration:none;font-weight:650;font-size:16px}
 .livebtn:hover{opacity:.9}
 .seelive{font-size:18px;margin:0 0 12px}
+.icon.has-img{background:none;overflow:hidden}
+.icon.has-img img{width:100%;height:100%;display:block;object-fit:cover}
+.crumb .icon.has-img{box-shadow:0 0 0 2px rgba(255,255,255,.55)}
+.fan{position:relative;width:min(100%,460px);aspect-ratio:1/1.12;justify-self:center;perspective:1200px}
+.fan img{position:absolute;top:50%;left:50%;width:50%;height:auto;border-radius:22px;box-shadow:0 30px 60px -20px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.18);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.fan .f0{z-index:3;transform:translate(-50%,-50%)}
+.fan .f1{z-index:2;transform:translate(-100%,-46%) rotate(-9deg) scale(.88)}
+.fan .f2{z-index:1;transform:translate(0%,-46%) rotate(9deg) scale(.88)}
+.fan:hover .f1{transform:translate(-112%,-47%) rotate(-12deg) scale(.9)}
+.fan:hover .f2{transform:translate(12%,-47%) rotate(12deg) scale(.9)}
+.fan:hover .f0{transform:translate(-50%,-53%)}
+.gallery{padding:clamp(48px,6vw,80px) 0;border-bottom:1px solid var(--rule)}
+.gallery h2{font-size:clamp(28px,3.4vw,40px);line-height:1.05;letter-spacing:-.02em;font-weight:800;font-variation-settings:'wdth' 115;margin:0 0 32px}
+.shots{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:clamp(16px,3vw,40px)}
+@media (max-width:760px){.shots{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}.shots figure{scroll-snap-align:start}}
+.shots figure{margin:0}
+.shots img{width:100%;height:auto;display:block;border-radius:26px;background:var(--paper2);box-shadow:0 0 0 1px var(--rule),0 24px 40px -24px rgba(20,25,35,.35)}
+.shots figcaption{margin-top:14px;font-weight:650;font-size:17px;line-height:1.35}
+@media (prefers-reduced-motion:reduce){.fan img{transition:none}}
+.single{perspective:1400px;width:100%;max-width:500px;justify-self:center}
+.single img{width:100%;height:auto;display:block;border-radius:18px;transform:rotateY(-9deg) rotateX(4deg);box-shadow:0 0 0 1px rgba(255,255,255,.2),-30px 40px 70px -30px rgba(0,0,0,.6);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.single:hover img{transform:none}
+.widefig{margin:0 0 40px}
+.widefig:last-child{margin-bottom:0}
+.widefig>img{width:100%;height:auto;display:block;border-radius:22px;background:#fff;box-shadow:0 0 0 1px var(--rule),0 24px 40px -24px rgba(20,25,35,.3)}
+.widefig figcaption{margin-top:14px;font-weight:650;font-size:17px;line-height:1.35}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.flow li{background:#fff;color:#1A1F2B;border-radius:22px;padding:24px;box-shadow:0 0 0 1px var(--rule),0 18px 30px -22px rgba(20,25,35,.3)}
+.fi{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;color:#fff;margin-bottom:18px}
+.fi svg{width:24px;height:24px}
+.flow small{display:block;font-size:14px;color:#5d6470;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.flow h3{margin:4px 0 8px;font-size:21px;font-weight:750}
+.flow p{margin:0;color:#4F5663;font-size:16px;line-height:1.55}
+@media (prefers-reduced-motion:reduce){.single img{transition:none}}
+.chero{overflow-x:clip}
+@media (max-width:520px){.bar nav .lnk{display:none}}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-</style></head><body><div style="--c:#B8322A"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
+</style></head><body><div style="--c:#C2261C"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
 <nav aria-label="Main"><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
-<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.5h8.5l4.5 4.5v14.5H6z"/><path d="M14.5 2.5V7H19"/><path d="M9 13h7M9 16.5h5"/></svg></div><div><b>Case study</b>Productivity, iPhone, iPad and Mac</div></div>
-<h1>PDF Converter</h1><p class="lede">A complete PDF toolkit in your pocket: convert, edit, sign and organise any document.</p><div class="live"><a class="livebtn" href="https://apps.apple.com/us/app/pdf-converter-pdf-editor/id684119875" target="_blank" rel="noopener">Download on the App Store</a></div></div><figure class="mock" style="margin:0"><div class="phone" role="img" aria-label="Illustration of the PDF Converter app"><div class="screen"><div class="island"></div><div class="sc"><h4>Tools</h4><div class="tools"><div><i></i>Convert</div><div><i></i>Merge</div><div><i></i>Split</div><div><i></i>Compress</div><div><i></i>Sign</div><div><i></i>Edit</div></div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px"><b>Recent</b><span class="mute">See all</span></div>
-<div class="file"><i></i><div><b>Lease agreement.pdf</b><span class="mute">Signed, 2.1 MB</span></div></div>
-<div class="file"><i></i><div><b>Q3 report.pdf</b><span class="mute">From Word, 840 KB</span></div></div>
-<div class="file"><i></i><div><b>Receipts merged.pdf</b><span class="mute">12 pages</span></div></div></div></div></div><figcaption class="caption">Illustrative interface</figcaption></figure></div>
+<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon has-img"><img src="/assets/pdf-converter/icon.webp" alt="" width="256" height="256" loading="lazy"></div><div><b>Case study</b>Productivity, iPhone, iPad and Mac</div></div>
+<h1>PDF Converter</h1><p class="lede">A complete PDF toolkit in your pocket: convert, edit, sign and organise any document.</p><div class="live"><a class="livebtn" href="https://apps.apple.com/us/app/pdf-converter-pdf-editor/id684119875" target="_blank" rel="noopener">Download on the App Store</a></div></div><div class="mock fan"><img class="f0" src="/assets/pdf-converter/screen-1.webp" alt="The PDF Converter home screen with tools for creating PDFs, PDF to Word, scanning, cloud, invoices, CV maker and recent files" width="535" height="1160"><img class="f1" src="/assets/pdf-converter/screen-2.webp" alt="A business letter being scanned with the camera, with PDF, Word, PowerPoint, Excel and ePub export options" width="535" height="1160"><img class="f2" src="/assets/pdf-converter/screen-3.webp" alt="An admission form filled in and signed in the editor, with Add Page, OCR, Sign and Smudge tools" width="535" height="1160"></div></div>
 <div class="storerow"><div><strong>4.99M</strong><span>downloads</span></div><div><strong>4.4</strong><span>App Store rating</span></div><div><strong>6K</strong><span>App Store ratings</span></div><div><strong>25</strong><span>languages</span></div></div></div></div>
 <main class="wrap">
 <section class="sec"><h2>The brief</h2><div class="prose"><p class="big">PDF Converter turns photos, Word, PowerPoint, Excel and web pages into PDFs and back again, with a full editor, e-signatures and an AI assistant built in.</p><p>People handle documents on their phones all day, but converting, merging or signing a PDF usually means a desktop. The app needed to put every common PDF task one tap away, work with the files people already keep in the cloud, and stay fast as the toolset grew.</p><p class="who">Who it serves: Students, freelancers and office workers who need to get a document done without a laptop.</p></div></section>
-<section class="sec"><h2>What made it hard</h2><div class="hard"><div><h3>Dozens of tools, one simple home</h3><p>Merge, split, compress, convert, sign, annotate and more had to stay discoverable without turning the home screen into a maze.</p></div><div><h3>Conversions that just work</h3><p>Word, PowerPoint, Excel, HTML and image formats each have quirks; output had to be reliable and quick.</p></div><div><h3>Files live everywhere</h3><p>Documents sit in Drive, Dropbox, OneDrive, Box, SharePoint, Files and Mail. The app had to meet them there.</p></div></div></section>
+<section class="gallery"><h2>Inside the app</h2><div class="shots" style="--n:3"><figure><img src="/assets/pdf-converter/screen-1.webp" alt="The PDF Converter home screen with tools for creating PDFs, PDF to Word, scanning, cloud, invoices, CV maker and recent files" width="535" height="1160" loading="lazy"><figcaption>Every PDF tool on one home screen</figcaption></figure><figure><img src="/assets/pdf-converter/screen-2.webp" alt="A business letter being scanned with the camera, with PDF, Word, PowerPoint, Excel and ePub export options" width="535" height="1160" loading="lazy"><figcaption>Scan paper into PDF, Word, Excel and more</figcaption></figure><figure><img src="/assets/pdf-converter/screen-3.webp" alt="An admission form filled in and signed in the editor, with Add Page, OCR, Sign and Smudge tools" width="535" height="1160" loading="lazy"><figcaption>Fill forms and sign on the phone</figcaption></figure></div></section><section class="sec"><h2>What made it hard</h2><div class="hard"><div><h3>Dozens of tools, one simple home</h3><p>Merge, split, compress, convert, sign, annotate and more had to stay discoverable without turning the home screen into a maze.</p></div><div><h3>Conversions that just work</h3><p>Word, PowerPoint, Excel, HTML and image formats each have quirks; output had to be reliable and quick.</p></div><div><h3>Files live everywhere</h3><p>Documents sit in Drive, Dropbox, OneDrive, Box, SharePoint, Files and Mail. The app had to meet them there.</p></div></div></section>
 <section class="sec"><h2>What we built</h2><div class="feat"><div><h3>Convert both ways</h3><p>JPG, Word, PowerPoint, Excel and HTML to PDF, and PDF back to JPG, Word, PowerPoint and Excel.</p></div><div><h3>Organise PDFs</h3><p>Merge, split, compress, rotate, unlock and watermark.</p></div><div><h3>Editor and annotation</h3><p>Text, shapes, highlights, sticky notes and freehand drawing, plus a distraction-free reader mode.</p></div><div><h3>Forms and signatures</h3><p>Fill PDF forms and add, edit or remove digital signatures.</p></div><div><h3>Cloud and security</h3><p>Import from and upload to the major cloud drives, with password protection and encryption.</p></div><div><h3>AI assistant</h3><p>AI summaries, OCR and an assistant that finds the right tool, plus search inside file contents.</p></div></div></section>
 <section class="sec"><h2>How we worked</h2><ol class="steps"><li><div><h3>Lead with intent</h3><p>A smarter landing screen asks what you came to do and routes you straight to the right tool.</p></div></li><li><div><h3>Grow the toolkit</h3><p>New modules such as invoice and CV makers, a text editor, Excel editor and scroll-shot capture were added without crowding the core.</p></div></li><li><div><h3>Go global</h3><p>Localised into 25 languages and extended to iPad, Mac and Apple Vision.</p></div></li></ol></section>
 <section class="sec" style="border-bottom:0"><h2>Where it landed</h2><div><p class="outcome">Nearly five million downloads and a 4.4 rating across more than 6,000 App Store reviews.</p><div style="height:28px"></div><ul class="chips" aria-label="Platforms"><li>iPhone</li><li>iPad</li><li>Mac</li><li>Apple Vision</li><li>25 languages</li></ul><h3 class="seelive">See it live</h3><div class="links"><a class="ghost" href="https://apps.apple.com/us/app/pdf-converter-pdf-editor/id684119875" target="_blank" rel="noopener">Download on the App Store</a></div></div></section>
-<a class="next" href="/screen-recorder" style="--c:#B4470F"><span>Next case study</span><b>Screen Recorder</b></a>
+<a class="next" href="/screen-recorder" style="--c:#C2410C"><span>Next case study</span><b>Screen Recorder</b></a>
 </main><section class="wrap cta"><h2>Have a product that needs to reach millions?</h2>
 <div><p>Tell us what you are building. We will come back with a plan, a team and a realistic timeline.</p><div class="links"><a class="btn" href="mailto:aziz.k@iapptechnologiesllp.com">Email us</a><a class="ghost" href="tel:+917009592313">+91 70095 92313</a></div></div></section><footer><div class="wrap"><span>© 2012–2026 iApp Technologies LLP</span>
 <span><a href="mailto:aziz.k@iapptechnologiesllp.com">aziz.k@iapptechnologiesllp.com</a></span>

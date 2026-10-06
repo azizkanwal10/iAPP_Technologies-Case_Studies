@@ -224,20 +224,55 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
 .livebtn{display:inline-flex;align-items:center;min-height:46px;padding:10px 20px;border-radius:999px;background:#fff;color:#14171D;text-decoration:none;font-weight:650;font-size:16px}
 .livebtn:hover{opacity:.9}
 .seelive{font-size:18px;margin:0 0 12px}
+.icon.has-img{background:none;overflow:hidden}
+.icon.has-img img{width:100%;height:100%;display:block;object-fit:cover}
+.crumb .icon.has-img{box-shadow:0 0 0 2px rgba(255,255,255,.55)}
+.fan{position:relative;width:min(100%,460px);aspect-ratio:1/1.12;justify-self:center;perspective:1200px}
+.fan img{position:absolute;top:50%;left:50%;width:50%;height:auto;border-radius:22px;box-shadow:0 30px 60px -20px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.18);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.fan .f0{z-index:3;transform:translate(-50%,-50%)}
+.fan .f1{z-index:2;transform:translate(-100%,-46%) rotate(-9deg) scale(.88)}
+.fan .f2{z-index:1;transform:translate(0%,-46%) rotate(9deg) scale(.88)}
+.fan:hover .f1{transform:translate(-112%,-47%) rotate(-12deg) scale(.9)}
+.fan:hover .f2{transform:translate(12%,-47%) rotate(12deg) scale(.9)}
+.fan:hover .f0{transform:translate(-50%,-53%)}
+.gallery{padding:clamp(48px,6vw,80px) 0;border-bottom:1px solid var(--rule)}
+.gallery h2{font-size:clamp(28px,3.4vw,40px);line-height:1.05;letter-spacing:-.02em;font-weight:800;font-variation-settings:'wdth' 115;margin:0 0 32px}
+.shots{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:clamp(16px,3vw,40px)}
+@media (max-width:760px){.shots{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}.shots figure{scroll-snap-align:start}}
+.shots figure{margin:0}
+.shots img{width:100%;height:auto;display:block;border-radius:26px;background:var(--paper2);box-shadow:0 0 0 1px var(--rule),0 24px 40px -24px rgba(20,25,35,.35)}
+.shots figcaption{margin-top:14px;font-weight:650;font-size:17px;line-height:1.35}
+@media (prefers-reduced-motion:reduce){.fan img{transition:none}}
+.single{perspective:1400px;width:100%;max-width:500px;justify-self:center}
+.single img{width:100%;height:auto;display:block;border-radius:18px;transform:rotateY(-9deg) rotateX(4deg);box-shadow:0 0 0 1px rgba(255,255,255,.2),-30px 40px 70px -30px rgba(0,0,0,.6);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.single:hover img{transform:none}
+.widefig{margin:0 0 40px}
+.widefig:last-child{margin-bottom:0}
+.widefig>img{width:100%;height:auto;display:block;border-radius:22px;background:#fff;box-shadow:0 0 0 1px var(--rule),0 24px 40px -24px rgba(20,25,35,.3)}
+.widefig figcaption{margin-top:14px;font-weight:650;font-size:17px;line-height:1.35}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.flow li{background:#fff;color:#1A1F2B;border-radius:22px;padding:24px;box-shadow:0 0 0 1px var(--rule),0 18px 30px -22px rgba(20,25,35,.3)}
+.fi{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;color:#fff;margin-bottom:18px}
+.fi svg{width:24px;height:24px}
+.flow small{display:block;font-size:14px;color:#5d6470;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.flow h3{margin:4px 0 8px;font-size:21px;font-weight:750}
+.flow p{margin:0;color:#4F5663;font-size:16px;line-height:1.55}
+@media (prefers-reduced-motion:reduce){.single img{transition:none}}
+.chero{overflow-x:clip}
+@media (max-width:520px){.bar nav .lnk{display:none}}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-</style></head><body><div style="--c:#B4470F"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
+</style></head><body><div style="--c:#C2410C"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
 <nav aria-label="Main"><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
-<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/></svg></div><div><b>Case study</b>Utilities, iPhone, iPad and Mac</div></div>
-<h1>Screen Recorder</h1><p class="lede">Record, react, edit and stream your screen from one app.</p><div class="live"><a class="livebtn" href="https://apps.apple.com/us/app/screen-recorder/id1578839671" target="_blank" rel="noopener">Download on the App Store</a></div></div><figure class="mock" style="margin:0"><div class="phone" role="img" aria-label="Illustration of the Screen Recorder app"><div class="screen"><div class="island"></div><div class="sc"><h4>Record</h4><div class="rec"><div style="display:grid;gap:14px;justify-items:center"><div class="recbtn"><i></i></div><div class="timer">00:42</div></div></div>
-<div class="toggles"><div>Face cam<span class="sw"></span></div><div>Microphone<span class="sw"></span></div><div>Live stream<span class="sw off"></span></div></div></div></div></div><figcaption class="caption">Illustrative interface</figcaption></figure></div>
+<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon has-img"><img src="/assets/screen-recorder/icon.webp" alt="" width="256" height="256" loading="lazy"></div><div><b>Case study</b>Utilities, iPhone, iPad and Mac</div></div>
+<h1>Screen Recorder</h1><p class="lede">Record, react, edit and stream your screen from one app.</p><div class="live"><a class="livebtn" href="https://apps.apple.com/us/app/screen-recorder/id1578839671" target="_blank" rel="noopener">Download on the App Store</a></div></div><div class="mock fan"><img class="f0" src="/assets/screen-recorder/screen-1.webp" alt="A mobile game being recorded with a face-cam reaction bubble and recording controls" width="535" height="1160"><img class="f1" src="/assets/screen-recorder/screen-2.webp" alt="The video editor with gameplay, face-cam and audio tracks on a timeline, plus text, sticker and music tools" width="535" height="1160"><img class="f2" src="/assets/screen-recorder/screen-3.webp" alt="The iOS Screen Broadcast panel with Screen Recorder selected and ready to start" width="535" height="1160"></div></div>
 <div class="storerow"><div><strong>3.06M</strong><span>downloads</span></div><div><strong>4.6</strong><span>App Store rating</span></div><div><strong>2.8K</strong><span>App Store ratings</span></div><div><strong>9</strong><span>languages</span></div></div></div></div>
 <main class="wrap">
 <section class="sec"><h2>The brief</h2><div class="prose"><p class="big">Screen Recorder captures games, tutorials, calls and live shows in HD, adds a face-cam reaction and voice commentary, and edits the result before it goes to YouTube, Facebook or Twitch.</p><p>Creators record on the phone but have to jump between apps to add commentary, trim and publish. The brief was one app that covers the whole loop: capture, react, edit and share.</p><p class="who">Who it serves: Gamers, educators and creators making tutorials, demos and reaction videos.</p></div></section>
-<section class="sec"><h2>What made it hard</h2><div class="hard"><div><h3>Recording without lag</h3><p>Capture has to stay smooth while a game or video is running, and start or stop from a floating control.</p></div><div><h3>Reaction on top of content</h3><p>Face-cam and voice commentary must line up with the recording and be adjustable clip by clip.</p></div><div><h3>Editing on a small screen</h3><p>Trimming, merging, music, text, speed and transitions needed to fit comfortably on a phone.</p></div></div></section>
+<section class="gallery"><h2>Inside the app</h2><div class="shots" style="--n:3"><figure><img src="/assets/screen-recorder/screen-1.webp" alt="A mobile game being recorded with a face-cam reaction bubble and recording controls" width="535" height="1160" loading="lazy"><figcaption>Face cam reactions over gameplay</figcaption></figure><figure><img src="/assets/screen-recorder/screen-2.webp" alt="The video editor with gameplay, face-cam and audio tracks on a timeline, plus text, sticker and music tools" width="535" height="1160" loading="lazy"><figcaption>A full editor on the timeline</figcaption></figure><figure><img src="/assets/screen-recorder/screen-3.webp" alt="The iOS Screen Broadcast panel with Screen Recorder selected and ready to start" width="535" height="1160" loading="lazy"><figcaption>One tap to record anything</figcaption></figure></div></section><section class="sec"><h2>What made it hard</h2><div class="hard"><div><h3>Recording without lag</h3><p>Capture has to stay smooth while a game or video is running, and start or stop from a floating control.</p></div><div><h3>Reaction on top of content</h3><p>Face-cam and voice commentary must line up with the recording and be adjustable clip by clip.</p></div><div><h3>Editing on a small screen</h3><p>Trimming, merging, music, text, speed and transitions needed to fit comfortably on a phone.</p></div></div></section>
 <section class="sec"><h2>What we built</h2><div class="feat"><div><h3>One-tap recording</h3><p>Start and stop from the notification bar or a floating window, with external audio.</p></div><div><h3>Live streaming</h3><p>Stream your screen to YouTube, Facebook and Twitch.</p></div><div><h3>Reaction camera</h3><p>Face-cam overlay and real-time voice commentary on any video, web page or photo.</p></div><div><h3>Video editor</h3><p>Trim, merge, add music, text and subtitles, stickers, watermarks, filters, speed changes, crop and transitions.</p></div><div><h3>Long screenshots</h3><p>Stitch photos or generate long screenshots straight from a recording.</p></div><div><h3>AI video module</h3><p>Smart editing and automatic improvements to recordings.</p></div></div></section>
 <section class="sec"><h2>How we worked</h2><ol class="steps"><li><div><h3>Protect the capture</h3><p>Performance and stability came first, with recurring work on recording smoothness and crash fixes.</p></div></li><li><div><h3>Make reactions first-class</h3><p>The reaction camera and commentary were rebuilt as their own module.</p></div></li><li><div><h3>Localise and refresh</h3><p>A modern UI refresh and localisation into nine languages widened the audience.</p></div></li></ol></section>
 <section class="sec" style="border-bottom:0"><h2>Where it landed</h2><div><p class="outcome">More than three million downloads and a 4.6 average rating on the App Store.</p><div style="height:28px"></div><ul class="chips" aria-label="Platforms"><li>iPhone</li><li>iPad</li><li>Mac</li><li>Apple Vision</li><li>9 languages</li></ul><h3 class="seelive">See it live</h3><div class="links"><a class="ghost" href="https://apps.apple.com/us/app/screen-recorder/id1578839671" target="_blank" rel="noopener">Download on the App Store</a></div></div></section>
-<a class="next" href="/poster-maker" style="--c:#6236C9"><span>Next case study</span><b>Poster Maker</b></a>
+<a class="next" href="/poster-maker" style="--c:#AE1757"><span>Next case study</span><b>Poster Maker</b></a>
 </main><section class="wrap cta"><h2>Have a product that needs to reach millions?</h2>
 <div><p>Tell us what you are building. We will come back with a plan, a team and a realistic timeline.</p><div class="links"><a class="btn" href="mailto:aziz.k@iapptechnologiesllp.com">Email us</a><a class="ghost" href="tel:+917009592313">+91 70095 92313</a></div></div></section><footer><div class="wrap"><span>© 2012–2026 iApp Technologies LLP</span>
 <span><a href="mailto:aziz.k@iapptechnologiesllp.com">aziz.k@iapptechnologiesllp.com</a></span>
