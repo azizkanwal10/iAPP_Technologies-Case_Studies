@@ -46,7 +46,7 @@ img{max-width:100%}
 .tally strong{display:block;font-size:clamp(36px,4.6vw,60px);line-height:1;font-weight:800;font-variation-settings:'wdth' 118;letter-spacing:-.03em}
 .tally span{color:var(--muted);font-size:16px}
 /* list */
-.list{padding:72px 0 40px}
+.list{padding-top:72px;padding-bottom:40px}
 .list h2,.sec h2{font-size:clamp(28px,3.4vw,40px);line-height:1.05;letter-spacing:-.02em;font-weight:800;font-variation-settings:'wdth' 115;margin:0 0 24px}
 .cards{display:grid;gap:22px;perspective:1400px}
 .row{--rx:0deg;--ry:0deg;--lift:0px;display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:28px;align-items:center;padding:26px 28px;text-decoration:none;
@@ -260,6 +260,63 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
 @media (prefers-reduced-motion:reduce){.single img{transition:none}}
 .chero{overflow-x:clip}
 @media (max-width:520px){.bar nav .lnk{display:none}}
+/* case study listing */
+.cs-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px 32px;margin-bottom:32px}
+.cs-head h2{margin:0 0 8px}
+.cs-head p{margin:0;color:var(--muted);max-width:52ch}
+.cs-filter{display:flex;flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none;gap:8px;padding:6px;border-radius:999px;background:var(--paper2);border:1px solid var(--rule)}
+.cs-filter button{flex:none;white-space:nowrap;font:inherit;font-size:16px;font-weight:600;min-height:44px;padding:8px 16px;border-radius:999px;border:0;background:transparent;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s}
+.cs-filter button span{font-size:13px;min-width:24px;padding:2px 7px;border-radius:999px;background:rgba(127,127,127,.16);font-variant-numeric:tabular-nums}
+.cs-filter button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.cs-filter button[aria-pressed="true"] span{background:rgba(255,255,255,.2)}
+.cs-filter button:not([aria-pressed="true"]):hover{background:rgba(127,127,127,.12)}
+.cs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;perspective:1600px}
+@media (max-width:860px){.cs-grid{grid-template-columns:1fr}}
+.cs-card{--rx:0deg;--ry:0deg;--lift:0px;--ty:0px;position:relative;display:flex;flex-direction:column;text-decoration:none;border-radius:30px;overflow:hidden;background:var(--paper2);border:1px solid var(--rule);
+transform:translateY(calc(var(--ty) + var(--lift))) rotateX(var(--rx)) rotateY(var(--ry));
+box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 18px 36px -22px rgba(20,25,35,.35);
+transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,opacity .5s ease,border-color .3s}
+.cs-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(500px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.22),transparent 60%);opacity:0;transition:opacity .3s}
+.cs-card:hover,.cs-card:focus-visible{--lift:-8px;border-color:color-mix(in srgb,var(--c) 40%,var(--rule));box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 40px 60px -28px color-mix(in srgb,var(--c) 55%,rgba(20,25,35,.6))}
+.cs-card:hover::after{opacity:1}
+.cs-card:active{--lift:-2px;transition-duration:.12s}
+.js .cs-card{--ty:36px;opacity:0;transition-delay:var(--d,0ms)}
+.js .cs-card.in{--ty:0px;opacity:1}
+.js .cs-card.in:hover{transition-delay:0ms}
+.cs-card.out{opacity:0!important;--ty:16px;transition-delay:0ms}
+.cs-media{position:relative;height:300px;overflow:hidden;background:radial-gradient(120% 90% at 20% 0%,rgba(255,255,255,.22),transparent 55%),var(--c)}
+.cs-media::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.16) 1px,transparent 1px);background-size:18px 18px;mask-image:linear-gradient(to bottom,#000,transparent 80%);-webkit-mask-image:linear-gradient(to bottom,#000,transparent 80%)}
+.cs-ic{position:absolute;top:20px;left:20px;width:56px;border-radius:15px;z-index:5;box-shadow:0 10px 24px -8px rgba(0,0,0,.45),0 0 0 1.5px rgba(255,255,255,.35);background:rgba(255,255,255,.16)}
+.cs-ic svg{width:50%;height:50%}
+.cs-media img{position:absolute;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.cs-media .p{width:27%;height:auto;bottom:-46%;border-radius:16px;box-shadow:0 24px 40px -14px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.15)}
+.cs-media .p0{left:36.5%;z-index:3;transform:translateY(-8%)}
+.cs-media .p1{left:14%;z-index:2;transform:translateY(6%) rotate(-9deg)}
+.cs-media .p2{left:59%;z-index:1;transform:translateY(6%) rotate(9deg)}
+.cs-card:hover .p0{transform:translateY(-20%)}
+.cs-card:hover .p1{transform:translate(-10%,-2%) rotate(-13deg)}
+.cs-card:hover .p2{transform:translate(10%,-2%) rotate(13deg)}
+.cs-media .w{width:94%;height:auto;right:-12%;top:96px;border-radius:16px;transform:rotate(-5deg);box-shadow:0 30px 50px -16px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.18)}
+.cs-card:hover .w{transform:translateY(-18px) rotate(-2deg)}
+.cs-body{position:relative;z-index:1;background:var(--paper2);padding:26px 28px 28px;display:flex;flex-direction:column;gap:10px;flex:1}
+.cs-cat{font-size:15px;font-weight:600;color:var(--muted)}
+.cs-body h3{margin:0;font-size:clamp(26px,2.6vw,34px);line-height:1.05;letter-spacing:-.02em;font-weight:850;font-variation-settings:'wdth' 118}
+.cs-body p{margin:0;color:var(--muted);max-width:52ch}
+.cs-stats{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:6px 0 0;padding:0}
+.cs-stats li{font-size:15px;padding:6px 12px;border-radius:999px;background:color-mix(in srgb,var(--c) 10%,transparent);border:1px solid color-mix(in srgb,var(--c) 25%,var(--rule))}
+.cs-stats b{font-weight:800}
+.cs-go{margin-top:auto;padding-top:14px;display:inline-flex;align-items:center;gap:12px;font-weight:700;font-size:16px}
+.cs-go i{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--ink);transition:background .25s,color .25s,border-color .25s,transform .25s}
+.cs-go svg{width:16px;height:16px}
+.cs-card:hover .cs-go i{background:var(--c);border-color:var(--c);color:#fff;transform:translateX(4px)}
+@media (min-width:861px){.cs-card.cs-feat:not(.solo){grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.cs-card.cs-feat:not(.solo) .cs-media{order:2;height:auto;min-height:400px}
+.cs-card.cs-feat:not(.solo) .cs-body{padding:40px;justify-content:center}
+.cs-card.cs-feat:not(.solo) .w{width:86%;right:-6%;top:64px;bottom:auto;transform:rotate(-4deg)}
+.cs-card.cs-feat:not(.solo):hover .w{transform:translateY(-14px) rotate(-2deg)}
+.cs-card.cs-feat:not(.solo) h3{font-size:clamp(34px,4vw,52px)}}
+@media (max-width:600px){.cs-media{height:240px}.cs-body{padding:22px}.cs-filter{flex-wrap:wrap;overflow:visible;background:none;border:0;padding:0}.cs-filter button{padding:8px 12px;font-size:15px;border:1px solid var(--rule);background:var(--paper2)}}
+@media (prefers-reduced-motion:reduce){.cs-card,.cs-media img,.cs-go i{transition:none}.js .cs-card{opacity:1;--ty:0px}}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style></head><body><div style="--c:#C2410C"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
 <nav aria-label="Main"><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
