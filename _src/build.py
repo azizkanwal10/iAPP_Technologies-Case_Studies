@@ -339,7 +339,19 @@ transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,opacity .
 .ghostp b{display:block;color:var(--c);font-size:12px;margin-bottom:2px}
 .ghostp p{margin:0 0 8px}
 .cs-media .cm .browser{padding:8px;border-radius:14px}.cs-media .cm .call{min-height:0}
-.gk{display:flex;gap:6px}.gk span{background:#EEF0F8;border-radius:999px;padding:3px 9px;font-weight:600}
+.gk{display:flex;gap:6px}
+/* GenZpark illustrative workspace */
+.gz{background:#0B0D10;color:#E8EBE4;border-radius:8px;display:grid;grid-template-columns:92px 1fr;min-height:300px;font-size:11px;overflow:hidden}
+.gz .side{background:#12151A;border-right:1px solid #22262E;color:#C9CEC4}
+.gz .side b{color:#D4F85A}
+.gz .side span.on{background:#D4F85A;color:#14171D}
+.gz .main{padding:12px}
+.gzp{display:flex;justify-content:space-between;align-items:center;background:#1A1E25;border:1px solid #2A2F38;border-radius:999px;padding:6px 6px 6px 12px}
+.gzp em{font-style:normal;background:#D4F85A;color:#14171D;border-radius:999px;padding:4px 10px;font-weight:700}
+.gzg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gzg i{aspect-ratio:1;border-radius:8px;background:linear-gradient(135deg,#2E4A12,#0E2A33)}
+.gzg i:nth-child(2){background:linear-gradient(135deg,#D4F85A,#3F8F5A)}.gzg i:nth-child(4){background:linear-gradient(135deg,#1B3B5A,#58C4A8)}.gzg i:nth-child(6){background:linear-gradient(135deg,#3F6212,#D4F85A)}
+.gzc{display:flex;justify-content:space-between;color:#9AA196}.gk span{background:#EEF0F8;border-radius:999px;padding:3px 9px;font-weight:600}
 """
 
 GLYPH = {
@@ -351,6 +363,7 @@ GLYPH = {
  "baridata":'<path d="M3 12.5h4l2-5 4 10 2-5h6"/>',
  "code-claw":'<g fill="currentColor" stroke="none"><ellipse cx="5.6" cy="10.2" rx="1.9" ry="2.4"/><ellipse cx="9.6" cy="5.9" rx="2" ry="2.6"/><ellipse cx="14.4" cy="5.9" rx="2" ry="2.6"/><ellipse cx="18.4" cy="10.2" rx="1.9" ry="2.4"/><path d="M12 11.3c-2.7 0-5.6 3.7-5.6 6.4 0 1.6 1.2 2.4 2.7 2.4 1.2 0 1.9-.6 2.9-.6s1.7.6 2.9.6c1.5 0 2.7-.8 2.7-2.4 0-2.7-2.9-6.4-5.6-6.4z"/></g>',
  "ghostai":'<path d="M6 20.5V10a6 6 0 0 1 12 0v10.5l-2-1.6-2 1.6-2-1.6-2 1.6-2-1.6z"/><circle cx="9.8" cy="10.6" r="1.1" fill="currentColor"/><circle cx="14.2" cy="10.6" r="1.1" fill="currentColor"/>',
+ "genzpark":'<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><path d="M17 13.2l1 2.8 2.8 1-2.8 1-1 2.8-1-2.8-2.8-1 2.8-1z" fill="currentColor"/>',
  "poster-maker":'<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="9.5" cy="8.5" r="1.8"/><path d="M4 17l5-5 4 4 2.5-2.5L20 18"/>',
 }
 import base64
@@ -366,6 +379,8 @@ def glyph(slug):
     vb="4.5 1 15 22" if slug=="transwayz" else "0 0 24 24"
     return f'<svg viewBox="{vb}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{GLYPH[slug]}</svg>'
 
+GZ_DASH='''<div class="gz"><div class="side"><b>GenZpark</b><span>Chat</span><span class="on">Images</span><span>Video</span><span>Docs</span><span>Slides</span><span>Music</span><span>PDF chat</span><span>Design</span></div>
+<div class="main"><div class="gzp">Neon city skyline at dusk, poster style<em>Generate</em></div><div class="gzc"><span>Images</span><span>Credit cost shown first</span></div><div class="gzg"><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>'''
 GHOST_CALL='''<div class="call">
 <div class="tiles"><i></i><i></i><i></i><i></i></div>
 <div class="ghostp"><span class="gq">Question heard: "When can we go live?"</span><b>Suggested answer</b><p>Beta in two weeks, full launch after the security review.</p><div class="gk"><span>Notes</span><span>Action items</span></div></div></div>'''
@@ -396,6 +411,9 @@ def mock(p):
 <svg viewBox="0 0 300 90" style="width:100%;height:auto;display:block;margin-top:4px"><path d="M10 85H290" stroke="#E6E8E3"/><polyline points="'''+pts+'''" fill="none" stroke="var(--c)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 <div class="cols" style="grid-template-columns:1fr 1fr"><div class="col"><span>Due this week</span><div class="trip">Patient 1042<br>6-month review</div><div class="trip">Patient 0987<br>12-month review</div></div>
 <div class="col"><span>Missed visits</span><div class="trip">Patient 0911<br>Reminder sent</div></div></div></div></div></div>
+<figcaption class="caption">Illustrative interface</figcaption></figure>'''
+    if k=="workspace":
+        return '''<figure class="mock web" style="margin:0"><div class="browser" role="img" aria-label="Illustration of the GenZpark dashboard generating images from a prompt"><div class="bdots"><i></i><i></i><i></i></div>'''+GZ_DASH+'''</div>
 <figcaption class="caption">Illustrative interface</figcaption></figure>'''
     if k=="ghost":
         return '''<figure class="mock web" style="margin:0"><div class="browser" role="img" aria-label="Illustration of GhostAI suggesting an answer during a video call"><div class="bdots"><i></i><i></i><i></i></div>'''+GHOST_CALL+'''</div>
@@ -459,6 +477,7 @@ def index_body(href):
             im=''.join(f'<img class="p p{i}" src="{ASSET(src)}" alt="" width="535" height="1160" loading="lazy">' for i,(src,cap,alt) in enumerate(p["shots"][:3]))
         elif p.get("card_img") or p.get("hero"):
             src,alt,w,h=p.get("card_img") or p["hero"]; im=f'<img class="w" src="{ASSET(src)}" alt="" width="{w}" height="{h}" loading="lazy">'
+        elif p["kind"]=="workspace": im=f'<div class="w cm"><div class="browser"><div class="bdots"><i></i><i></i><i></i></div>{GZ_DASH}</div></div>'
         elif p["kind"]=="ghost": im=f'<div class="w cm"><div class="browser"><div class="bdots"><i></i><i></i><i></i></div>{GHOST_CALL}</div></div>'
         else: im=''
         return f'<div class="cs-media" aria-hidden="true">{ic}{im}</div>'
