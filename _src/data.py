@@ -1,7 +1,7 @@
 # All facts below come from the user's brief, the Transwayz product doc, or the live App Store listings (Oct 2026).
 PROJECTS = [
 # Code Claw facts come from the product website (codeclaw-markting.iapplabz.co.in) as supplied by the owner, Oct 2026.
- dict(slug="code-claw", name="Code Claw", color="#86198F", kind="desktop", ai=True,
+ dict(slug="code-claw", niche="Developer tools", name="Code Claw", color="#86198F", kind="desktop", ai=True,
   card_img=("assets/code-claw/features.webp","",1600,846),
   hero=("assets/code-claw/hero.webp","The Code Claw website: an AI coding agent on your own machine, with a Download free button for version 0.1.0 on macOS, Windows and Linux",956,778),
   wide=[("assets/code-claw/features.webp","Everything in one desktop app: editor, agent, model choice, git safety and a real dev environment","Code Claw feature overview with five panels: Editor and IDE, An agent that acts, Your models your rules, Git and safety, and Real dev environment",1600,846),
@@ -38,7 +38,7 @@ PROJECTS = [
   links=[("Visit the Code Claw site","https://codeclaw-markting.iapplabz.co.in/")]),
 
 # GhostAI facts come from meetghostai.com and its help centre (via web search) and the owner's screenshots, Oct 2026.
- dict(slug="ghostai", name="GhostAI", color="#3E4A89", kind="ghost", ai=True,
+ dict(slug="ghostai", niche="Meetings and calls", name="GhostAI", color="#3E4A89", kind="ghost", ai=True,
   category="AI meeting assistant", platform="Mac app",
   oneliner="An invisible sidekick that gives you instant answers in meetings, calls and conversations, without anyone knowing.",
   summary="GhostAI is a real-time AI assistant for the Mac. It listens to the call, suggests answers as the conversation happens, takes notes, and turns every meeting into a summary with key points and action items.",
@@ -71,7 +71,7 @@ PROJECTS = [
   links=[("Visit meetghostai.com","https://meetghostai.com/")]),
 
 # GenZpark facts come from genzpark.ai (via web search) and the owner's screenshots, Oct 2026.
- dict(slug="genzpark", name="GenZpark", color="#3F6212", kind="workspace", ai=True,
+ dict(slug="genzpark", niche="Content creation", name="GenZpark", color="#3F6212", kind="workspace", ai=True,
   category="AI workspace", platform="Web platform",
   oneliner="An all-in-one AI platform to create, chat, generate and automate faster, from a single dashboard.",
   summary="GenZpark brings powerful AI tools into one simple dashboard. People generate images, create videos, write content, edit documents, build presentations, make music and chat with AI models, all from a single platform and a single account.",
@@ -103,7 +103,7 @@ PROJECTS = [
   platforms=["Web app","Free, Starter, Creator and Pro plans","Credit-based pricing"],
   links=[("Visit genzpark.ai","https://genzpark.ai/")]),
 
- dict(slug="poster-maker", name="Poster Maker", color="#AE1757", kind="poster", ai=True,
+ dict(slug="poster-maker", niche="Graphic design", name="Poster Maker", color="#AE1757", kind="poster", ai=True,
   icon="assets/poster-maker/icon.webp",
   shots=[("assets/poster-maker/screen-1.webp","20,000+ templates for every occasion","Template library filtered by Birthday, Business, Party and Flyer"),
          ("assets/poster-maker/screen-2.webp","Ads that sell, built in minutes","A real-estate ad being designed with brand colours, graphics and shapes"),
@@ -136,7 +136,7 @@ PROJECTS = [
   outcome="Close to three million downloads and a 4.6 rating across 20,000 App Store reviews, in 28 languages.",
   platforms=["iPhone","iPad","Mac","Apple Vision","28 languages"],
   links=[("Download on the App Store","https://apps.apple.com/us/app/poster-maker-ai-flyer-design/id1241339881")]),
- dict(slug="transwayz", name="Transwayz", color="#1A30D2", kind="web",
+ dict(slug="transwayz", niche="Trucking and logistics", name="Transwayz", color="#1A30D2", kind="web",
   hero=("assets/transwayz/dispatch.webp","Transwayz trips and dispatch board showing active orders, trips in progress, available drivers and five live trips with their status",695,784),
   wide=[("assets/transwayz/integrations.webp","Integrations: accounting, fuel tax (IFTA), telematics and EDI connectors, each configured in-app","Transwayz integrations screen listing accounting, IFTA and telematics connectors next to the module list with screen counts",1600,573)],
   flow=[("Capture order","Create a one-off order, set up a recurring one or bulk-import from a spreadsheet. Each order holds the customer, stops, dates, goods and rate.","#3B6CF0","box"),
@@ -176,7 +176,7 @@ PROJECTS = [
   platforms=["Web app","Multi-tenant","PDF and spreadsheet export","Public website and blog"],
   links=[("Visit transwayz.com","https://transwayz.com/")]),
 
- dict(slug="baridata", name="Baridata", color="#0F766E", kind="registry",
+ dict(slug="baridata", niche="Healthcare", name="Baridata", color="#0F766E", kind="registry",
   card_img=("assets/baridata/dashboard.webp","",1600,498),
   hero=("assets/baridata/hero.webp","Baridata illustration of a patient with BMI and HbA1c falling, an average %TWL card and an outcomes snapshot",652,711),
   wide=[("assets/baridata/dashboard.webp","The outcomes dashboard: average %TWL over 24 months, total cases, diabetes remission and complication rate","Baridata outcomes dashboard with a %TWL curve over 24 months and cards for total cases, average %TWL at 12 months, diabetes remission and major complications",1600,498)],
@@ -218,7 +218,7 @@ PROJECTS = [
   outcome="One registry for the whole bariatric programme: surgeries logged in minutes, follow-ups tracked automatically, outcomes visible live and research data ready when it is needed.",
   platforms=["Cloud web app","Anonymised data","CSV and Excel export"],
   links=[("Visit baridata.com","https://baridata.com/")]),
- dict(slug="beatstars", name="BeatStars", color="#161616", kind="player",
+ dict(slug="beatstars", niche="Music", name="BeatStars", color="#161616", kind="player",
   icon="assets/beatstars/icon.webp",
   shots=[("assets/beatstars/screen-1.webp","A player built for discovering beats","The BeatStars player showing a track with like, comment, follow and add-to-cart controls"),
          ("assets/beatstars/screen-2.webp","Messages between artists and producers","The BeatStars Messages inbox with conversations between producers and artists"),
@@ -321,7 +321,7 @@ PROJECTS = [
   platforms=["iPhone","iPad","Mac","Apple Vision","9 languages"],
   links=[("Download on the App Store","https://apps.apple.com/us/app/screen-recorder/id1578839671")]),
 
- dict(slug="singles-connect", name="Singles Connect", color="#6D2FD6", kind="dating",
+ dict(slug="singles-connect", niche="Dating app", name="Singles Connect", color="#6D2FD6", kind="dating",
   category="Dating app", platform="iPhone and Android",
   oneliner="A Canadian dating app built around verified profiles, real conversations and face-to-face video calls.",
   summary="Singles Connect is a swipe-based dating and geosocial app. Members browse nearby profiles, swipe to like or pass, match, then chat with photo sharing and meet over in-app voice and video calls.",

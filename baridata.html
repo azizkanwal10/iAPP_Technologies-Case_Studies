@@ -324,7 +324,15 @@ transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,opacity .
 .on-color .ai-tag{background:#fff;color:#14171D}
 .cs-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px}
 .ai-mini{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.04em;padding:2px 7px;border-radius:999px;color:#fff;background:linear-gradient(135deg,#6D28D9,#BE185D);vertical-align:middle;margin-left:6px;position:relative;top:-1px}
-.crumb .ai-tag{margin-top:6px}
+.crumb .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+/* 3D niche label */
+.niche{display:inline-flex;align-items:center;padding:5px 12px 6px;border-radius:10px;font-size:13px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1.15;color:#fff;white-space:nowrap;
+background:linear-gradient(180deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 88%,#000));
+box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.18),0 3px 0 color-mix(in srgb,var(--c) 55%,#000),0 8px 14px -6px color-mix(in srgb,var(--c) 70%,rgba(0,0,0,.5));
+text-shadow:0 1px 0 rgba(0,0,0,.25);transform:translateY(-1px);transition:transform .2s ease,box-shadow .2s ease}
+.cs-card:hover .niche{transform:translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.18),0 5px 0 color-mix(in srgb,var(--c) 55%,#000),0 12px 18px -6px color-mix(in srgb,var(--c) 70%,rgba(0,0,0,.5))}
+.on-color .niche{color:#14171D;text-shadow:none;background:linear-gradient(180deg,#fff,#E9ECEF);box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 rgba(0,0,0,.08),0 3px 0 rgba(0,0,0,.28),0 8px 14px -6px rgba(0,0,0,.45)}
+@media (prefers-reduced-motion:reduce){.niche{transition:none}}
 /* GhostAI illustrative call */
 .call{position:relative;background:#1B1F27;border-radius:8px;min-height:300px;padding:10px;overflow:hidden}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -350,7 +358,7 @@ transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,opacity .
 .gzc{display:flex;justify-content:space-between;color:#9AA196}.gk span{background:#EEF0F8;border-radius:999px;padding:3px 9px;font-weight:600}
 </style></head><body><div style="--c:#0F766E"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
 <nav aria-label="Main"><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
-<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12.5h4l2-5 4 10 2-5h6"/></svg></div><div><b>Case study</b>Healthcare SaaS, Cloud web platform</div></div>
+<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12.5h4l2-5 4 10 2-5h6"/></svg></div><div><b>Case study</b>Healthcare SaaS, Cloud web platform<span class="tags"><span class="niche">Healthcare</span></span></div></div>
 <h1>Baridata</h1><p class="lede">A cloud clinical registry that lets bariatric surgeons log a surgery in about two minutes and watch patient outcomes update live.</p><div class="live"><a class="livebtn" href="https://baridata.com/" target="_blank" rel="noopener">Visit baridata.com</a></div></div><div class="mock single"><img src="/assets/baridata/hero.webp" alt="Baridata illustration of a patient with BMI and HbA1c falling, an average %TWL card and an outcomes snapshot" width="652" height="711"></div></div>
 <div class="storerow"><div><strong>2 min</strong><span>to log a complete surgery</span></div><div><strong>44+</strong><span>bariatric centres across India</span></div><div><strong>6</strong><span>steps from surgery to research export</span></div><div><strong>Live</strong><span>outcomes dashboard</span></div></div></div></div>
 <main class="wrap">

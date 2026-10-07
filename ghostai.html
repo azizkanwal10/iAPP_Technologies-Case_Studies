@@ -324,7 +324,15 @@ transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,opacity .
 .on-color .ai-tag{background:#fff;color:#14171D}
 .cs-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px}
 .ai-mini{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.04em;padding:2px 7px;border-radius:999px;color:#fff;background:linear-gradient(135deg,#6D28D9,#BE185D);vertical-align:middle;margin-left:6px;position:relative;top:-1px}
-.crumb .ai-tag{margin-top:6px}
+.crumb .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+/* 3D niche label */
+.niche{display:inline-flex;align-items:center;padding:5px 12px 6px;border-radius:10px;font-size:13px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1.15;color:#fff;white-space:nowrap;
+background:linear-gradient(180deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 88%,#000));
+box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.18),0 3px 0 color-mix(in srgb,var(--c) 55%,#000),0 8px 14px -6px color-mix(in srgb,var(--c) 70%,rgba(0,0,0,.5));
+text-shadow:0 1px 0 rgba(0,0,0,.25);transform:translateY(-1px);transition:transform .2s ease,box-shadow .2s ease}
+.cs-card:hover .niche{transform:translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.18),0 5px 0 color-mix(in srgb,var(--c) 55%,#000),0 12px 18px -6px color-mix(in srgb,var(--c) 70%,rgba(0,0,0,.5))}
+.on-color .niche{color:#14171D;text-shadow:none;background:linear-gradient(180deg,#fff,#E9ECEF);box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 rgba(0,0,0,.08),0 3px 0 rgba(0,0,0,.28),0 8px 14px -6px rgba(0,0,0,.45)}
+@media (prefers-reduced-motion:reduce){.niche{transition:none}}
 /* GhostAI illustrative call */
 .call{position:relative;background:#1B1F27;border-radius:8px;min-height:300px;padding:10px;overflow:hidden}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -350,7 +358,7 @@ transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,opacity .
 .gzc{display:flex;justify-content:space-between;color:#9AA196}.gk span{background:#EEF0F8;border-radius:999px;padding:3px 9px;font-weight:600}
 </style></head><body><div style="--c:#3E4A89"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
 <nav aria-label="Main"><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
-<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20.5V10a6 6 0 0 1 12 0v10.5l-2-1.6-2 1.6-2-1.6-2 1.6-2-1.6z"/><circle cx="9.8" cy="10.6" r="1.1" fill="currentColor"/><circle cx="14.2" cy="10.6" r="1.1" fill="currentColor"/></svg></div><div><b>Case study</b>AI meeting assistant, Mac app<br><span class="ai-tag"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"/><path d="M19 15.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>AI tool</span></div></div>
+<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20.5V10a6 6 0 0 1 12 0v10.5l-2-1.6-2 1.6-2-1.6-2 1.6-2-1.6z"/><circle cx="9.8" cy="10.6" r="1.1" fill="currentColor"/><circle cx="14.2" cy="10.6" r="1.1" fill="currentColor"/></svg></div><div><b>Case study</b>AI meeting assistant, Mac app<span class="tags"><span class="niche">Meetings and calls</span><span class="ai-tag"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"/><path d="M19 15.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>AI tool</span></span></div></div>
 <h1>GhostAI</h1><p class="lede">An invisible sidekick that gives you instant answers in meetings, calls and conversations, without anyone knowing.</p><div class="live"><a class="livebtn" href="https://meetghostai.com/" target="_blank" rel="noopener">Visit meetghostai.com</a></div></div><figure class="mock web" style="margin:0"><div class="browser" role="img" aria-label="Illustration of GhostAI suggesting an answer during a video call"><div class="bdots"><i></i><i></i><i></i></div><div class="call">
 <div class="tiles"><i></i><i></i><i></i><i></i></div>
 <div class="ghostp"><span class="gq">Question heard: "When can we go live?"</span><b>Suggested answer</b><p>Beta in two weeks, full launch after the security review.</p><div class="gk"><span>Notes</span><span>Action items</span></div></div></div></div>

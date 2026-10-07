@@ -328,7 +328,15 @@ transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,opacity .
 .on-color .ai-tag{background:#fff;color:#14171D}
 .cs-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px}
 .ai-mini{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.04em;padding:2px 7px;border-radius:999px;color:#fff;background:linear-gradient(135deg,#6D28D9,#BE185D);vertical-align:middle;margin-left:6px;position:relative;top:-1px}
-.crumb .ai-tag{margin-top:6px}
+.crumb .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+/* 3D niche label */
+.niche{display:inline-flex;align-items:center;padding:5px 12px 6px;border-radius:10px;font-size:13px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1.15;color:#fff;white-space:nowrap;
+background:linear-gradient(180deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 88%,#000));
+box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.18),0 3px 0 color-mix(in srgb,var(--c) 55%,#000),0 8px 14px -6px color-mix(in srgb,var(--c) 70%,rgba(0,0,0,.5));
+text-shadow:0 1px 0 rgba(0,0,0,.25);transform:translateY(-1px);transition:transform .2s ease,box-shadow .2s ease}
+.cs-card:hover .niche{transform:translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.18),0 5px 0 color-mix(in srgb,var(--c) 55%,#000),0 12px 18px -6px color-mix(in srgb,var(--c) 70%,rgba(0,0,0,.5))}
+.on-color .niche{color:#14171D;text-shadow:none;background:linear-gradient(180deg,#fff,#E9ECEF);box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 rgba(0,0,0,.08),0 3px 0 rgba(0,0,0,.28),0 8px 14px -6px rgba(0,0,0,.45)}
+@media (prefers-reduced-motion:reduce){.niche{transition:none}}
 /* GhostAI illustrative call */
 .call{position:relative;background:#1B1F27;border-radius:8px;min-height:300px;padding:10px;overflow:hidden}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -368,6 +376,7 @@ GLYPH = {
 }
 import base64
 SPARK='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"/><path d="M19 15.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>'
+def niche_tag(p): return f'<span class="niche">{p["niche"]}</span>' if p.get("niche") else ''
 def ai_tag(p): return f'<span class="ai-tag">{SPARK}AI tool</span>' if p.get("ai") else ''
 ASSET=lambda path: "/"+path
 def data_uri(path):
@@ -487,7 +496,7 @@ def index_body(href):
     for i,p in enumerate(PROJECTS):
         chips=''.join(f'<li><b>{v}</b> {l}</li>' for v,l in p["stats"][:2])
         cards+=f'''<a class="cs-card{" cs-feat" if i==0 else ""}" href="{href(p["slug"])}" data-groups="{groups(p)}" style="--c:{p["color"]};--d:{(i%2)*90}ms">{media(p)}
-<div class="cs-body"><div class="cs-meta">{ai_tag(p)}<span class="cs-cat">{p["category"]}</span></div><h3>{p["name"]}</h3><p>{p["oneliner"]}</p><ul class="cs-stats">{chips}</ul>
+<div class="cs-body"><div class="cs-meta">{niche_tag(p) or f'<span class="cs-cat">{p["category"]}</span>'}{ai_tag(p)}</div><h3>{p["name"]}</h3><p>{p["oneliner"]}</p><ul class="cs-stats">{chips}</ul>
 <span class="cs-go">View case study<i>{ARROW}</i></span></div></a>'''
     n=lambda g: sum(g in groups(p).split() for p in PROJECTS)
     btn=lambda f,label,c,on=False: f'<button type="button" aria-pressed="{"true" if on else "false"}" data-f="{f}">{label} <span>{c}</span></button>' if c else ''
@@ -545,7 +554,7 @@ def case_body(p, href, nxt):
     live=''.join(f'<a class="livebtn" href="{u}" target="_blank" rel="noopener">{t}</a>' for t,u in p["links"])
     links=''.join(f'<a class="ghost" href="{u}" target="_blank" rel="noopener">{t}</a>' for t,u in p["links"])
     return f'''<div style="--c:{p["color"]}"><div class="chero on-color">{topbar(href(None),True)}
-<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon{" has-img" if p.get("icon") else ""}">{icon_inner(p)}</div><div><b>Case study</b>{p["category"]}, {p["platform"]}{('<br>'+ai_tag(p)) if p.get("ai") else ''}</div></div>
+<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon{" has-img" if p.get("icon") else ""}">{icon_inner(p)}</div><div><b>Case study</b>{p["category"]}, {p["platform"]}{('<span class="tags">'+niche_tag(p)+ai_tag(p)+'</span>') if (p.get("niche") or p.get("ai")) else ''}</div></div>
 <h1>{p["name"]}</h1><p class="lede">{p["oneliner"]}</p>{('<div class="live">'+live+'</div>') if live else ''}</div>{mock(p)}</div>
 <div class="storerow">{st}</div></div></div>
 <main class="wrap">
