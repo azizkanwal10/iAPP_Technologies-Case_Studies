@@ -337,6 +337,51 @@ text-shadow:0 1px 0 rgba(0,0,0,.25);transform:translateY(-1px);transition:transf
 .cs-card:hover .niche{transform:translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.18),0 5px 0 color-mix(in srgb,var(--c) 55%,#000),0 12px 18px -6px color-mix(in srgb,var(--c) 70%,rgba(0,0,0,.5))}
 .on-color .niche{color:#14171D;text-shadow:none;background:linear-gradient(180deg,#fff,#E9ECEF);box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 rgba(0,0,0,.08),0 3px 0 rgba(0,0,0,.28),0 8px 14px -6px rgba(0,0,0,.45)}
 @media (prefers-reduced-motion:reduce){.niche{transition:none}}
+/* results panel */
+.tally{position:relative;overflow:hidden;border:0;border-radius:28px;gap:0;color:#fff;
+background:radial-gradient(90% 140% at 0% 0%,rgba(124,58,237,.45),transparent 55%),radial-gradient(80% 140% at 100% 100%,rgba(190,24,93,.4),transparent 55%),#14171F;
+box-shadow:0 30px 60px -30px rgba(20,25,35,.55),inset 0 0 0 1px rgba(255,255,255,.08)}
+.tally::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);background-size:20px 20px;pointer-events:none}
+.tally div{position:relative;padding:32px 32px 34px;border-right:1px solid rgba(255,255,255,.1)}
+.tally div:last-child{border-right:0}
+.tally strong{font-size:clamp(44px,5.4vw,72px);margin-top:16px;background:linear-gradient(180deg,#fff 30%,#D9C6FF);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+.tally span{display:block;margin-top:8px;color:rgba(255,255,255,.75);font-size:17px}
+.ti{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;color:#fff;background:linear-gradient(135deg,#6D28D9,#BE185D);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 10px 20px -8px rgba(190,24,93,.7)}
+.ti svg{width:22px;height:22px}
+.stars{display:block;position:relative;width:110px;height:20px;margin-top:12px;background:linear-gradient(90deg,rgba(255,255,255,.22) 0 100%);-webkit-mask:var(--st);mask:var(--st);
+--st:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 110 20'%3E%3Cg fill='%23000'%3E%3Cpath id='s' d='M10 1.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.8l-5.2 2.7 1-5.8L1.6 7.6l5.8-.8z'/%3E%3Cuse href='%23s' x='22'/%3E%3Cuse href='%23s' x='44'/%3E%3Cuse href='%23s' x='66'/%3E%3Cuse href='%23s' x='88'/%3E%3C/g%3E%3C/svg%3E") 0 0/110px 20px no-repeat}
+.stars b{position:absolute;inset:0 auto 0 0;background:#FBBF24}
+@media (max-width:700px){.tally div{border-right:0;border-bottom:1px solid rgba(255,255,255,.1);padding:26px 24px}.tally div:last-child{border-bottom:0}}
+/* compact case study grid */
+.cs-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+@media (max-width:1060px){.cs-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:680px){.cs-grid{grid-template-columns:1fr}}
+.cs-card{border-radius:22px}
+.cs-media{height:200px}
+.cs-ic{top:14px;left:14px;width:44px;border-radius:12px}
+.cs-media .p{width:30%;border-radius:12px;bottom:-62%}
+.cs-media .w{width:96%;right:-14%;top:58px;border-radius:12px}
+.cs-media .cm{position:absolute;width:520px;left:22%;top:40px;transform:scale(.6) rotate(-4deg);transform-origin:top left;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.cs-card:hover .cm{transform:translateY(-10px) scale(.6) rotate(-2deg)}
+.cs-media .cm .browser{box-shadow:0 30px 50px -16px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.18)}
+.cs-body{padding:20px 22px 22px;gap:8px}
+.cs-body h3{font-size:clamp(22px,1.9vw,26px)}
+.cs-body p{font-size:16px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.cs-meta{gap:6px 8px;min-height:24px}
+.cs-meta .niche{font-size:11px;padding:4px 9px 5px;border-radius:8px}
+.cs-meta .ai-tag{font-size:11.5px;padding:3px 9px 3px 7px}.cs-meta .ai-tag svg{width:12px;height:12px}
+.cs-cat{font-size:14px}
+.cs-stats{gap:6px;margin-top:4px}
+.cs-stats li{font-size:13px;padding:4px 10px}
+.cs-go{font-size:15px;padding-top:12px}
+.cs-go i{width:34px;height:34px}
+@media (max-width:600px){.cs-media{height:190px}}
+@media (min-width:1061px){.cs-card.cs-top:not(.solo){grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}
+.cs-card.cs-top:not(.solo) .cs-media{order:2;height:auto;min-height:300px}
+.cs-card.cs-top:not(.solo) .cs-body{padding:32px 36px;justify-content:center}
+.cs-card.cs-top:not(.solo) h3{font-size:34px}
+.cs-card.cs-top:not(.solo) .w{width:88%;right:-8%;top:52px}
+.cs-card.cs-top:not(.solo) .cs-go{margin-top:8px}}
 /* GhostAI illustrative call */
 .call{position:relative;background:#1B1F27;border-radius:8px;min-height:300px;padding:10px;overflow:hidden}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -474,6 +519,10 @@ cards.forEach(function(c,i){var show=f==="all"||(" "+c.getAttribute("data-groups
 if(show){if(c.hidden){c.hidden=false;c.classList.add("out");c.classList.remove("feat-off");void c.offsetWidth;}c.style.setProperty("--d",(i%2)*60+"ms");c.classList.remove("out");c.classList.add("in")}
 else if(!c.hidden){c.classList.add("out");setTimeout(function(){if(c.classList.contains("out"))c.hidden=true},reduce?0:260)}
 c.classList.toggle("solo",f!=="all")})})});
+var nums=[].slice.call(document.querySelectorAll(".tally strong[data-to]"));
+if(!reduce&&"IntersectionObserver" in window&&nums.length){var done=false,t=new IntersectionObserver(function(es){if(done||!es.some(function(e){return e.isIntersecting}))return;done=true;t.disconnect();
+var t0=performance.now();nums.forEach(function(n){n.dataset.final=n.textContent});
+(function step(now){var k=Math.min(1,(now-t0)/1400),e=1-Math.pow(1-k,3);nums.forEach(function(n){var v=parseFloat(n.dataset.to)*e;n.textContent=(k<1?v.toFixed(+n.dataset.dec):n.dataset.final.replace(n.dataset.suf,""))+n.dataset.suf;if(k===1)n.textContent=n.dataset.final});if(k<1)requestAnimationFrame(step)})(t0)},{threshold:.4});t.observe(document.querySelector(".tally"))}
 })();</script>'''
 
 def index_body(href):
@@ -486,8 +535,8 @@ def index_body(href):
             im=''.join(f'<img class="p p{i}" src="{ASSET(src)}" alt="" width="535" height="1160" loading="lazy">' for i,(src,cap,alt) in enumerate(p["shots"][:3]))
         elif p.get("card_img") or p.get("hero"):
             src,alt,w,h=p.get("card_img") or p["hero"]; im=f'<img class="w" src="{ASSET(src)}" alt="" width="{w}" height="{h}" loading="lazy">'
-        elif p["kind"]=="workspace": im=f'<div class="w cm"><div class="browser"><div class="bdots"><i></i><i></i><i></i></div>{GZ_DASH}</div></div>'
-        elif p["kind"]=="ghost": im=f'<div class="w cm"><div class="browser"><div class="bdots"><i></i><i></i><i></i></div>{GHOST_CALL}</div></div>'
+        elif p["kind"]=="workspace": im=f'<div class="cm"><div class="browser"><div class="bdots"><i></i><i></i><i></i></div>{GZ_DASH}</div></div>'
+        elif p["kind"]=="ghost": im=f'<div class="cm"><div class="browser"><div class="bdots"><i></i><i></i><i></i></div>{GHOST_CALL}</div></div>'
         else: im=''
         return f'<div class="cs-media" aria-hidden="true">{ic}{im}</div>'
     def group(p): return "web" if p["kind"] in ("web","registry") else "desktop" if p["kind"]=="desktop" else "mobile"
@@ -495,7 +544,7 @@ def index_body(href):
     cards=''
     for i,p in enumerate(PROJECTS):
         chips=''.join(f'<li><b>{v}</b> {l}</li>' for v,l in p["stats"][:2])
-        cards+=f'''<a class="cs-card{" cs-feat" if i==0 else ""}" href="{href(p["slug"])}" data-groups="{groups(p)}" style="--c:{p["color"]};--d:{(i%2)*90}ms">{media(p)}
+        cards+=f'''<a class="cs-card{" cs-top" if i==0 else ""}" href="{href(p["slug"])}" data-groups="{groups(p)}" style="--c:{p["color"]};--d:{(i%2)*90}ms">{media(p)}
 <div class="cs-body"><div class="cs-meta">{niche_tag(p) or f'<span class="cs-cat">{p["category"]}</span>'}{ai_tag(p)}</div><h3>{p["name"]}</h3><p>{p["oneliner"]}</p><ul class="cs-stats">{chips}</ul>
 <span class="cs-go">View case study<i>{ARROW}</i></span></div></a>'''
     n=lambda g: sum(g in groups(p).split() for p in PROJECTS)
@@ -507,7 +556,10 @@ def index_body(href):
 <p>iApp Technologies is a leading AI development company. Since 2012, our team of 100+ designers, engineers and marketers has taken products from first sketch to millions of users. Today we build AI agents, RAG systems and intelligent apps for businesses around the world.</p>
 <div class="links" style="margin-top:32px"><a class="btn" href="#work">See our work</a><a class="ghost" href="mailto:aziz.k@iapptechnologiesllp.com">Talk to our team</a></div></section>
 <section class="wrap" aria-label="Products"><div class="home">{apps}</div>
-<div class="tally"><div><strong>{total}</strong><span>downloads across our four consumer apps</span></div><div><strong>108K+</strong><span>ratings on the US App Store</span></div><div><strong>4.6</strong><span>median App Store rating</span></div></div></section>
+<div class="tally" aria-label="Results across our consumer apps">
+<div><i class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg></i><strong data-to="11.8" data-suf="M+" data-dec="1">{total}</strong><span>downloads across our four consumer apps</span></div>
+<div><i class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8.5 9.5h7M8.5 12.5h4"/></svg></i><strong data-to="108" data-suf="K+" data-dec="0">108K+</strong><span>ratings on the US App Store</span></div>
+<div><i class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></i><strong data-to="4.6" data-suf="" data-dec="1">4.6</strong><span>median App Store rating</span><em class="stars" aria-hidden="true"><b style="width:92%"></b></em></div></div></section>
 <section class="wrap list" id="work"><div class="cs-head"><div><h2>Case studies</h2><p>Products we have designed, built and kept shipping, from freight and healthcare platforms to apps with millions of installs.</p></div>{filt}</div><div class="cs-grid">{cards}</div></section>
 <section class="wrap company"><div class="cohead"><h2>One team. Every stage. Under one roof.</h2><p>Most products stall in the hand-offs between agencies. We keep strategy, design, engineering, AI, QA and growth inside one accountable team, so your product moves from idea to launch to scale without changing hands.</p></div>
 <div class="facts"><div><strong>100+</strong><span>people on staff</span></div><div><strong>2012</strong><span>building since</span></div><div><strong>4</strong><span>offices: USA, India, Canada, Australia</span></div></div>
