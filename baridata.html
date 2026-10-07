@@ -318,6 +318,24 @@ transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,opacity .
 @media (max-width:600px){.cs-media{height:240px}.cs-body{padding:22px}.cs-filter{flex-wrap:wrap;overflow:visible;background:none;border:0;padding:0}.cs-filter button{padding:8px 12px;font-size:15px;border:1px solid var(--rule);background:var(--paper2)}}
 @media (prefers-reduced-motion:reduce){.cs-card,.cs-media img,.cs-go i{transition:none}.js .cs-card{opacity:1;--ty:0px}}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* AI tool badges */
+.ai-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 8px;border-radius:999px;font-size:13px;font-weight:750;letter-spacing:.02em;line-height:1.2;color:#fff;background:linear-gradient(135deg,#6D28D9,#BE185D);vertical-align:middle;white-space:nowrap}
+.ai-tag svg{width:14px;height:14px;flex:none}
+.on-color .ai-tag{background:#fff;color:#14171D}
+.cs-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px}
+.ai-mini{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.04em;padding:2px 7px;border-radius:999px;color:#fff;background:linear-gradient(135deg,#6D28D9,#BE185D);vertical-align:middle;margin-left:6px;position:relative;top:-1px}
+.crumb .ai-tag{margin-top:6px}
+/* GhostAI illustrative call */
+.call{position:relative;background:#1B1F27;border-radius:8px;min-height:300px;padding:10px;overflow:hidden}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tiles i{background:#2B313D;border-radius:8px;height:136px;display:grid;place-items:center}
+.tiles i::before{content:"";width:44px;height:44px;border-radius:50%;background:#3A4252}
+.ghostp{position:absolute;right:12px;bottom:12px;width:64%;background:rgba(255,255,255,.95);color:#1A1F2B;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.45;box-shadow:0 18px 40px -12px rgba(0,0,0,.6)}
+.ghostp .gq{display:block;color:#5d6470;margin-bottom:6px}
+.ghostp b{display:block;color:var(--c);font-size:12px;margin-bottom:2px}
+.ghostp p{margin:0 0 8px}
+.cs-media .cm .browser{padding:8px;border-radius:14px}.cs-media .cm .call{min-height:0}
+.gk{display:flex;gap:6px}.gk span{background:#EEF0F8;border-radius:999px;padding:3px 9px;font-weight:600}
 </style></head><body><div style="--c:#0F766E"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
 <nav aria-label="Main"><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
 <div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12.5h4l2-5 4 10 2-5h6"/></svg></div><div><b>Case study</b>Healthcare SaaS, Cloud web platform</div></div>

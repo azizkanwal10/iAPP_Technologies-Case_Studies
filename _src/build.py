@@ -322,6 +322,24 @@ transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,opacity .
 @media (max-width:600px){.cs-media{height:240px}.cs-body{padding:22px}.cs-filter{flex-wrap:wrap;overflow:visible;background:none;border:0;padding:0}.cs-filter button{padding:8px 12px;font-size:15px;border:1px solid var(--rule);background:var(--paper2)}}
 @media (prefers-reduced-motion:reduce){.cs-card,.cs-media img,.cs-go i{transition:none}.js .cs-card{opacity:1;--ty:0px}}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* AI tool badges */
+.ai-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 8px;border-radius:999px;font-size:13px;font-weight:750;letter-spacing:.02em;line-height:1.2;color:#fff;background:linear-gradient(135deg,#6D28D9,#BE185D);vertical-align:middle;white-space:nowrap}
+.ai-tag svg{width:14px;height:14px;flex:none}
+.on-color .ai-tag{background:#fff;color:#14171D}
+.cs-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px}
+.ai-mini{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.04em;padding:2px 7px;border-radius:999px;color:#fff;background:linear-gradient(135deg,#6D28D9,#BE185D);vertical-align:middle;margin-left:6px;position:relative;top:-1px}
+.crumb .ai-tag{margin-top:6px}
+/* GhostAI illustrative call */
+.call{position:relative;background:#1B1F27;border-radius:8px;min-height:300px;padding:10px;overflow:hidden}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tiles i{background:#2B313D;border-radius:8px;height:136px;display:grid;place-items:center}
+.tiles i::before{content:"";width:44px;height:44px;border-radius:50%;background:#3A4252}
+.ghostp{position:absolute;right:12px;bottom:12px;width:64%;background:rgba(255,255,255,.95);color:#1A1F2B;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.45;box-shadow:0 18px 40px -12px rgba(0,0,0,.6)}
+.ghostp .gq{display:block;color:#5d6470;margin-bottom:6px}
+.ghostp b{display:block;color:var(--c);font-size:12px;margin-bottom:2px}
+.ghostp p{margin:0 0 8px}
+.cs-media .cm .browser{padding:8px;border-radius:14px}.cs-media .cm .call{min-height:0}
+.gk{display:flex;gap:6px}.gk span{background:#EEF0F8;border-radius:999px;padding:3px 9px;font-weight:600}
 """
 
 GLYPH = {
@@ -331,9 +349,13 @@ GLYPH = {
  "screen-recorder":'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/>',
  "singles-connect":'<path d="M12 20s-7-4.4-7-9.6A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.4C19 15.6 12 20 12 20z"/><path d="M17.5 3.5c.6-.7 1.9-.5 2.1.5.3 1.2-1.6 2.5-2.1 2.8-.5-.3-2.4-1.6-2.1-2.8.2-1 1.5-1.2 2.1-.5z" fill="currentColor"/>',
  "baridata":'<path d="M3 12.5h4l2-5 4 10 2-5h6"/>',
+ "code-claw":'<g fill="currentColor" stroke="none"><ellipse cx="5.6" cy="10.2" rx="1.9" ry="2.4"/><ellipse cx="9.6" cy="5.9" rx="2" ry="2.6"/><ellipse cx="14.4" cy="5.9" rx="2" ry="2.6"/><ellipse cx="18.4" cy="10.2" rx="1.9" ry="2.4"/><path d="M12 11.3c-2.7 0-5.6 3.7-5.6 6.4 0 1.6 1.2 2.4 2.7 2.4 1.2 0 1.9-.6 2.9-.6s1.7.6 2.9.6c1.5 0 2.7-.8 2.7-2.4 0-2.7-2.9-6.4-5.6-6.4z"/></g>',
+ "ghostai":'<path d="M6 20.5V10a6 6 0 0 1 12 0v10.5l-2-1.6-2 1.6-2-1.6-2 1.6-2-1.6z"/><circle cx="9.8" cy="10.6" r="1.1" fill="currentColor"/><circle cx="14.2" cy="10.6" r="1.1" fill="currentColor"/>',
  "poster-maker":'<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="9.5" cy="8.5" r="1.8"/><path d="M4 17l5-5 4 4 2.5-2.5L20 18"/>',
 }
 import base64
+SPARK='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"/><path d="M19 15.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>'
+def ai_tag(p): return f'<span class="ai-tag">{SPARK}AI tool</span>' if p.get("ai") else ''
 ASSET=lambda path: "/"+path
 def data_uri(path):
     return "data:image/webp;base64,"+base64.b64encode(open(path,"rb").read()).decode()
@@ -343,6 +365,10 @@ def icon_inner(p):
 def glyph(slug):
     vb="4.5 1 15 22" if slug=="transwayz" else "0 0 24 24"
     return f'<svg viewBox="{vb}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{GLYPH[slug]}</svg>'
+
+GHOST_CALL='''<div class="call">
+<div class="tiles"><i></i><i></i><i></i><i></i></div>
+<div class="ghostp"><span class="gq">Question heard: "When can we go live?"</span><b>Suggested answer</b><p>Beta in two weeks, full launch after the security review.</p><div class="gk"><span>Notes</span><span>Action items</span></div></div></div>'''
 
 def mock(p):
     if p.get("hero"):
@@ -370,6 +396,9 @@ def mock(p):
 <svg viewBox="0 0 300 90" style="width:100%;height:auto;display:block;margin-top:4px"><path d="M10 85H290" stroke="#E6E8E3"/><polyline points="'''+pts+'''" fill="none" stroke="var(--c)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 <div class="cols" style="grid-template-columns:1fr 1fr"><div class="col"><span>Due this week</span><div class="trip">Patient 1042<br>6-month review</div><div class="trip">Patient 0987<br>12-month review</div></div>
 <div class="col"><span>Missed visits</span><div class="trip">Patient 0911<br>Reminder sent</div></div></div></div></div></div>
+<figcaption class="caption">Illustrative interface</figcaption></figure>'''
+    if k=="ghost":
+        return '''<figure class="mock web" style="margin:0"><div class="browser" role="img" aria-label="Illustration of GhostAI suggesting an answer during a video call"><div class="bdots"><i></i><i></i><i></i></div>'''+GHOST_CALL+'''</div>
 <figcaption class="caption">Illustrative interface</figcaption></figure>'''
     head='<figure class="mock" style="margin:0"><div class="phone" role="img" aria-label="Illustration of the '+p["name"]+' app"><div class="screen"><div class="island"></div><div class="sc">'
     tail='</div></div></div><figcaption class="caption">Illustrative interface</figcaption></figure>'
@@ -414,7 +443,7 @@ if(!reduce&&"IntersectionObserver" in window){var io=new IntersectionObserver(fu
 if(!reduce)cards.forEach(function(c){c.addEventListener("pointermove",function(e){if(e.pointerType!=="mouse")return;var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.style.setProperty("--ry",((x-.5)*4).toFixed(2)+"deg");c.style.setProperty("--rx",((.5-y)*4).toFixed(2)+"deg");c.style.setProperty("--mx",(x*100)+"%");c.style.setProperty("--my",(y*100)+"%")});c.addEventListener("pointerleave",function(){c.style.setProperty("--rx","0deg");c.style.setProperty("--ry","0deg")})});
 var btns=[].slice.call(document.querySelectorAll(".cs-filter button"));
 btns.forEach(function(b){b.addEventListener("click",function(){var f=b.getAttribute("data-f");btns.forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});
-cards.forEach(function(c,i){var show=f==="all"||c.getAttribute("data-group")===f;
+cards.forEach(function(c,i){var show=f==="all"||(" "+c.getAttribute("data-groups")+" ").indexOf(" "+f+" ")>-1;
 if(show){if(c.hidden){c.hidden=false;c.classList.add("out");c.classList.remove("feat-off");void c.offsetWidth;}c.style.setProperty("--d",(i%2)*60+"ms");c.classList.remove("out");c.classList.add("in")}
 else if(!c.hidden){c.classList.add("out");setTimeout(function(){if(c.classList.contains("out"))c.hidden=true},reduce?0:260)}
 c.classList.toggle("solo",f!=="all")})})});
@@ -422,7 +451,7 @@ c.classList.toggle("solo",f!=="all")})})});
 
 def index_body(href):
     total="11.8M+"
-    apps=''.join(f'<a class="app" href="{href(p["slug"])}" style="--c:{p["color"]}"><div class="icon{" has-img" if p.get("icon") else ""}">{icon_inner(p)}</div><b>{p["name"]}</b><span>{p["card_stat"][0]}</span></a>' for p in PROJECTS)
+    apps=''.join(f'<a class="app" href="{href(p["slug"])}" style="--c:{p["color"]}"><div class="icon{" has-img" if p.get("icon") else ""}">{icon_inner(p)}</div><b>{p["name"]}{'<em class="ai-mini">AI</em>' if p.get("ai") else ''}</b><span>{p["card_stat"][0]}</span></a>' for p in PROJECTS)
     ARROW='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>'
     def media(p):
         ic=f'<div class="cs-ic icon{" has-img" if p.get("icon") else ""}">{icon_inner(p)}</div>'
@@ -430,17 +459,21 @@ def index_body(href):
             im=''.join(f'<img class="p p{i}" src="{ASSET(src)}" alt="" width="535" height="1160" loading="lazy">' for i,(src,cap,alt) in enumerate(p["shots"][:3]))
         elif p.get("card_img") or p.get("hero"):
             src,alt,w,h=p.get("card_img") or p["hero"]; im=f'<img class="w" src="{ASSET(src)}" alt="" width="{w}" height="{h}" loading="lazy">'
+        elif p["kind"]=="ghost": im=f'<div class="w cm"><div class="browser"><div class="bdots"><i></i><i></i><i></i></div>{GHOST_CALL}</div></div>'
         else: im=''
         return f'<div class="cs-media" aria-hidden="true">{ic}{im}</div>'
-    def group(p): return "web" if p["kind"] in ("web","registry") else "mobile"
+    def group(p): return "web" if p["kind"] in ("web","registry") else "desktop" if p["kind"]=="desktop" else "mobile"
+    def groups(p): return group(p)+(" ai" if p.get("ai") else "")
     cards=''
     for i,p in enumerate(PROJECTS):
         chips=''.join(f'<li><b>{v}</b> {l}</li>' for v,l in p["stats"][:2])
-        cards+=f'''<a class="cs-card{" cs-feat" if i==0 else ""}" href="{href(p["slug"])}" data-group="{group(p)}" style="--c:{p["color"]};--d:{(i%2)*90}ms">{media(p)}
-<div class="cs-body"><span class="cs-cat">{p["category"]}</span><h3>{p["name"]}</h3><p>{p["oneliner"]}</p><ul class="cs-stats">{chips}</ul>
+        cards+=f'''<a class="cs-card{" cs-feat" if i==0 else ""}" href="{href(p["slug"])}" data-groups="{groups(p)}" style="--c:{p["color"]};--d:{(i%2)*90}ms">{media(p)}
+<div class="cs-body"><div class="cs-meta">{ai_tag(p)}<span class="cs-cat">{p["category"]}</span></div><h3>{p["name"]}</h3><p>{p["oneliner"]}</p><ul class="cs-stats">{chips}</ul>
 <span class="cs-go">View case study<i>{ARROW}</i></span></div></a>'''
-    n_all=len(PROJECTS); n_m=sum(group(p)=="mobile" for p in PROJECTS); n_w=n_all-n_m
-    filt=f'''<div class="cs-filter" role="group" aria-label="Filter case studies"><button type="button" aria-pressed="true" data-f="all">All <span>{n_all}</span></button><button type="button" aria-pressed="false" data-f="mobile">Mobile apps <span>{n_m}</span></button><button type="button" aria-pressed="false" data-f="web">Web platforms <span>{n_w}</span></button></div>'''
+    n=lambda g: sum(g in groups(p).split() for p in PROJECTS)
+    btn=lambda f,label,c,on=False: f'<button type="button" aria-pressed="{"true" if on else "false"}" data-f="{f}">{label} <span>{c}</span></button>' if c else ''
+    filt=('<div class="cs-filter" role="group" aria-label="Filter case studies">'+btn("all","All",len(PROJECTS),True)+btn("ai","AI tools",n("ai"))
+          +btn("mobile","Mobile apps",n("mobile"))+btn("web","Web platforms",n("web"))+btn("desktop","Desktop apps",n("desktop"))+'</div>')
     return f'''{topbar(href(None))}<main>
 <section class="wrap ihero"><h1>Ideas, engineered into intelligent products.</h1>
 <p>iApp Technologies is a leading AI development company. Since 2012, our team of 100+ designers, engineers and marketers has taken products from first sketch to millions of users. Today we build AI agents, RAG systems and intelligent apps for businesses around the world.</p>
@@ -493,7 +526,7 @@ def case_body(p, href, nxt):
     live=''.join(f'<a class="livebtn" href="{u}" target="_blank" rel="noopener">{t}</a>' for t,u in p["links"])
     links=''.join(f'<a class="ghost" href="{u}" target="_blank" rel="noopener">{t}</a>' for t,u in p["links"])
     return f'''<div style="--c:{p["color"]}"><div class="chero on-color">{topbar(href(None),True)}
-<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon{" has-img" if p.get("icon") else ""}">{icon_inner(p)}</div><div><b>Case study</b>{p["category"]}, {p["platform"]}</div></div>
+<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon{" has-img" if p.get("icon") else ""}">{icon_inner(p)}</div><div><b>Case study</b>{p["category"]}, {p["platform"]}{('<br>'+ai_tag(p)) if p.get("ai") else ''}</div></div>
 <h1>{p["name"]}</h1><p class="lede">{p["oneliner"]}</p>{('<div class="live">'+live+'</div>') if live else ''}</div>{mock(p)}</div>
 <div class="storerow">{st}</div></div></div>
 <main class="wrap">
@@ -517,7 +550,7 @@ def page(title, desc, body, extra_head=""):
 out=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(out)  # asset paths in data.py are relative to the repo root
 href_site=lambda s: "/" if s is None else f"/{s}"
-open(f"{out}/index.html","w").write(page("Case studies | iApp Technologies","Products iApp Technologies designed and built: Transwayz, Baridata, BeatStars, PDF Converter, Screen Recorder, Poster Maker and Singles Connect.",index_body(href_site)))
+open(f"{out}/index.html","w").write(page("Case studies | iApp Technologies","Products iApp Technologies designed and built, including AI tools: "+", ".join(p["name"] for p in PROJECTS)+".",index_body(href_site)))
 for i,p in enumerate(PROJECTS):
     nxt=PROJECTS[(i+1)%len(PROJECTS)]
     open(f"{out}/{p['slug']}.html","w").write(page(f"{p['name']} case study | iApp Technologies",p["oneliner"],case_body(p,href_site,nxt)))
