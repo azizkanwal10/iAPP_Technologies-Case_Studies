@@ -602,7 +602,6 @@ GLYPH = {
  "code-claw":'<g fill="currentColor" stroke="none"><ellipse cx="5.6" cy="10.2" rx="1.9" ry="2.4"/><ellipse cx="9.6" cy="5.9" rx="2" ry="2.6"/><ellipse cx="14.4" cy="5.9" rx="2" ry="2.6"/><ellipse cx="18.4" cy="10.2" rx="1.9" ry="2.4"/><path d="M12 11.3c-2.7 0-5.6 3.7-5.6 6.4 0 1.6 1.2 2.4 2.7 2.4 1.2 0 1.9-.6 2.9-.6s1.7.6 2.9.6c1.5 0 2.7-.8 2.7-2.4 0-2.7-2.9-6.4-5.6-6.4z"/></g>',
  "ghostai":'<path d="M6 20.5V10a6 6 0 0 1 12 0v10.5l-2-1.6-2 1.6-2-1.6-2 1.6-2-1.6z"/><circle cx="9.8" cy="10.6" r="1.1" fill="currentColor"/><circle cx="14.2" cy="10.6" r="1.1" fill="currentColor"/>',
  "genzpark":'<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><path d="M17 13.2l1 2.8 2.8 1-2.8 1-1 2.8-1-2.8-2.8-1 2.8-1z" fill="currentColor"/>',
- "3d-demo":'<path d="M12 2.8 20 7.3v9.4l-8 4.5-8-4.5V7.3z"/><path d="M4 7.3l8 4.6 8-4.6M12 11.9v9.3"/>',
  "poster-maker":'<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="9.5" cy="8.5" r="1.8"/><path d="M4 17l5-5 4 4 2.5-2.5L20 18"/>',
 }
 import base64
@@ -791,8 +790,8 @@ var t0=performance.now();nums.forEach(function(n){n.dataset.final=n.textContent}
 (function step(now){var k=Math.min(1,(now-t0)/1400),e=1-Math.pow(1-k,3);nums.forEach(function(n){var v=parseFloat(n.dataset.to)*e;n.textContent=(k<1?v.toFixed(+n.dataset.dec):n.dataset.final.replace(n.dataset.suf,""))+n.dataset.suf;if(k===1)n.textContent=n.dataset.final});if(k<1)requestAnimationFrame(step)})(t0)},{threshold:.4});t.observe(document.querySelector(".tally"))}
 })();</script>'''
 
-WALL_A=["code-claw/features.webp","transwayz/integrations.webp","3d-demo/about.webp","baridata/dashboard.webp","beatstars/web.webp","3d-demo/projects.webp"]
-WALL_B=["poster-maker/screen-1.webp","singles-connect/screen-1.webp","pdf-converter/screen-1.webp","3d-demo/hero.webp","screen-recorder/screen-2.webp","beatstars/screen-1.webp","transwayz/dispatch.webp","poster-maker/screen-2.webp","singles-connect/screen-2.webp","code-claw/hero.webp"]
+WALL_A=["code-claw/features.webp","transwayz/integrations.webp","baridata/dashboard.webp","beatstars/web.webp"]
+WALL_B=["poster-maker/screen-1.webp","singles-connect/screen-1.webp","pdf-converter/screen-1.webp","screen-recorder/screen-1.webp","screen-recorder/screen-2.webp","beatstars/screen-1.webp","transwayz/dispatch.webp","poster-maker/screen-2.webp","singles-connect/screen-2.webp","code-claw/hero.webp"]
 def wall():
     row=lambda L,d: f'<div class="fx-row" data-dir="{d}">'+''.join(f'<img src="/assets/{f}" alt="" loading="lazy" decoding="async">' for f in L+L)+'</div>'
     return f'<section class="fx-wall" aria-hidden="true"><div class="fx-plane">{row(WALL_A,-1)}{row(WALL_B,1)}</div></section>'
@@ -892,7 +891,7 @@ def index_body(href):
     cards=''
     for i,p in enumerate(PROJECTS):
         chips=''.join(f'<li><b>{v}</b> {l}</li>' for v,l in p["stats"][:2])
-        cards+=f'''<a class="cs-card" href="{href(p["slug"])}" data-groups="{groups(p)}" style="--c:{p["color"]};--d:{(i%2)*90}ms">{media(p)}
+        cards+=f'''<a class="cs-card{" cs-top" if i==0 and len(PROJECTS)%3==1 else ""}" href="{href(p["slug"])}" data-groups="{groups(p)}" style="--c:{p["color"]};--d:{(i%2)*90}ms">{media(p)}
 <div class="cs-body"><div class="cs-meta">{niche_tag(p) or f'<span class="cs-cat">{p["category"]}</span>'}{ai_tag(p)}{demo_tag(p)}</div><h3>{p["name"]}</h3><p>{p["oneliner"]}</p><ul class="cs-stats">{chips}</ul>
 <span class="cs-go">View case study<i>{ARROW}</i></span></div></a>'''
     n=lambda g: sum(g in groups(p).split() for p in PROJECTS)
