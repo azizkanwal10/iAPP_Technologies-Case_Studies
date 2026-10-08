@@ -442,9 +442,13 @@ html.fx-arrive::after{content:"";position:fixed;inset:0;z-index:200;background:v
 .meet .l p{max-width:390px;margin:20px 0 24px;font-size:14px;line-height:1.7;color:rgba(255,255,255,.62)}
 .meet-btn{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;border-radius:999px;background:#fff;color:#000;font-weight:700;font-size:14px;text-decoration:none;transition:transform .2s ease,background .2s ease}
 .meet-btn:hover{background:#e6e6ea;transform:scale(1.03)}
+.meet.v2 .meet-stage{background-image:url(/assets/mascot-v2-poster.webp)}
+.meet-ver{position:absolute;top:clamp(24px,4vw,52px);right:clamp(24px,4vw,52px);display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto}
+.meet-ver button{font:inherit;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);background:none;border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
+.meet-ver button[aria-pressed="true"]{background:#fff;color:#000}
 .meet-hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38)}
 @media (max-width:760px){.meet{height:auto;min-height:0}.meet-stage{position:relative;inset:auto;width:100%;height:68svh;min-height:420px;background-size:cover}
-.meet-ui{position:static;height:auto;padding:0 20px 44px;margin-top:-56px}.meet-tag{position:absolute;top:20px;left:20px;z-index:2}.meet-row{position:relative;z-index:1;flex-direction:column;align-items:flex-start;gap:18px}.meet .r{display:none}.meet-hint{display:none}}
+.meet-ui{position:static;height:auto;padding:0 20px 44px;margin-top:-56px}.meet-tag{position:absolute;top:20px;left:20px;z-index:2}.meet-ver{top:16px;right:16px}.meet-row{position:relative;z-index:1;flex-direction:column;align-items:flex-start;gap:18px}.meet .r{display:none}.meet-hint{display:none}}
 @media (prefers-reduced-motion:reduce){.bob,.cube{animation:none}.sc{position:relative;top:auto}}
 /* results panel */
 .tally{position:relative;overflow:hidden;border:0;border-radius:28px;gap:0;color:#fff;
@@ -728,11 +732,16 @@ def meet():
 <p>We design AI that listens, reasons and acts: agents that run real workflows, assistants that answer from your own data, and apps that get smarter with every user.</p>
 <a class="meet-btn" href="mailto:aziz.k@iapptechnologiesllp.com">Talk to our AI team</a></div>
 <div class="r"><p class="big" aria-hidden="true"><span data-s="Built by">Built by</span><br><span data-s="iApp">iApp</span></p></div></div>
-<span class="meet-hint" aria-hidden="true">Move your cursor</span></div></section>
+<span class="meet-hint" aria-hidden="true">Move your cursor</span>
+<div class="meet-ver" role="group" aria-label="Choose mascot version"><button type="button" data-v="1">V1 Headset</button><button type="button" data-v="2">V2 Giraffe</button></div></div></section>
 <script>(function(){var s=document.getElementById("meet");if(!s)return;var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 var CH="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~|}{[]:;?><";
 function scr(el,delay){var t=el.getAttribute("data-s");el.innerHTML="&nbsp;";setTimeout(function(){var p=0,id=setInterval(function(){p+=.5;var o="";for(var i=0;i<t.length;i++){if(t[i]===" "){o+=" ";continue}if(i<p)o+=t[i];else if(i<p+3)o+=CH[Math.random()*CH.length|0]}el.textContent=o||"\u00a0";if(p>=t.length){clearInterval(id);el.textContent=t}},25)},delay)}
-var load=function(){import("/assets/mascot.js").then(function(m){m.mount(s)}).catch(function(){s.classList.add("no-webgl")})};
+var ver="2";try{ver=new URLSearchParams(location.search).get("mascot")||localStorage.getItem("mascotV")||"2"}catch(e){}
+if(ver==="2")s.classList.add("v2");
+[].forEach.call(s.querySelectorAll(".meet-ver button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-v")===ver?"true":"false");
+  b.addEventListener("click",function(){try{localStorage.setItem("mascotV",b.getAttribute("data-v"))}catch(e){}var u=new URL(location.href);u.searchParams.set("mascot",b.getAttribute("data-v"));u.hash="meet";location.replace(u.href)})});
+var load=function(){import(ver==="2"?"/assets/mascot-v2.js":"/assets/mascot.js").then(function(m){m.mount(s)}).catch(function(){s.classList.add("no-webgl")})};
 if(!("IntersectionObserver" in window)){load();return}
 var a=new IntersectionObserver(function(e){if(e[0].isIntersecting){a.disconnect();load()}},{rootMargin:"700px 0px"});a.observe(s);
 if(!reduce){var b=new IntersectionObserver(function(e){if(e[0].isIntersecting){b.disconnect();[].forEach.call(s.querySelectorAll("[data-s]"),function(el,i){scr(el,150+i*260)})}},{threshold:.35});b.observe(s)}

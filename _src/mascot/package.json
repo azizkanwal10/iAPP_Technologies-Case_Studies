@@ -3,7 +3,9 @@
   "private": true,
   "description": "3D mascot for the Meet our AI section. Build: npm install && npm run build",
   "scripts": {
-    "build": "esbuild main.js --bundle --minify --format=esm --target=es2020 --outfile=../../assets/mascot.js"
+    "build": "npm run build:v1 && npm run build:v2",
+    "build:v1": "esbuild main.js --bundle --minify --format=esm --target=es2020 --outfile=../../assets/mascot.js",
+    "build:v2": "node giraffe-mesh.mjs && esbuild giraffe.js --bundle --minify --format=esm --target=es2020 --outfile=../../assets/mascot-v2.js"
   },
   "devDependencies": {
     "esbuild": "0.28.2",

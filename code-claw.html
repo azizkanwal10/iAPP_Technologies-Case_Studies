@@ -438,9 +438,13 @@ html.fx-arrive::after{content:"";position:fixed;inset:0;z-index:200;background:v
 .meet .l p{max-width:390px;margin:20px 0 24px;font-size:14px;line-height:1.7;color:rgba(255,255,255,.62)}
 .meet-btn{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;border-radius:999px;background:#fff;color:#000;font-weight:700;font-size:14px;text-decoration:none;transition:transform .2s ease,background .2s ease}
 .meet-btn:hover{background:#e6e6ea;transform:scale(1.03)}
+.meet.v2 .meet-stage{background-image:url(/assets/mascot-v2-poster.webp)}
+.meet-ver{position:absolute;top:clamp(24px,4vw,52px);right:clamp(24px,4vw,52px);display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto}
+.meet-ver button{font:inherit;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);background:none;border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
+.meet-ver button[aria-pressed="true"]{background:#fff;color:#000}
 .meet-hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38)}
 @media (max-width:760px){.meet{height:auto;min-height:0}.meet-stage{position:relative;inset:auto;width:100%;height:68svh;min-height:420px;background-size:cover}
-.meet-ui{position:static;height:auto;padding:0 20px 44px;margin-top:-56px}.meet-tag{position:absolute;top:20px;left:20px;z-index:2}.meet-row{position:relative;z-index:1;flex-direction:column;align-items:flex-start;gap:18px}.meet .r{display:none}.meet-hint{display:none}}
+.meet-ui{position:static;height:auto;padding:0 20px 44px;margin-top:-56px}.meet-tag{position:absolute;top:20px;left:20px;z-index:2}.meet-ver{top:16px;right:16px}.meet-row{position:relative;z-index:1;flex-direction:column;align-items:flex-start;gap:18px}.meet .r{display:none}.meet-hint{display:none}}
 @media (prefers-reduced-motion:reduce){.bob,.cube{animation:none}.sc{position:relative;top:auto}}
 /* results panel */
 .tally{position:relative;overflow:hidden;border:0;border-radius:28px;gap:0;color:#fff;

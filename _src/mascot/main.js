@@ -12,7 +12,7 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 const W = 2.5, H = 1.06, RAD = 0.47;         // front outline of the headset
 const BEND_X = 2.4, BEND_Y = 7;              // curvature of the front
 
-function roundedRectPoints(w, h, r, n = 520) {
+export function roundedRectPoints(w, h, r, n = 520) {
   // evenly spaced points around a rounded rectangle (dense, so the shape can be bent smoothly)
   const hw = w / 2, hh = h / 2, sx = w - 2 * r, sy = h - 2 * r, arc = (Math.PI / 2) * r;
   const per = 2 * sx + 2 * sy + 4 * arc, pts = [];
@@ -34,36 +34,36 @@ function roundedRectPoints(w, h, r, n = 520) {
   return pts;
 }
 
-function bend(geo) {
+export function bend(geo, BX = BEND_X, BY = BEND_Y) {
   // wrap a flat, front-facing geometry around a horizontal and a gentle vertical curve
   const pos = geo.attributes.position, v = new THREE.Vector3();
   for (let i = 0; i < pos.count; i++) {
     v.fromBufferAttribute(pos, i);
-    const a = v.x / BEND_X, r1 = BEND_X + v.z;
-    const x = Math.sin(a) * r1; let z = Math.cos(a) * r1 - BEND_X;
-    const b = v.y / BEND_Y, r2 = BEND_Y + z;
-    const y = Math.sin(b) * r2; z = Math.cos(b) * r2 - BEND_Y;
+    const a = v.x / BX, r1 = BX + v.z;
+    const x = Math.sin(a) * r1; let z = Math.cos(a) * r1 - BX;
+    const b = v.y / BY, r2 = BY + z;
+    const y = Math.sin(b) * r2; z = Math.cos(b) * r2 - BY;
     pos.setXYZ(i, x, y, z);
   }
   geo.computeVertexNormals();
   return geo;
 }
 
-function ringGeometry(w, h, r, inset, depth, bevel = 0.018) {
+export function ringGeometry(w, h, r, inset, depth, bevel = 0.018, BX, BY) {
   const outer = new THREE.Shape(roundedRectPoints(w, h, r));
   outer.holes.push(new THREE.Path(roundedRectPoints(w - 2 * inset, h - 2 * inset, Math.max(0.05, r - inset)).reverse()));
   const g = new THREE.ExtrudeGeometry(outer, { depth, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 5, curveSegments: 4 });
   g.translate(0, 0, -depth - bevel);
-  return bend(g);
+  return bend(g, BX, BY);
 }
 
-function solidGeometry(w, h, r, depth, bevel = 0.04) {
+export function solidGeometry(w, h, r, depth, bevel = 0.04, BX, BY) {
   const g = new THREE.ExtrudeGeometry(new THREE.Shape(roundedRectPoints(w, h, r)), { depth, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 6, curveSegments: 4 });
   g.translate(0, 0, -depth - bevel);
-  return bend(g);
+  return bend(g, BX, BY);
 }
 
-function canvasTex(w, h, draw, srgb = true) {
+export function canvasTex(w, h, draw, srgb = true) {
   const c = document.createElement("canvas"); c.width = w; c.height = h;
   draw(c.getContext("2d"), w, h);
   const t = new THREE.CanvasTexture(c);
@@ -71,14 +71,14 @@ function canvasTex(w, h, draw, srgb = true) {
   return t;
 }
 
-function roundedMask(w, h, r) {
+export function roundedMask(w, h, r) {
   return canvasTex(1024, Math.round(1024 * h / w), (g, cw, ch) => {
     const s = cw / w; g.fillStyle = "#000"; g.fillRect(0, 0, cw, ch);
     g.fillStyle = "#fff"; g.beginPath(); g.roundRect(0, 0, cw, ch, r * s); g.fill();
   }, false);
 }
 
-function knitBump() {
+export function knitBump() {
   const t = canvasTex(256, 256, (g) => {
     g.fillStyle = "#808080"; g.fillRect(0, 0, 256, 256);
     for (let y = 0; y < 256; y += 8) for (let x = 0; x < 256; x += 8) {
@@ -92,7 +92,7 @@ function knitBump() {
   return t;
 }
 
-function brushedRoughness() {
+export function brushedRoughness() {
   const t = canvasTex(512, 64, (g, w, h) => {
     g.fillStyle = "#6a6a6a"; g.fillRect(0, 0, w, h);
     for (let i = 0; i < 1400; i++) { const y = Math.random() * h, v = 90 + Math.random() * 60 | 0; g.fillStyle = `rgba(${v},${v},${v},.35)`; g.fillRect(0, y, w, 0.6 + Math.random()); }
@@ -101,7 +101,7 @@ function brushedRoughness() {
   return t;
 }
 
-function studioEnvironment(renderer) {
+export function studioEnvironment(renderer) {
   // a dark studio with soft boxes, used only for reflections
   const env = new THREE.Scene();
   env.background = new THREE.Color(0x050507);
@@ -122,7 +122,7 @@ function studioEnvironment(renderer) {
 }
 
 // ---------- display shader ----------
-function displayMaterial(text) {
+export function displayMaterial(text, sub = "AI  ·  AGENTS  ·  APPS") {
   const textTex = canvasTex(2048, 870, () => {}, true);
   const draw = () => {
     const c = textTex.image, g = c.getContext("2d");
@@ -134,7 +134,7 @@ function displayMaterial(text) {
     g.fillStyle = "#ffffff"; g.fillText(text, c.width / 2, c.height / 2 + 8);
     g.shadowBlur = 0; g.font = "500 44px 'Space Mono', monospace";
     if ("letterSpacing" in g) g.letterSpacing = "18px";
-    g.fillStyle = "rgba(255,255,255,.55)"; g.fillText("AI  ·  AGENTS  ·  APPS", c.width / 2, c.height / 2 + 150);
+    g.fillStyle = "rgba(255,255,255,.55)"; g.fillText(sub, c.width / 2, c.height / 2 + 150);
     textTex.needsUpdate = true;
   };
   draw();
@@ -212,7 +212,7 @@ function buildHeadset(text) {
   return { group: g, disp };
 }
 
-const VignetteGrain = {
+export const VignetteGrain = {
   uniforms: { tDiffuse: { value: null }, uTime: { value: 0 } },
   vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
   fragmentShader: `uniform sampler2D tDiffuse; uniform float uTime; varying vec2 vUv;
