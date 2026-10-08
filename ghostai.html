@@ -3,7 +3,7 @@
 <title>GhostAI case study | iApp Technologies</title><meta name="description" content="An invisible sidekick that gives you instant answers in meetings, calls and conversations, without anyone knowing.">
 <meta property="og:title" content="GhostAI case study | iApp Technologies"><meta property="og:description" content="An invisible sidekick that gives you instant answers in meetings, calls and conversations, without anyone knowing."><meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%231A1F2B%22/><text x=%2250%22 y=%2270%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22 font-weight=%22bold%22>i</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet"><style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Space+Mono:wght@400;700&family=Anton+SC&display=swap" rel="stylesheet"><style>
 :root{--paper:#EDEFEA;--paper2:#F7F8F4;--ink:#1A1F2B;--muted:#4F5663;--rule:#C7CCC4;--onc:#fff;
 --f:'Archivo',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;box-sizing:border-box;
 padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -406,6 +406,24 @@ box-shadow:0 -1px 0 rgba(255,255,255,.12) inset,0 40px 80px -40px rgba(10,12,20,
 .sv-mock{position:absolute;left:7%;top:12%;width:540px;transform:scale(.82) rotate(-3deg);transform-origin:top left}
 .sv-mock .browser{box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
 @media (max-width:860px){.sc{grid-template-columns:1fr;min-height:0;top:calc(70px + var(--i)*18px)}.sc-vis{min-height:220px}.sv-mock{transform:scale(.55) rotate(-3deg)}.sc-n{margin-bottom:6px}}
+/* Meet our AI: full-screen 3D mascot */
+.meet{display:block;width:100%;position:relative;height:100vh;height:100svh;min-height:640px;margin-top:72px;background:#000;color:#fff;overflow:hidden}
+.meet-stage{position:absolute;inset:0;background:#000 url(/assets/mascot-poster.webp) 50% 100%/cover no-repeat}
+.meet-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.2s ease}
+.meet.live .meet-stage canvas{opacity:1}
+.meet-stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;background:linear-gradient(transparent,#000);pointer-events:none}
+.meet-ui{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(24px,4vw,52px);pointer-events:none;font-family:"Space Mono",ui-monospace,monospace}
+.meet-ui a{pointer-events:auto}
+.meet-tag{align-self:flex-start;padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.meet-row{display:flex;justify-content:space-between;align-items:flex-end;gap:28px}
+.meet h2,.meet .big{font-family:inherit;font-weight:400;font-size:clamp(40px,7.4vw,100px);line-height:.95;letter-spacing:-.03em;margin:0;color:#fff}
+.meet .r .big{text-align:right}
+.meet .l p{max-width:390px;margin:20px 0 24px;font-size:14px;line-height:1.7;color:rgba(255,255,255,.62)}
+.meet-btn{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;border-radius:999px;background:#fff;color:#000;font-weight:700;font-size:14px;text-decoration:none;transition:transform .2s ease,background .2s ease}
+.meet-btn:hover{background:#e6e6ea;transform:scale(1.03)}
+.meet-hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38)}
+@media (max-width:760px){.meet{height:auto;min-height:0}.meet-stage{position:relative;inset:auto;width:100%;height:68svh;min-height:420px;background-size:cover}
+.meet-ui{position:static;height:auto;padding:0 20px 44px;margin-top:-56px}.meet-tag{position:absolute;top:20px;left:20px;z-index:2}.meet-row{position:relative;z-index:1;flex-direction:column;align-items:flex-start;gap:18px}.meet .r{display:none}.meet-hint{display:none}}
 @media (prefers-reduced-motion:reduce){.bob,.cube{animation:none}.sc{position:relative;top:auto}}
 /* results panel */
 .tally{position:relative;overflow:hidden;border:0;border-radius:28px;gap:0;color:#fff;

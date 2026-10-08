@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import os, json, shutil
 from data import PROJECTS
 
-FONT = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">'
+FONT = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Space+Mono:wght@400;700&family=Anton+SC&display=swap" rel="stylesheet">'
 
 CSS = r"""
 :root{--paper:#EDEFEA;--paper2:#F7F8F4;--ink:#1A1F2B;--muted:#4F5663;--rule:#C7CCC4;--onc:#fff;
@@ -410,6 +410,24 @@ box-shadow:0 -1px 0 rgba(255,255,255,.12) inset,0 40px 80px -40px rgba(10,12,20,
 .sv-mock{position:absolute;left:7%;top:12%;width:540px;transform:scale(.82) rotate(-3deg);transform-origin:top left}
 .sv-mock .browser{box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
 @media (max-width:860px){.sc{grid-template-columns:1fr;min-height:0;top:calc(70px + var(--i)*18px)}.sc-vis{min-height:220px}.sv-mock{transform:scale(.55) rotate(-3deg)}.sc-n{margin-bottom:6px}}
+/* Meet our AI: full-screen 3D mascot */
+.meet{display:block;width:100%;position:relative;height:100vh;height:100svh;min-height:640px;margin-top:72px;background:#000;color:#fff;overflow:hidden}
+.meet-stage{position:absolute;inset:0;background:#000 url(/assets/mascot-poster.webp) 50% 100%/cover no-repeat}
+.meet-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.2s ease}
+.meet.live .meet-stage canvas{opacity:1}
+.meet-stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;background:linear-gradient(transparent,#000);pointer-events:none}
+.meet-ui{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(24px,4vw,52px);pointer-events:none;font-family:"Space Mono",ui-monospace,monospace}
+.meet-ui a{pointer-events:auto}
+.meet-tag{align-self:flex-start;padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.meet-row{display:flex;justify-content:space-between;align-items:flex-end;gap:28px}
+.meet h2,.meet .big{font-family:inherit;font-weight:400;font-size:clamp(40px,7.4vw,100px);line-height:.95;letter-spacing:-.03em;margin:0;color:#fff}
+.meet .r .big{text-align:right}
+.meet .l p{max-width:390px;margin:20px 0 24px;font-size:14px;line-height:1.7;color:rgba(255,255,255,.62)}
+.meet-btn{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;border-radius:999px;background:#fff;color:#000;font-weight:700;font-size:14px;text-decoration:none;transition:transform .2s ease,background .2s ease}
+.meet-btn:hover{background:#e6e6ea;transform:scale(1.03)}
+.meet-hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38)}
+@media (max-width:760px){.meet{height:auto;min-height:0}.meet-stage{position:relative;inset:auto;width:100%;height:68svh;min-height:420px;background-size:cover}
+.meet-ui{position:static;height:auto;padding:0 20px 44px;margin-top:-56px}.meet-tag{position:absolute;top:20px;left:20px;z-index:2}.meet-row{position:relative;z-index:1;flex-direction:column;align-items:flex-start;gap:18px}.meet .r{display:none}.meet-hint{display:none}}
 @media (prefers-reduced-motion:reduce){.bob,.cube{animation:none}.sc{position:relative;top:auto}}
 /* results panel */
 .tally{position:relative;overflow:hidden;border:0;border-radius:28px;gap:0;color:#fff;
@@ -667,6 +685,23 @@ def wall():
     row=lambda L,d: f'<div class="fx-row" data-dir="{d}">'+''.join(f'<img src="/assets/{f}" alt="" loading="lazy" decoding="async">' for f in L+L)+'</div>'
     return f'<section class="fx-wall" aria-hidden="true"><div class="fx-plane">{row(WALL_A,-1)}{row(WALL_B,1)}</div></section>'
 
+def meet():
+    return '''<section class="meet" id="meet" aria-labelledby="meet-h"><div class="meet-stage" aria-hidden="true"><canvas></canvas></div>
+<div class="meet-ui"><span class="meet-tag">Meet our AI</span>
+<div class="meet-row"><div class="l"><h2 id="meet-h"><span data-s="Built to">Built to</span><br><span data-s="Think">Think</span></h2>
+<p>We design AI that listens, reasons and acts: agents that run real workflows, assistants that answer from your own data, and apps that get smarter with every user.</p>
+<a class="meet-btn" href="mailto:aziz.k@iapptechnologiesllp.com">Talk to our AI team</a></div>
+<div class="r"><p class="big" aria-hidden="true"><span data-s="Built by">Built by</span><br><span data-s="iApp">iApp</span></p></div></div>
+<span class="meet-hint" aria-hidden="true">Move your cursor</span></div></section>
+<script>(function(){var s=document.getElementById("meet");if(!s)return;var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+var CH="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~|}{[]:;?><";
+function scr(el,delay){var t=el.getAttribute("data-s");el.innerHTML="&nbsp;";setTimeout(function(){var p=0,id=setInterval(function(){p+=.5;var o="";for(var i=0;i<t.length;i++){if(t[i]===" "){o+=" ";continue}if(i<p)o+=t[i];else if(i<p+3)o+=CH[Math.random()*CH.length|0]}el.textContent=o||"\u00a0";if(p>=t.length){clearInterval(id);el.textContent=t}},25)},delay)}
+var load=function(){import("/assets/mascot.js").then(function(m){m.mount(s)}).catch(function(){s.classList.add("no-webgl")})};
+if(!("IntersectionObserver" in window)){load();return}
+var a=new IntersectionObserver(function(e){if(e[0].isIntersecting){a.disconnect();load()}},{rootMargin:"700px 0px"});a.observe(s);
+if(!reduce){var b=new IntersectionObserver(function(e){if(e[0].isIntersecting){b.disconnect();[].forEach.call(s.querySelectorAll("[data-s]"),function(el,i){scr(el,150+i*260)})}},{threshold:.35});b.observe(s)}
+})();</script>'''
+
 def spot_visual(p):
     if p.get("shots"):
         return '<div class="sv-fan">'+''.join(f'<img src="{ASSET(src)}" alt="" width="535" height="1160" loading="lazy">' for src,cap,alt in p["shots"][:3])+'</div>'
@@ -727,7 +762,7 @@ def index_body(href):
 <div><i class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg></i><strong data-to="11.8" data-suf="M+" data-dec="1">{total}</strong><span>downloads across our four consumer apps</span></div>
 <div><i class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8.5 9.5h7M8.5 12.5h4"/></svg></i><strong data-to="108" data-suf="K+" data-dec="0">108K+</strong><span>ratings on the US App Store</span></div>
 <div><i class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></i><strong data-to="4.6" data-suf="" data-dec="1">4.6</strong><span>median App Store rating</span><em class="stars" aria-hidden="true"><b style="width:92%"></b></em></div></div></section>
-{wall()}{spotlight(href)}<section class="wrap list" id="work"><div class="cs-head"><div><h2>Case studies</h2><p>Products we have designed, built and kept shipping, from freight and healthcare platforms to apps with millions of installs.</p></div>{filt}</div><div class="cs-grid">{cards}</div></section>
+{wall()}{meet()}{spotlight(href)}<section class="wrap list" id="work"><div class="cs-head"><div><h2>Case studies</h2><p>Products we have designed, built and kept shipping, from freight and healthcare platforms to apps with millions of installs.</p></div>{filt}</div><div class="cs-grid">{cards}</div></section>
 <section class="wrap company"><div class="cohead"><h2>One team. Every stage. Under one roof.</h2><p data-words>Most products stall in the hand-offs between agencies. We keep strategy, design, engineering, AI, QA and growth inside one accountable team, so your product moves from idea to launch to scale without changing hands.</p></div>
 <div class="facts"><div><strong>100+</strong><span>people on staff</span></div><div><strong>2012</strong><span>building since</span></div><div><strong>4</strong><span>offices: USA, India, Canada, Australia</span></div></div>
 <div class="svc">
