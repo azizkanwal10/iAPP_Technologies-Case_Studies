@@ -1,155 +1,228 @@
-// "Meet our AI" mascot: a glossy robot llama in neon goggles that follows the cursor.
+// "Meet our AI": a studio-lit AI headset that turns to face the cursor.
+// Brushed aluminium frame, curved dark glass and a live display reading "iApp Technologies".
 // Built with three.js and bundled to /assets/mascot.js (see package.json). Everything is drawn in code.
 import * as THREE from "three";
-import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
-const NEON = new THREE.Color("#ff3d7f");
-const VIOLET = new THREE.Color("#7c3aed");
+// ---------- helpers ----------
+const W = 2.5, H = 1.06, RAD = 0.47;         // front outline of the headset
+const BEND_X = 2.4, BEND_Y = 7;              // curvature of the front
 
-function glowTexture(word) {
-  const c = document.createElement("canvas");
-  c.width = 2048; c.height = 1024;
-  const g = c.getContext("2d");
-  const r = g.createRadialGradient(1024, 760, 40, 1024, 760, 900);
-  r.addColorStop(0, "rgba(110,16,80,0.75)");
-  r.addColorStop(0.45, "rgba(60,10,55,0.4)");
-  r.addColorStop(1, "rgba(0,0,0,0)");
-  g.fillStyle = "#000"; g.fillRect(0, 0, 2048, 1024);
-  g.fillStyle = r; g.fillRect(0, 0, 2048, 1024);
-  // faint watermark word behind the character
-  g.font = "400 430px 'Anton SC', 'Archivo', sans-serif";
-  g.textAlign = "center"; g.textBaseline = "middle";
-  const tg = g.createRadialGradient(1024, 560, 50, 1024, 560, 1100);
-  tg.addColorStop(0, "rgba(142,127,148,0.02)");
-  tg.addColorStop(0.7, "rgba(142,127,148,0.16)");
-  g.fillStyle = tg; g.fillText(word, 1024, 560);
-  // dot grid
-  g.fillStyle = "rgba(255,255,255,0.06)";
-  for (let y = 12; y < 1024; y += 32) for (let x = 12; x < 2048; x += 32) g.fillRect(x, y, 2, 2);
+function roundedRectPoints(w, h, r, n = 520) {
+  // evenly spaced points around a rounded rectangle (dense, so the shape can be bent smoothly)
+  const hw = w / 2, hh = h / 2, sx = w - 2 * r, sy = h - 2 * r, arc = (Math.PI / 2) * r;
+  const per = 2 * sx + 2 * sy + 4 * arc, pts = [];
+  const seg = [
+    [sx, (t) => [-hw + r + t, -hh]],
+    [arc, (t) => { const a = -Math.PI / 2 + t / r; return [hw - r + Math.cos(a) * r, -hh + r + Math.sin(a) * r]; }],
+    [sy, (t) => [hw, -hh + r + t]],
+    [arc, (t) => { const a = t / r; return [hw - r + Math.cos(a) * r, hh - r + Math.sin(a) * r]; }],
+    [sx, (t) => [hw - r - t, hh]],
+    [arc, (t) => { const a = Math.PI / 2 + t / r; return [-hw + r + Math.cos(a) * r, hh - r + Math.sin(a) * r]; }],
+    [sy, (t) => [-hw, hh - r - t]],
+    [arc, (t) => { const a = Math.PI + t / r; return [-hw + r + Math.cos(a) * r, -hh + r + Math.sin(a) * r]; }],
+  ];
+  for (let i = 0; i < n; i++) {
+    let d = (i / n) * per, p;
+    for (const [len, f] of seg) { if (d <= len) { p = f(d); break; } d -= len; }
+    pts.push(new THREE.Vector2(p[0], p[1]));
+  }
+  return pts;
+}
+
+function bend(geo) {
+  // wrap a flat, front-facing geometry around a horizontal and a gentle vertical curve
+  const pos = geo.attributes.position, v = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i);
+    const a = v.x / BEND_X, r1 = BEND_X + v.z;
+    const x = Math.sin(a) * r1; let z = Math.cos(a) * r1 - BEND_X;
+    const b = v.y / BEND_Y, r2 = BEND_Y + z;
+    const y = Math.sin(b) * r2; z = Math.cos(b) * r2 - BEND_Y;
+    pos.setXYZ(i, x, y, z);
+  }
+  geo.computeVertexNormals();
+  return geo;
+}
+
+function ringGeometry(w, h, r, inset, depth, bevel = 0.018) {
+  const outer = new THREE.Shape(roundedRectPoints(w, h, r));
+  outer.holes.push(new THREE.Path(roundedRectPoints(w - 2 * inset, h - 2 * inset, Math.max(0.05, r - inset)).reverse()));
+  const g = new THREE.ExtrudeGeometry(outer, { depth, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 5, curveSegments: 4 });
+  g.translate(0, 0, -depth - bevel);
+  return bend(g);
+}
+
+function solidGeometry(w, h, r, depth, bevel = 0.04) {
+  const g = new THREE.ExtrudeGeometry(new THREE.Shape(roundedRectPoints(w, h, r)), { depth, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 6, curveSegments: 4 });
+  g.translate(0, 0, -depth - bevel);
+  return bend(g);
+}
+
+function canvasTex(w, h, draw, srgb = true) {
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  draw(c.getContext("2d"), w, h);
   const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace;
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
 
-function visorTexture(text) {
-  const c = document.createElement("canvas");
-  c.width = 1536; c.height = 384;
-  const g = c.getContext("2d");
-  const draw = () => {
-    g.clearRect(0, 0, c.width, c.height);
-    g.textAlign = "center"; g.textBaseline = "middle";
-    g.font = "800 150px 'Archivo', 'Arial Black', sans-serif";
-    g.shadowColor = "#ff2d75"; g.shadowBlur = 36;
-    g.fillStyle = "#ffd6e6"; g.fillText(text, 768, 200);
-    g.shadowBlur = 8; g.fillStyle = "#ffffff"; g.fillText(text, 768, 200);
-    tex.needsUpdate = true;
+function roundedMask(w, h, r) {
+  return canvasTex(1024, Math.round(1024 * h / w), (g, cw, ch) => {
+    const s = cw / w; g.fillStyle = "#000"; g.fillRect(0, 0, cw, ch);
+    g.fillStyle = "#fff"; g.beginPath(); g.roundRect(0, 0, cw, ch, r * s); g.fill();
+  }, false);
+}
+
+function knitBump() {
+  const t = canvasTex(256, 256, (g) => {
+    g.fillStyle = "#808080"; g.fillRect(0, 0, 256, 256);
+    for (let y = 0; y < 256; y += 8) for (let x = 0; x < 256; x += 8) {
+      const o = (y / 8) % 2 ? 4 : 0;
+      const gr = g.createRadialGradient(x + o + 4, y + 4, 0, x + o + 4, y + 4, 5);
+      gr.addColorStop(0, "#d0d0d0"); gr.addColorStop(1, "#505050");
+      g.fillStyle = gr; g.beginPath(); g.ellipse(x + o + 4, y + 4, 3.6, 4.6, 0.5, 0, Math.PI * 2); g.fill();
+    }
+  }, false);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(6, 3);
+  return t;
+}
+
+function brushedRoughness() {
+  const t = canvasTex(512, 64, (g, w, h) => {
+    g.fillStyle = "#6a6a6a"; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 1400; i++) { const y = Math.random() * h, v = 90 + Math.random() * 60 | 0; g.fillStyle = `rgba(${v},${v},${v},.35)`; g.fillRect(0, y, w, 0.6 + Math.random()); }
+  }, false);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 8);
+  return t;
+}
+
+function studioEnvironment(renderer) {
+  // a dark studio with soft boxes, used only for reflections
+  const env = new THREE.Scene();
+  env.background = new THREE.Color(0x050507);
+  const box = (w, h, color, intensity, pos) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(intensity), side: THREE.DoubleSide }));
+    m.position.set(...pos); m.lookAt(0, 0, 0); env.add(m);
   };
-  const tex = new THREE.CanvasTexture(c);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  tex.anisotropy = 8;
-  draw();
-  if (document.fonts) document.fonts.load("800 150px Archivo").then(draw, () => {});
+  box(8, 2.2, "#ffffff", 1.2, [0, 7, 2]);       // top strip
+  box(2.2, 7, "#ffffff", 1.6, [-8, 1, 3]);      // left key
+  box(2.2, 7, "#f3e8ff", 1.2, [8, 1, 2]);       // right fill
+  box(5, 1.2, "#ff4d8d", 1.4, [-4, -2, -6]);    // magenta kicker
+  box(5, 1.2, "#7c3aed", 1.5, [5, 2, -6]);      // violet kicker
+  box(14, 4, "#1a1622", 1, [0, -6, 0]);         // floor bounce
+  const pm = new THREE.PMREMGenerator(renderer);
+  const tex = pm.fromScene(env, 0.02).texture;
+  pm.dispose();
   return tex;
 }
 
-function roundedRectCurve(w, h, r, z) {
-  const pts = [], seg = 14, hw = w / 2 - r, hh = h / 2 - r;
-  const corners = [[hw, hh, 0], [-hw, hh, Math.PI / 2], [-hw, -hh, Math.PI], [hw, -hh, Math.PI * 1.5]];
-  for (const [cx, cy, a0] of corners)
-    for (let i = 0; i <= seg; i++) {
-      const a = a0 + (i / seg) * (Math.PI / 2);
-      pts.push(new THREE.Vector3(cx + Math.cos(a) * r, cy + Math.sin(a) * r, z));
-    }
-  return new THREE.CatmullRomCurve3(pts, true, "centripetal");
-}
-
-function badgeTexture() {
-  const c = document.createElement("canvas");
-  c.width = c.height = 256;
-  const g = c.getContext("2d");
-  g.fillStyle = "#ffffff"; g.beginPath(); g.roundRect(8, 8, 240, 240, 64); g.fill();
-  g.fillStyle = "#14171d"; g.font = "800 170px 'Archivo', 'Arial Black', sans-serif";
-  g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("i", 128, 140);
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
-}
-
-function buildMascot(text) {
-  const pearl = new THREE.MeshPhysicalMaterial({ color: 0xf2ecf4, roughness: 0.42, clearcoat: 1, clearcoatRoughness: 0.18, sheen: 0.6, sheenColor: new THREE.Color("#ffb3d6"), sheenRoughness: 0.5 });
-  const muzzleMat = new THREE.MeshPhysicalMaterial({ color: 0xd8cfe6, roughness: 0.5, clearcoat: 0.6, clearcoatRoughness: 0.3 });
-  const darkMat = new THREE.MeshStandardMaterial({ color: 0x1b1420, roughness: 0.6 });
-  const glass = new THREE.MeshPhysicalMaterial({ color: 0x040307, roughness: 0.22, metalness: 0.1, clearcoat: 1, clearcoatRoughness: 0.08, envMapIntensity: 0.45 });
-  const strapMat = new THREE.MeshStandardMaterial({ color: 0x3a2433, roughness: 0.55, metalness: 0.2 });
-  const jacket = new THREE.MeshPhysicalMaterial({ color: 0x3a1d3d, roughness: 0.75, sheen: 1, sheenColor: new THREE.Color("#ff6aa8"), sheenRoughness: 0.45 });
-  const neon = new THREE.MeshBasicMaterial({ color: NEON.clone().multiplyScalar(3.2), toneMapped: false });
-  const neonCore = new THREE.MeshBasicMaterial({ color: new THREE.Color("#ffc2d9").multiplyScalar(1.8), toneMapped: false });
-  const innerEar = new THREE.MeshStandardMaterial({ color: 0xff9cc0, roughness: 0.5, emissive: 0xff3d7f, emissiveIntensity: 0.45 });
-
-  const root = new THREE.Group();
-  // body
-  const torso = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 48), jacket);
-  torso.scale.set(1.75, 1.05, 1.05); torso.position.set(0, -2.15, -0.1); root.add(torso);
-  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.56, 0.16, 24, 64), jacket);
-  collar.rotation.x = Math.PI / 2; collar.position.set(0, -1.18, 0.02); root.add(collar);
-  const badge = new THREE.Mesh(new RoundedBoxGeometry(0.34, 0.34, 0.06, 4, 0.08), new THREE.MeshStandardMaterial({ map: badgeTexture(), roughness: 0.4 }));
-  badge.position.set(0.86, -1.62, 0.86); badge.rotation.set(-0.35, 0.55, 0); root.add(badge);
-
-  // neck (pivot for the head sits at its top)
-  const neckGroup = new THREE.Group(); neckGroup.position.set(0, -1.2, 0); root.add(neckGroup);
-  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.5, 1.5, 48), pearl);
-  neck.position.y = 0.6; neckGroup.add(neck);
-
-  const head = new THREE.Group(); head.position.set(0, 1.3, 0); neckGroup.add(head);
-  const skull = new THREE.Mesh(new THREE.SphereGeometry(1, 72, 56), pearl);
-  skull.scale.set(1.04, 0.96, 0.98); skull.position.y = 0.55; head.add(skull);
-  // fluffy tuft
-  [[0, 1.48, 0.15, 0.3], [-0.24, 1.42, 0.05, 0.24], [0.25, 1.43, 0.02, 0.25], [-0.08, 1.4, 0.38, 0.22], [0.14, 1.36, 0.42, 0.2]].forEach(([x, y, z, r]) => {
-    const s = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 24), pearl); s.position.set(x, y, z); head.add(s);
+// ---------- display shader ----------
+function displayMaterial(text) {
+  const textTex = canvasTex(2048, 870, () => {}, true);
+  const draw = () => {
+    const c = textTex.image, g = c.getContext("2d");
+    g.clearRect(0, 0, c.width, c.height);
+    g.textAlign = "center"; g.textBaseline = "middle";
+    g.font = "600 176px 'Archivo', 'Helvetica Neue', Arial, sans-serif";
+    if ("letterSpacing" in g) g.letterSpacing = "4px";
+    g.shadowColor = "rgba(255,255,255,.55)"; g.shadowBlur = 30;
+    g.fillStyle = "#ffffff"; g.fillText(text, c.width / 2, c.height / 2 + 8);
+    g.shadowBlur = 0; g.font = "500 44px 'Space Mono', monospace";
+    if ("letterSpacing" in g) g.letterSpacing = "18px";
+    g.fillStyle = "rgba(255,255,255,.55)"; g.fillText("AI  ·  AGENTS  ·  APPS", c.width / 2, c.height / 2 + 150);
+    textTex.needsUpdate = true;
+  };
+  draw();
+  if (document.fonts) Promise.all([document.fonts.load("600 176px Archivo"), document.fonts.load("500 44px 'Space Mono'")]).then(draw, () => {});
+  return new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uText: { value: textTex } },
+    vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader: `
+      uniform float uTime; uniform sampler2D uText; varying vec2 vUv;
+      float blob(vec2 p, vec2 c, float r){ return smoothstep(r, 0., length(p-c)); }
+      void main(){
+        vec2 p = vUv*vec2(2.36,1.);
+        float t = uTime*.35;
+        vec3 col = vec3(.015,.012,.03);
+        col += vec3(.45,.12,.95) * blob(p, vec2(.7+.25*sin(t),.35+.12*cos(t*1.3)), .9) * .55;
+        col += vec3(1.,.18,.48) * blob(p, vec2(1.7+.25*cos(t*.8),.62+.12*sin(t*1.1)), .85) * .5;
+        col += vec3(.2,.45,1.)  * blob(p, vec2(1.2+.3*sin(t*.6+1.),.2+.1*cos(t)), .7) * .35;
+        vec4 tx = texture2D(uText, vUv);
+        col = mix(col*1.2, vec3(2.8), tx.a*.97);
+        float e = smoothstep(0.,.06,vUv.x)*smoothstep(1.,.94,vUv.x)*smoothstep(0.,.14,vUv.y)*smoothstep(1.,.86,vUv.y);
+        gl_FragColor = vec4(col*e, 1.);
+      }`,
+    toneMapped: false,
   });
-  // muzzle, nose and smile
-  const muzzle = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 36), muzzleMat);
-  muzzle.scale.set(0.56, 0.42, 0.5); muzzle.position.set(0, -0.2, 0.72); head.add(muzzle);
-  [-0.12, 0.12].forEach((x) => { const n = new THREE.Mesh(new THREE.SphereGeometry(0.055, 16, 12), darkMat); n.scale.set(1.3, 0.7, 0.6); n.position.set(x, -0.06, 1.18); head.add(n); });
-  const smile = new THREE.Mesh(new THREE.TorusGeometry(0.15, 0.022, 8, 32, Math.PI * 0.8), darkMat);
-  smile.rotation.z = Math.PI + Math.PI * 0.1; smile.position.set(0, -0.26, 1.16); head.add(smile);
+}
 
-  // ears (they wiggle a little)
-  const ears = [-1, 1].map((sx) => {
-    const pivot = new THREE.Group(); pivot.position.set(sx * 0.6, 1.25, -0.08); pivot.rotation.z = -sx * 0.45; head.add(pivot);
-    const ear = new THREE.Mesh(new THREE.CapsuleGeometry(0.19, 0.62, 10, 24), pearl);
-    ear.scale.z = 0.55; ear.position.y = 0.42; pivot.add(ear);
-    const inner = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.48, 8, 20), innerEar);
-    inner.scale.z = 0.4; inner.position.set(0, 0.42, 0.07); pivot.add(inner);
-    return { pivot, sx };
+// ---------- the headset ----------
+function buildHeadset(text) {
+  const g = new THREE.Group();
+
+  const aluminium = new THREE.MeshPhysicalMaterial({ color: 0xd7d9de, metalness: 1, roughness: 0.4, roughnessMap: brushedRoughness(), anisotropy: 0.6, anisotropyRotation: Math.PI / 2, envMapIntensity: 1.0 });
+  const darkMetal = new THREE.MeshPhysicalMaterial({ color: 0x2a2b30, metalness: 1, roughness: 0.38, envMapIntensity: 1 });
+  const knit = knitBump();
+  const fabric = new THREE.MeshPhysicalMaterial({ color: 0x24242a, roughness: 0.95, bumpMap: knit, bumpScale: 2.2, sheen: 0.6, sheenColor: new THREE.Color("#5b5670"), sheenRoughness: 0.8 });
+  const seal = new THREE.MeshPhysicalMaterial({ color: 0x1a1a1f, roughness: 0.92, bumpMap: knit, bumpScale: 1.5, sheen: 0.4, sheenColor: new THREE.Color("#3d3a4a") });
+  const glass = new THREE.MeshPhysicalMaterial({ color: 0x000000, metalness: 0, roughness: 0.03, clearcoat: 1, clearcoatRoughness: 0.02, transparent: true, opacity: 0.38, envMapIntensity: 2.2, alphaMap: roundedMask(W - 0.02, H - 0.02, RAD - 0.01), alphaTest: 0.5, depthWrite: false });
+
+  const disp = displayMaterial(text);
+  g.add(new THREE.Mesh(bend(new THREE.PlaneGeometry(W - 0.16, H - 0.16, 160, 48).translate(0, 0, -0.07)), disp));
+  g.add(new THREE.Mesh(bend(new THREE.PlaneGeometry(W, H, 120, 40).translate(0, 0, -0.09)), new THREE.MeshBasicMaterial({ color: 0x000000 })));
+
+  const glassMesh = new THREE.Mesh(bend(new THREE.PlaneGeometry(W - 0.02, H - 0.02, 160, 56).translate(0, 0, 0.004)), glass);
+  glassMesh.renderOrder = 2; g.add(glassMesh);
+  g.add(new THREE.Mesh(ringGeometry(W + 0.08, H + 0.08, RAD + 0.04, 0.07, 0.34), aluminium));
+  const shell = new THREE.Mesh(solidGeometry(W + 0.02, H + 0.02, RAD + 0.01, 0.42, 0.06), darkMetal);
+  shell.position.z = -0.34; g.add(shell);
+  const sealMesh = new THREE.Mesh(solidGeometry(W - 0.12, H - 0.06, RAD - 0.04, 0.28, 0.1), seal);
+  sealMesh.position.z = -0.78; g.add(sealMesh);
+
+  // knitted strap: an open band around the back (the front gap sits inside the headset)
+  const strap = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.5, 120, 1, true, 0.62, Math.PI * 2 - 1.24), fabric);
+  strap.material.side = THREE.DoubleSide; strap.scale.set(1.17, 1, 1.05); strap.position.set(0, -0.02, -1.25); g.add(strap);
+  [-1, 1].forEach((s) => {
+    const c = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.34, 8, 24), aluminium);
+    c.rotation.x = Math.PI / 2; c.position.set(s * 1.17, -0.02, -0.55); g.add(c);
   });
 
-  // goggles
-  const visor = new THREE.Group(); visor.position.set(0, 0.68, 0.74); head.add(visor);
-  const strap = new THREE.Mesh(new THREE.TorusGeometry(1.0, 0.075, 16, 96), strapMat);
-  strap.rotation.x = Math.PI / 2; strap.scale.set(1.05, 1.0, 1); strap.position.set(0, 0.68, 0); head.add(strap);
-  const housing = new THREE.Mesh(new RoundedBoxGeometry(2.0, 0.78, 0.7, 6, 0.28), strapMat);
-  housing.position.z = -0.12; housing.scale.z = 1.25; visor.add(housing);
-  const lens = new THREE.Mesh(new RoundedBoxGeometry(1.86, 0.66, 0.7, 6, 0.24), glass);
-  lens.position.z = 0.02; visor.add(lens);
-  const zFront = 0.02 + 0.35;
-  const tube = new THREE.Mesh(new THREE.TubeGeometry(roundedRectCurve(1.86, 0.66, 0.24, zFront + 0.005), 200, 0.046, 14, true), neon);
-  visor.add(tube);
-  const core = new THREE.Mesh(new THREE.TubeGeometry(roundedRectCurve(1.86, 0.66, 0.24, zFront + 0.04), 200, 0.009, 8, true), neonCore);
-  visor.add(core);
-  const textMat = new THREE.MeshBasicMaterial({ map: visorTexture(text), transparent: true, toneMapped: false, depthWrite: false });
-  textMat.color.setScalar(1.6);
-  const label = new THREE.Mesh(new THREE.PlaneGeometry(1.62, 0.405), textMat);
-  label.position.z = zFront + 0.012; visor.add(label);
-  const scanMat = new THREE.MeshBasicMaterial({ color: NEON.clone().multiplyScalar(1.4), transparent: true, opacity: 0, toneMapped: false, depthWrite: false, blending: THREE.AdditiveBlending });
-  const scan = new THREE.Mesh(new THREE.PlaneGeometry(0.06, 0.56), scanMat);
-  scan.position.z = zFront + 0.02; visor.add(scan);
+  const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.1, 48), aluminium);
+  crown.position.set(0.86, H / 2 + 0.09, -0.22); g.add(crown);
+  for (let i = 0; i < 36; i++) {
+    const k = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.08, 0.012), darkMetal);
+    const a = (i / 36) * Math.PI * 2; k.position.set(0.86 + Math.cos(a) * 0.077, H / 2 + 0.09, -0.22 + Math.sin(a) * 0.077); k.rotation.y = -a; g.add(k);
+  }
+  const button = new THREE.Mesh(new THREE.CapsuleGeometry(0.035, 0.22, 6, 16), aluminium);
+  button.rotation.z = Math.PI / 2; button.position.set(-0.8, H / 2 + 0.05, -0.22); g.add(button);
 
-  return { root, neckGroup, head, ears, torso, textMat, scan, scanMat };
+  const sensorMat = new THREE.MeshPhysicalMaterial({ color: 0x050505, roughness: 0.1, metalness: 0.5, clearcoat: 1 });
+  [-0.62, -0.3, 0.3, 0.62].forEach((x) => {
+    const s = new THREE.Mesh(new THREE.CircleGeometry(0.032, 24), sensorMat);
+    const a = x / BEND_X;
+    s.position.set(Math.sin(a) * (BEND_X - 0.03), -H / 2 + 0.1, Math.cos(a) * (BEND_X - 0.03) - BEND_X); s.rotation.y = a; g.add(s);
+  });
+
+  g.position.y = 0.05;
+  return { group: g, disp };
 }
+
+const VignetteGrain = {
+  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 } },
+  vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float uTime; varying vec2 vUv;
+    float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233)))*43758.5453); }
+    void main(){ vec4 c = texture2D(tDiffuse, vUv);
+      float v = smoothstep(1.15, .35, length(vUv-.5)*1.35);
+      c.rgb *= mix(.55, 1., v);
+      c.rgb += (h(vUv*vec2(1920.,1080.)+uTime)-.5)*.018;
+      gl_FragColor = c; }`,
+};
 
 export function mount(section, opts = {}) {
   const canvas = section.querySelector("canvas");
@@ -161,34 +234,39 @@ export function mount(section, opts = {}) {
   try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" }); }
   catch (e) { section.classList.add("no-webgl"); return; }
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 1.0;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000000);
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.32;
+  scene.environment = studioEnvironment(renderer);
+  scene.background = canvasTex(1024, 1024, (g, w, h) => {
+    g.fillStyle = "#030305"; g.fillRect(0, 0, w, h);
+    let r = g.createRadialGradient(w * 0.5, h * 0.5, 10, w * 0.5, h * 0.5, w * 0.55);
+    r.addColorStop(0, "rgba(64,30,110,.55)"); r.addColorStop(0.5, "rgba(30,14,52,.35)"); r.addColorStop(1, "rgba(0,0,0,0)");
+    g.fillStyle = r; g.fillRect(0, 0, w, h);
+    r = g.createRadialGradient(w * 0.5, h * 0.95, 10, w * 0.5, h * 0.95, w * 0.5);
+    r.addColorStop(0, "rgba(140,30,90,.25)"); r.addColorStop(1, "rgba(0,0,0,0)");
+    g.fillStyle = r; g.fillRect(0, 0, w, h);
+  });
 
-  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);
+  const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
+  const key = new THREE.DirectionalLight(0xffffff, 0.9); key.position.set(-4, 5, 6); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xb48cff, 0.9); rim.position.set(5, 2, -5); scene.add(rim);
+  const rim2 = new THREE.DirectionalLight(0xff5c9a, 0.6); rim2.position.set(-5, -1, -4); scene.add(rim2);
 
-  const bgMat = new THREE.MeshBasicMaterial({ map: glowTexture(opts.watermark || "INTELLIGENCE"), toneMapped: false, depthWrite: false });
-  const bg = new THREE.Mesh(new THREE.PlaneGeometry(36, 18), bgMat);
-  bg.position.set(0, 0.6, -6); scene.add(bg);
+  const hs = buildHeadset(text);
+  const pivot = new THREE.Group(); pivot.add(hs.group); scene.add(pivot);
 
-  const key = new THREE.DirectionalLight(0xfff4ee, 1.5); key.position.set(-3, 4, 6); scene.add(key);
-  const rimL = new THREE.DirectionalLight(NEON, 2.6); rimL.position.set(-5, 2, -4); scene.add(rimL);
-  const rimR = new THREE.DirectionalLight(VIOLET, 2.4); rimR.position.set(5, 3, -4); scene.add(rimR);
-  const fill = new THREE.PointLight(0xff4d8d, 2.2, 8, 2); fill.position.set(0, -1.2, 3.2); scene.add(fill);
-  scene.add(new THREE.HemisphereLight(0x8a7fb8, 0x2a0a1e, 0.25));
-
-  const m = buildMascot(text);
-  scene.add(m.root);
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 1.6), new THREE.MeshBasicMaterial({
+    transparent: true, depthWrite: false, toneMapped: false,
+    map: canvasTex(256, 128, (g, w, h) => { const r = g.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); r.addColorStop(0, "rgba(0,0,0,.85)"); r.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = r; g.fillRect(0, 0, w, h); }),
+  }));
+  shadow.rotation.x = -Math.PI / 2; shadow.position.set(0, -1.15, -0.5); scene.add(shadow);
 
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.75, 0.4, 1.15);
-  composer.addPass(bloom);
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(256, 256), 0.32, 0.35, 2.3));
+  const grain = new ShaderPass(VignetteGrain); composer.addPass(grain);
   composer.addPass(new OutputPass());
 
   function resize() {
@@ -198,47 +276,39 @@ export function mount(section, opts = {}) {
     renderer.setPixelRatio(dpr); renderer.setSize(w, h, false);
     composer.setPixelRatio(dpr); composer.setSize(w, h);
     camera.aspect = w / h;
-    // keep the whole head in frame on narrow screens
-    const need = camera.aspect < 0.9 ? 10.5 * Math.pow(0.9 / camera.aspect, 0.85) : 10.5;
-    camera.position.set(0, 0.55, need);
-    camera.lookAt(0, camera.aspect < 0.9 ? 0.35 : 0.15, 0);
+    const dist = camera.aspect < 1 ? 6.4 * Math.pow(1 / camera.aspect, 0.9) : 7.2;
+    camera.position.set(0, 1.25, dist);
+    camera.lookAt(0, camera.aspect < 1 ? 0.05 : -0.42, 0);
     camera.updateProjectionMatrix();
   }
 
-  // springy follow
-  let tx = 0, ty = 0, yaw = 0, pitch = 0, vy = 0, vp = 0, lastMove = -1e9, earV = 0, earA = 0;
+  let tx = 0, ty = 0, yaw = 0, pitch = 0, vy = 0, vp = 0, lastMove = -1e9;
   const onMove = (e) => {
     const r = canvas.getBoundingClientRect();
     tx = THREE.MathUtils.clamp(((e.clientX - r.left) / r.width) * 2 - 1, -1.2, 1.2);
-    ty = THREE.MathUtils.clamp(((e.clientY - r.top) / r.height) * 2 - 1.1, -1.2, 1.2);
+    ty = THREE.MathUtils.clamp(((e.clientY - r.top) / r.height) * 2 - 1, -1.2, 1.2);
     lastMove = performance.now();
   };
   if (fine) window.addEventListener("pointermove", onMove, { passive: true });
   else section.addEventListener("pointermove", onMove, { passive: true });
 
   const clock = new THREE.Timer();
-  let running = false, raf = 0, nextBlink = 3, nextScan = 1.5;
+  let running = false, raf = 0;
   function frame() {
-    raf = 0;
-    clock.update(); const dt = Math.min(clock.getDelta(), 0.05), t = clock.getElapsed();
+    raf = 0; clock.update();
+    const dt = Math.min(clock.getDelta(), 0.05), t = clock.getElapsed();
     const idle = performance.now() - lastMove > 2600;
-    const gx = idle ? Math.sin(t * 0.45) * 0.55 + Math.sin(t * 1.3) * 0.08 : tx;
-    const gy = idle ? Math.sin(t * 0.7) * 0.18 : ty;
-    const targetYaw = gx * 0.62, targetPitch = gy * 0.32;
-    vy += (targetYaw - yaw) * 60 * dt; vy *= Math.pow(0.0006, dt); yaw += vy * dt;
-    vp += (targetPitch - pitch) * 60 * dt; vp *= Math.pow(0.0006, dt); pitch += vp * dt;
-    m.head.rotation.set(pitch * 0.8, yaw * 0.75, -yaw * 0.08);
-    m.neckGroup.rotation.set(pitch * 0.25, yaw * 0.3, -yaw * 0.04);
-    m.root.rotation.y = yaw * 0.12;
-    m.torso.scale.y = 1.05 + Math.sin(t * 1.6) * 0.012;
-    // ears lag behind the head turn
-    earV += ((-vy * 0.05) - earA) * 30 * dt; earV *= Math.pow(0.02, dt); earA += earV * dt;
-    m.ears.forEach(({ pivot, sx }) => { pivot.rotation.z = -sx * 0.45 + earA + Math.sin(t * 2 + sx) * 0.03; });
-    // visor blink and scan line
-    let glow = 1;
-    if (t > nextBlink) { const k = (t - nextBlink) / 0.18; glow = k < 1 ? 0.35 + 0.65 * Math.abs(1 - 2 * k) : 1; if (k >= 1) nextBlink = t + 3.5 + Math.random() * 3; }
-    m.textMat.color.setScalar(1.6 * glow);
-    if (t > nextScan) { const k = (t - nextScan) / 1.1; if (k < 1) { m.scan.position.x = -0.85 + 1.7 * k; m.scanMat.opacity = Math.sin(k * Math.PI) * 0.55; } else { m.scanMat.opacity = 0; nextScan = t + 2.8; } }
+    const gx = idle ? Math.sin(t * 0.35) * 0.6 : tx;
+    const gy = idle ? Math.sin(t * 0.5) * 0.2 : ty;
+    const targetYaw = gx * 0.6, targetPitch = gy * 0.28;
+    vy += (targetYaw - yaw) * 34 * dt; vy *= Math.pow(0.0015, dt); yaw += vy * dt;
+    vp += (targetPitch - pitch) * 34 * dt; vp *= Math.pow(0.0015, dt); pitch += vp * dt;
+    pivot.rotation.set(pitch, yaw, -yaw * 0.06);
+    pivot.position.y = Math.sin(t * 0.9) * 0.05;
+    shadow.material.opacity = 0.75 - pivot.position.y * 1.5;
+    shadow.scale.setScalar(1 - pivot.position.y * 0.6);
+    hs.disp.uniforms.uTime.value = t;
+    grain.uniforms.uTime.value = t * 60;
     composer.render();
     if (running && !reduce) raf = requestAnimationFrame(frame);
   }
@@ -246,10 +316,10 @@ export function mount(section, opts = {}) {
   function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; }
 
   resize();
-  if (reduce) { tx = 0.35; ty = -0.05; yaw = 0.2; pitch = -0.02; composer.render(); frame(); }
+  if (reduce) { yaw = 0.25; pitch = 0.05; pivot.rotation.set(pitch, yaw, 0); composer.render(); }
   window.addEventListener("resize", () => { resize(); if (!running) composer.render(); });
   new IntersectionObserver((es) => { es[0].isIntersecting && !document.hidden ? start() : stop(); }).observe(section);
   document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
   section.classList.add("live");
-  return { scene, mascot: m, render: () => composer.render() };
+  return { scene, render: () => composer.render() };
 }

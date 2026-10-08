@@ -410,6 +410,23 @@ box-shadow:0 -1px 0 rgba(255,255,255,.12) inset,0 40px 80px -40px rgba(10,12,20,
 .sv-mock{position:absolute;left:7%;top:12%;width:540px;transform:scale(.82) rotate(-3deg);transform-origin:top left}
 .sv-mock .browser{box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
 @media (max-width:860px){.sc{grid-template-columns:1fr;min-height:0;top:calc(70px + var(--i)*18px)}.sc-vis{min-height:220px}.sv-mock{transform:scale(.55) rotate(-3deg)}.sc-n{margin-bottom:6px}}
+/* tap feedback */
+.fx-rhost{overflow:hidden;isolation:isolate}
+.fx-ripple{position:absolute;border-radius:50%;pointer-events:none;z-index:6;background:radial-gradient(circle,rgba(255,255,255,.75),color-mix(in srgb,var(--c,#BE185D) 45%,transparent) 42%,transparent 70%);transform:scale(0);opacity:1;animation:fxRipple .65s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes fxRipple{to{transform:scale(1);opacity:0}}
+.cs-card:active,.app:active .icon,.sc:active{scale:.97;transition:scale .08s}
+.btn:active,.ghost:active,.livebtn:active,.meet-btn:active,.cs-filter button:active{scale:.95}
+.fx-chosen.cs-card,.fx-chosen .icon,.fx-chosen.btn{outline:3px solid color-mix(in srgb,var(--c,#7C3AED) 70%,#fff);outline-offset:4px;animation:fxPick .45s ease}
+@keyframes fxPick{0%{scale:1}35%{scale:.96}100%{scale:1.01}}
+.fx-curtain{position:fixed;inset:0;z-index:200;display:grid;place-items:center;align-content:center;gap:22px;background:radial-gradient(120% 90% at 50% 120%,color-mix(in srgb,var(--fc) 60%,#fff 0%),var(--fc) 60%);color:#fff;clip-path:circle(0% at 50% 100%);transition:clip-path .46s cubic-bezier(.7,0,.2,1)}
+.fx-curtain.on{clip-path:circle(150% at 50% 100%)}
+.fx-cname{font-size:clamp(34px,6vw,84px);font-weight:850;font-variation-settings:'wdth' 120;letter-spacing:-.03em;opacity:0;translate:0 20px;transition:opacity .3s .15s,translate .3s .15s}
+.fx-curtain.on .fx-cname{opacity:1;translate:none}
+.fx-load{display:block;width:120px;height:3px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden;position:relative}
+.fx-load::after{content:"";position:absolute;inset:0;background:#fff;transform-origin:0 50%;animation:fxLoad .9s ease-in-out infinite}
+@keyframes fxLoad{0%{transform:scaleX(0)}60%{transform:scaleX(1)}100%{transform:scaleX(1);opacity:0}}
+html.fx-arrive::after{content:"";position:fixed;inset:0;z-index:200;background:var(--fc);pointer-events:none;animation:fxArrive .6s cubic-bezier(.7,0,.2,1) forwards}
+@keyframes fxArrive{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0)}}
 /* Meet our AI: full-screen 3D mascot */
 .meet{display:block;width:100%;position:relative;height:100vh;height:100svh;min-height:640px;margin-top:72px;background:#000;color:#fff;overflow:hidden}
 .meet-stage{position:absolute;inset:0;background:#000 url(/assets/mascot-poster.webp) 50% 100%/cover no-repeat}
@@ -622,6 +639,25 @@ else{var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.is
 var esc=function(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;")};
 var words=reduce?[]:$$("[data-words]").map(function(el){var t=el.textContent.trim().split(/\s+/);el.innerHTML=t.map(function(w){return '<span class="w">'+esc(w)+'</span>'}).join(" ");return {el:el,ws:[].slice.call(el.querySelectorAll(".w"))}});
 
+/* click feedback: ripple, press and a page transition so every tap visibly registers */
+var TAP="a,button,.cs-card,.app,.sc";
+d.addEventListener("pointerdown",function(e){var el=e.target.closest(TAP);if(!el||e.button>0)return;
+  var host=el.classList.contains("app")?el.querySelector(".icon"):el;if(!host)return;
+  var r=host.getBoundingClientRect(),s=Math.max(r.width,r.height)*2.2,rp=d.createElement("span");rp.className="fx-ripple";
+  rp.style.cssText="width:"+s+"px;height:"+s+"px;left:"+(e.clientX-r.left-s/2)+"px;top:"+(e.clientY-r.top-s/2)+"px";
+  if(getComputedStyle(host).position==="static")host.style.position="relative";host.classList.add("fx-rhost");host.appendChild(rp);
+  setTimeout(function(){rp.remove()},700)},{passive:true});
+d.addEventListener("click",function(e){var a=e.target.closest("a[href]");if(!a||e.defaultPrevented||e.button>0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+  if(a.target==="_blank"||a.hasAttribute("download"))return;var u;try{u=new URL(a.href,location.href)}catch(x){return}
+  if(u.origin!==location.origin||(u.pathname===location.pathname&&u.hash))return;
+  e.preventDefault();var card=a.closest("[style*='--c']")||a,col=getComputedStyle(card).getPropertyValue("--c").trim()||"#14171D";
+  var name=(a.querySelector("h3,b")||{}).textContent||"";name=name.replace(/AI$/,"").trim();
+  a.classList.add("fx-chosen");try{sessionStorage.setItem("fxNav",col)}catch(x){}
+  if(reduce){location.href=u.href;return}
+  var c=d.createElement("div");c.className="fx-curtain";c.style.setProperty("--fc",col);c.innerHTML='<span class="fx-cname"></span><i class="fx-load"></i>';c.firstChild.textContent=name;d.body.appendChild(c);
+  requestAnimationFrame(function(){c.classList.add("on")});setTimeout(function(){location.href=u.href},460)});
+W.addEventListener("pageshow",function(e){if(e.persisted){$$(".fx-curtain").forEach(function(c){c.remove()});$$(".fx-chosen").forEach(function(a){a.classList.remove("fx-chosen")})}});
+
 var objs=$$(".fx-obj").map(function(e){return {el:e,k:parseFloat(e.getAttribute("data-depth"))||1}});
 var h1=d.querySelector(".ihero h1"),home=d.querySelector(".home"),mock=d.querySelector(".chero .mock");
 var wall=d.querySelector(".fx-wall"),rows=$$(".fx-row"),cards=$$(".stack .sc");
@@ -826,7 +862,7 @@ def page(title, desc, body, extra_head=""):
 <title>{title}</title><meta name="description" content="{desc}">
 <meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%231A1F2B%22/><text x=%2250%22 y=%2270%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22 font-weight=%22bold%22>i</text></svg>">
-{FONT}<style>{CSS}</style>{extra_head}<script src="/fx.js" defer></script></head><body>{body}</body></html>'''
+{FONT}<script>try{{var c=sessionStorage.getItem("fxNav");if(c&&!matchMedia("(prefers-reduced-motion: reduce)").matches){{document.documentElement.classList.add("fx-arrive");document.documentElement.style.setProperty("--fc",c)}}sessionStorage.removeItem("fxNav")}}catch(e){{}}</script><style>{CSS}</style>{extra_head}<script src="/fx.js" defer></script></head><body>{body}</body></html>'''
 
 # ---- multi-page site for Vercel
 out=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

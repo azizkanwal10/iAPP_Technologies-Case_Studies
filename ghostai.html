@@ -3,7 +3,7 @@
 <title>GhostAI case study | iApp Technologies</title><meta name="description" content="An invisible sidekick that gives you instant answers in meetings, calls and conversations, without anyone knowing.">
 <meta property="og:title" content="GhostAI case study | iApp Technologies"><meta property="og:description" content="An invisible sidekick that gives you instant answers in meetings, calls and conversations, without anyone knowing."><meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%231A1F2B%22/><text x=%2250%22 y=%2270%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22 font-weight=%22bold%22>i</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Space+Mono:wght@400;700&family=Anton+SC&display=swap" rel="stylesheet"><style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Space+Mono:wght@400;700&family=Anton+SC&display=swap" rel="stylesheet"><script>try{var c=sessionStorage.getItem("fxNav");if(c&&!matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("fx-arrive");document.documentElement.style.setProperty("--fc",c)}sessionStorage.removeItem("fxNav")}catch(e){}</script><style>
 :root{--paper:#EDEFEA;--paper2:#F7F8F4;--ink:#1A1F2B;--muted:#4F5663;--rule:#C7CCC4;--onc:#fff;
 --f:'Archivo',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;box-sizing:border-box;
 padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -406,6 +406,23 @@ box-shadow:0 -1px 0 rgba(255,255,255,.12) inset,0 40px 80px -40px rgba(10,12,20,
 .sv-mock{position:absolute;left:7%;top:12%;width:540px;transform:scale(.82) rotate(-3deg);transform-origin:top left}
 .sv-mock .browser{box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
 @media (max-width:860px){.sc{grid-template-columns:1fr;min-height:0;top:calc(70px + var(--i)*18px)}.sc-vis{min-height:220px}.sv-mock{transform:scale(.55) rotate(-3deg)}.sc-n{margin-bottom:6px}}
+/* tap feedback */
+.fx-rhost{overflow:hidden;isolation:isolate}
+.fx-ripple{position:absolute;border-radius:50%;pointer-events:none;z-index:6;background:radial-gradient(circle,rgba(255,255,255,.75),color-mix(in srgb,var(--c,#BE185D) 45%,transparent) 42%,transparent 70%);transform:scale(0);opacity:1;animation:fxRipple .65s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes fxRipple{to{transform:scale(1);opacity:0}}
+.cs-card:active,.app:active .icon,.sc:active{scale:.97;transition:scale .08s}
+.btn:active,.ghost:active,.livebtn:active,.meet-btn:active,.cs-filter button:active{scale:.95}
+.fx-chosen.cs-card,.fx-chosen .icon,.fx-chosen.btn{outline:3px solid color-mix(in srgb,var(--c,#7C3AED) 70%,#fff);outline-offset:4px;animation:fxPick .45s ease}
+@keyframes fxPick{0%{scale:1}35%{scale:.96}100%{scale:1.01}}
+.fx-curtain{position:fixed;inset:0;z-index:200;display:grid;place-items:center;align-content:center;gap:22px;background:radial-gradient(120% 90% at 50% 120%,color-mix(in srgb,var(--fc) 60%,#fff 0%),var(--fc) 60%);color:#fff;clip-path:circle(0% at 50% 100%);transition:clip-path .46s cubic-bezier(.7,0,.2,1)}
+.fx-curtain.on{clip-path:circle(150% at 50% 100%)}
+.fx-cname{font-size:clamp(34px,6vw,84px);font-weight:850;font-variation-settings:'wdth' 120;letter-spacing:-.03em;opacity:0;translate:0 20px;transition:opacity .3s .15s,translate .3s .15s}
+.fx-curtain.on .fx-cname{opacity:1;translate:none}
+.fx-load{display:block;width:120px;height:3px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden;position:relative}
+.fx-load::after{content:"";position:absolute;inset:0;background:#fff;transform-origin:0 50%;animation:fxLoad .9s ease-in-out infinite}
+@keyframes fxLoad{0%{transform:scaleX(0)}60%{transform:scaleX(1)}100%{transform:scaleX(1);opacity:0}}
+html.fx-arrive::after{content:"";position:fixed;inset:0;z-index:200;background:var(--fc);pointer-events:none;animation:fxArrive .6s cubic-bezier(.7,0,.2,1) forwards}
+@keyframes fxArrive{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0)}}
 /* Meet our AI: full-screen 3D mascot */
 .meet{display:block;width:100%;position:relative;height:100vh;height:100svh;min-height:640px;margin-top:72px;background:#000;color:#fff;overflow:hidden}
 .meet-stage{position:absolute;inset:0;background:#000 url(/assets/mascot-poster.webp) 50% 100%/cover no-repeat}
