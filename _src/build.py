@@ -41,7 +41,7 @@ img{max-width:100%}
 .app{text-decoration:none;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
 .icon{width:100%;aspect-ratio:1;border-radius:24%;background:var(--c);display:grid;place-items:center;color:#fff;transition:transform .2s ease}
 .icon svg{width:44%;height:44%}
-.app:hover .icon{transform:translateY(-4px)}
+.app:hover .icon{translate:0 -4px}
 .app b{font-size:18px;font-weight:700;line-height:1.2}
 .app span{font-size:15px;color:var(--muted);line-height:1.3;margin-top:-8px}
 .tally{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));border-top:2px solid var(--ink);border-bottom:1px solid var(--rule)}
@@ -203,8 +203,8 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
 .home .app{animation:pop .5s cubic-bezier(.2,.8,.3,1.2) both}
 .home .app:nth-child(2){animation-delay:.06s}.home .app:nth-child(3){animation-delay:.12s}.home .app:nth-child(4){animation-delay:.18s}.home .app:nth-child(5){animation-delay:.24s}
 }
-@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;translate:0 18px}to{opacity:1;translate:none}}
+@keyframes pop{from{opacity:0;scale:.85}to{opacity:1;scale:1}}
 .ihero h1{max-width:13ch}
 .company{padding:clamp(64px,8vw,104px) 0 0}
 .cohead{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:40px}
@@ -337,6 +337,80 @@ text-shadow:0 1px 0 rgba(0,0,0,.25);transform:translateY(-1px);transition:transf
 .cs-card:hover .niche{transform:translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.18),0 5px 0 color-mix(in srgb,var(--c) 55%,#000),0 12px 18px -6px color-mix(in srgb,var(--c) 70%,rgba(0,0,0,.5))}
 .on-color .niche{color:#14171D;text-shadow:none;background:linear-gradient(180deg,#fff,#E9ECEF);box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 rgba(0,0,0,.08),0 3px 0 rgba(0,0,0,.28),0 8px 14px -6px rgba(0,0,0,.45)}
 @media (prefers-reduced-motion:reduce){.niche{transition:none}}
+.demo-tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.02em;border:1.5px dashed currentColor;color:var(--muted);white-space:nowrap}
+.on-color .demo-tag{color:#fff}
+/* scroll progress */
+.fx-bar{position:fixed;left:0;top:0;height:3px;width:100%;z-index:60;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#6D28D9,#BE185D,#F59E0B);pointer-events:none}
+/* rise into view */
+.fx .rise{opacity:0;translate:0 36px;transition:opacity .9s cubic-bezier(.2,.7,.2,1),translate .9s cubic-bezier(.2,.7,.2,1)}
+.fx .rise.risen{opacity:1;translate:none}
+.fx .svc>div.rise:nth-child(2),.fx .steps li.rise:nth-child(2),.fx .feat>div.rise:nth-child(2),.fx .hard>div.rise:nth-child(2){transition-delay:.08s}
+.fx .svc>div.rise:nth-child(3),.fx .steps li.rise:nth-child(3),.fx .feat>div.rise:nth-child(3),.fx .hard>div.rise:nth-child(3){transition-delay:.16s}
+.fx .svc>div.rise:nth-child(4),.fx .steps li.rise:nth-child(4),.fx .feat>div.rise:nth-child(4),.fx .hard>div.rise:nth-child(4){transition-delay:.24s}
+.fx .svc>div.rise:nth-child(n+5),.fx .feat>div.rise:nth-child(n+5){transition-delay:.32s}
+[data-words] .w{transition:opacity .25s linear}
+/* hero: metallic title and floating 3D glass objects */
+.ihero{position:relative}
+.ihero>*:not(.fx-stage){position:relative;z-index:1}
+.ihero h1{background:linear-gradient(180deg,var(--ink) 38%,color-mix(in srgb,var(--ink) 45%,#7C3AED));-webkit-background-clip:text;background-clip:text;color:transparent;transform-origin:20% 50%;will-change:transform}
+.fx-stage{position:absolute;inset:0;pointer-events:none;perspective:1000px;z-index:0}
+.fx-obj{position:absolute;transform-style:preserve-3d;will-change:transform}
+.bob{animation:bob 7s ease-in-out infinite;transform-style:preserve-3d}.b2{animation-duration:9s;animation-delay:-2s}.b3{animation-duration:11s;animation-delay:-4s}.b4{animation-duration:8s;animation-delay:-1s}
+@keyframes bob{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -16px;rotate:6deg}}
+.o1{right:5%;top:8%}.o2{right:27%;top:50%}.o3{right:1%;top:58%}.o4{right:31%;top:4%}.o5{right:19%;top:33%}
+.orb{display:block;width:150px;height:150px;border-radius:50%;
+background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.95) 0 5%,rgba(255,255,255,.35) 11%,transparent 30%),radial-gradient(circle at 72% 78%,rgba(244,114,182,.85),transparent 50%),radial-gradient(circle at 45% 45%,#8B5CF6,#3B0764 75%);
+box-shadow:inset -14px -20px 34px rgba(0,0,0,.35),inset 12px 12px 30px rgba(255,255,255,.25),0 34px 60px -22px rgba(109,40,217,.65)}
+.orb.sm{width:52px;height:52px}
+.cube{--s:92px;width:var(--s);height:var(--s);position:relative;transform-style:preserve-3d;animation:spin 16s linear infinite}
+.cube i{position:absolute;inset:0;border-radius:14px;border:1.5px solid rgba(255,255,255,.6);background:linear-gradient(135deg,rgba(167,139,250,.55),rgba(236,72,153,.3));box-shadow:inset 0 0 22px rgba(255,255,255,.35)}
+.cube i:nth-child(1){transform:translateZ(calc(var(--s)/2))}.cube i:nth-child(2){transform:rotateY(180deg) translateZ(calc(var(--s)/2))}
+.cube i:nth-child(3){transform:rotateY(90deg) translateZ(calc(var(--s)/2))}.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(calc(var(--s)/2))}
+.cube i:nth-child(5){transform:rotateX(90deg) translateZ(calc(var(--s)/2))}.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(calc(var(--s)/2))}
+@keyframes spin{from{transform:rotateX(-22deg) rotateY(0deg)}to{transform:rotateX(-22deg) rotateY(360deg)}}
+.ring{display:block;width:140px;height:140px;border-radius:50%;transform:rotateX(64deg) rotateZ(20deg);
+background:conic-gradient(from 90deg,#F59E0B,#EC4899,#8B5CF6,#3B82F6,#F59E0B);-webkit-mask:radial-gradient(circle,transparent 46%,#000 47.5%);mask:radial-gradient(circle,transparent 46%,#000 47.5%);filter:drop-shadow(0 20px 18px rgba(109,40,217,.45))}
+.pill{display:block;width:120px;height:44px;border-radius:999px;transform:rotate(-24deg);
+background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,0) 45%),linear-gradient(90deg,#F59E0B,#EC4899);box-shadow:inset 0 -6px 12px rgba(0,0,0,.18),0 20px 30px -14px rgba(236,72,153,.6)}
+main{overflow-x:clip}
+@media (max-width:900px){.o1{right:-2%;top:-1%;scale:.42;transform-origin:100% 0}.o5{right:30%;top:-1%;scale:.6}.o2,.o3,.o4{display:none}.ihero h1{padding-top:44px}}
+/* icons follow the cursor in 3D */
+.home{transform-style:preserve-3d;will-change:transform}
+.home .app{transform-style:preserve-3d}
+.home .icon{transform:translateZ(26px);box-shadow:0 18px 30px -18px color-mix(in srgb,var(--c) 80%,transparent)}
+/* tilted screen wall that slides with scroll */
+.fx-wall{overflow:hidden;padding:56px 0 24px;perspective:1600px;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.fx-plane{transform:rotateX(18deg) rotateZ(-4deg) scale(1.06);transform-style:preserve-3d}
+.fx-row{display:flex;gap:18px;width:max-content;margin-bottom:18px;will-change:transform}
+.fx-row img{height:200px;width:auto;border-radius:16px;background:#fff;box-shadow:0 0 0 1px var(--rule),0 24px 40px -22px rgba(20,25,35,.45)}
+.fx-row[data-dir="1"]{transform:translate3d(-30%,0,0)}
+@media (max-width:700px){.fx-row img{height:130px;border-radius:12px}.fx-row{gap:12px;margin-bottom:12px}}
+/* AI spotlight: cards that pin and stack */
+.spot{padding-top:88px}
+.spot-head{max-width:720px;margin-bottom:36px}
+.spot-head h2{font-size:clamp(34px,5vw,64px);line-height:.98;letter-spacing:-.03em;font-weight:850;font-variation-settings:'wdth' 120;margin:16px 0 14px}
+.spot-head p{margin:0;color:var(--muted);max-width:56ch}
+.stack{display:grid;gap:44px;padding-bottom:6vh}
+.sc{position:sticky;top:calc(84px + var(--i)*26px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(20px,3vw,44px);align-items:center;min-height:440px;padding:clamp(24px,3.6vw,44px);border-radius:32px;color:#fff;transform-origin:50% 0;will-change:transform,filter;
+background:radial-gradient(90% 120% at 100% 0%,color-mix(in srgb,var(--c) 75%,transparent),transparent 62%),linear-gradient(160deg,color-mix(in srgb,var(--c) 40%,#0B0D12),#0B0D12 70%);
+box-shadow:0 -1px 0 rgba(255,255,255,.12) inset,0 40px 80px -40px rgba(10,12,20,.7)}
+.sc-n{display:block;font-size:clamp(56px,7vw,96px);line-height:.85;font-weight:900;font-variation-settings:'wdth' 125;letter-spacing:-.04em;background:linear-gradient(180deg,#fff,rgba(255,255,255,.25));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:14px}
+.sc h3{font-size:clamp(30px,3.6vw,48px);line-height:1;letter-spacing:-.025em;font-weight:850;font-variation-settings:'wdth' 118;margin:14px 0 12px}
+.sc p{margin:0;color:rgba(255,255,255,.8);max-width:46ch}
+.sc-stats{list-style:none;padding:0;margin:20px 0 24px;display:flex;flex-wrap:wrap;gap:8px}
+.sc-stats li{font-size:14px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18)}
+.sc-stats b{margin-right:5px}
+.sc .btn{background:#fff;color:#14171D}
+.sc .ghost{border-color:rgba(255,255,255,.7);color:#fff}.sc .ghost:hover{background:#fff;color:#14171D}
+.sc .niche{box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.18),0 3px 0 rgba(0,0,0,.45)}
+.sc-vis{position:relative;height:100%;min-height:340px;border-radius:22px;overflow:hidden;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.sv-img{position:absolute;left:8%;top:12%;width:110%;max-width:none;height:auto;border-radius:16px;transform:rotate(-4deg);box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
+.sv-fan img{position:absolute;bottom:-28%;width:34%;height:auto;border-radius:16px;box-shadow:0 30px 50px -18px rgba(0,0,0,.7)}
+.sv-fan img:nth-child(1){left:33%;z-index:3;transform:translateY(-12%)}.sv-fan img:nth-child(2){left:6%;transform:rotate(-10deg)}.sv-fan img:nth-child(3){left:60%;transform:rotate(10deg)}
+.sv-mock{position:absolute;left:7%;top:12%;width:540px;transform:scale(.82) rotate(-3deg);transform-origin:top left}
+.sv-mock .browser{box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
+@media (max-width:860px){.sc{grid-template-columns:1fr;min-height:0;top:calc(70px + var(--i)*18px)}.sc-vis{min-height:220px}.sv-mock{transform:scale(.55) rotate(-3deg)}.sc-n{margin-bottom:6px}}
+@media (prefers-reduced-motion:reduce){.bob,.cube{animation:none}.sc{position:relative;top:auto}}
 /* results panel */
 .tally{position:relative;overflow:hidden;border:0;border-radius:28px;gap:0;color:#fff;
 background:radial-gradient(90% 140% at 0% 0%,rgba(124,58,237,.45),transparent 55%),radial-gradient(80% 140% at 100% 100%,rgba(190,24,93,.4),transparent 55%),#14171F;
@@ -417,11 +491,13 @@ GLYPH = {
  "code-claw":'<g fill="currentColor" stroke="none"><ellipse cx="5.6" cy="10.2" rx="1.9" ry="2.4"/><ellipse cx="9.6" cy="5.9" rx="2" ry="2.6"/><ellipse cx="14.4" cy="5.9" rx="2" ry="2.6"/><ellipse cx="18.4" cy="10.2" rx="1.9" ry="2.4"/><path d="M12 11.3c-2.7 0-5.6 3.7-5.6 6.4 0 1.6 1.2 2.4 2.7 2.4 1.2 0 1.9-.6 2.9-.6s1.7.6 2.9.6c1.5 0 2.7-.8 2.7-2.4 0-2.7-2.9-6.4-5.6-6.4z"/></g>',
  "ghostai":'<path d="M6 20.5V10a6 6 0 0 1 12 0v10.5l-2-1.6-2 1.6-2-1.6-2 1.6-2-1.6z"/><circle cx="9.8" cy="10.6" r="1.1" fill="currentColor"/><circle cx="14.2" cy="10.6" r="1.1" fill="currentColor"/>',
  "genzpark":'<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><path d="M17 13.2l1 2.8 2.8 1-2.8 1-1 2.8-1-2.8-2.8-1 2.8-1z" fill="currentColor"/>',
+ "3d-demo":'<path d="M12 2.8 20 7.3v9.4l-8 4.5-8-4.5V7.3z"/><path d="M4 7.3l8 4.6 8-4.6M12 11.9v9.3"/>',
  "poster-maker":'<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="9.5" cy="8.5" r="1.8"/><path d="M4 17l5-5 4 4 2.5-2.5L20 18"/>',
 }
 import base64
 SPARK='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"/><path d="M19 15.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>'
 def niche_tag(p): return f'<span class="niche">{p["niche"]}</span>' if p.get("niche") else ''
+def demo_tag(p): return '<span class="demo-tag">Concept demo</span>' if p.get("demo") else ''
 def ai_tag(p): return f'<span class="ai-tag">{SPARK}AI tool</span>' if p.get("ai") else ''
 ASSET=lambda path: "/"+path
 def data_uri(path):
@@ -507,6 +583,66 @@ def cta():
     return '''<section class="wrap cta"><h2>Have a product that needs to reach millions?</h2>
 <div><p>Tell us what you are building. We will come back with a plan, a team and a realistic timeline.</p><div class="links"><a class="btn" href="mailto:aziz.k@iapptechnologiesllp.com">Email us</a><a class="ghost" href="tel:+917009592313">+91 70095 92313</a></div></div></section>'''
 
+FX_JS=r'''/* Cursor and scroll effects for the case studies site. Everything is skipped for reduced motion. */
+(function(){
+var d=document,root=d.documentElement,W=window;
+var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches,fine=matchMedia("(hover: hover) and (pointer: fine)").matches;
+root.classList.add("fx");
+var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
+var $$=function(q){return [].slice.call(d.querySelectorAll(q))};
+
+/* scroll progress bar */
+var bar=d.createElement("div");bar.className="fx-bar";bar.setAttribute("aria-hidden","true");d.body.appendChild(bar);
+
+/* sections rise into view */
+var rise=$$(".list .cs-head,.cohead,.facts,.svc>div,.sec,.gallery,.next,.cta,.spot-head,.tally,.steps li,.feat>div,.hard>div");
+rise.forEach(function(e){e.classList.add("rise")});
+if(reduce||!("IntersectionObserver" in W)){rise.forEach(function(e){e.classList.add("risen")})}
+else{var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("risen");io.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px"});rise.forEach(function(e){io.observe(e)})}
+
+/* paragraphs that light up word by word */
+var esc=function(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;")};
+var words=reduce?[]:$$("[data-words]").map(function(el){var t=el.textContent.trim().split(/\s+/);el.innerHTML=t.map(function(w){return '<span class="w">'+esc(w)+'</span>'}).join(" ");return {el:el,ws:[].slice.call(el.querySelectorAll(".w"))}});
+
+var objs=$$(".fx-obj").map(function(e){return {el:e,k:parseFloat(e.getAttribute("data-depth"))||1}});
+var h1=d.querySelector(".ihero h1"),home=d.querySelector(".home"),mock=d.querySelector(".chero .mock");
+var wall=d.querySelector(".fx-wall"),rows=$$(".fx-row"),cards=$$(".stack .sc");
+if(reduce){return}
+
+var tx=0,ty=0,cx=0,cy=0,hx=0,hy=0,hcx=0,hcy=0,sy=W.scrollY,vh=W.innerHeight,raf=0;
+function kick(){if(!raf)raf=requestAnimationFrame(frame)}
+function frame(){
+  raf=0;
+  cx+=(tx-cx)*.08;cy+=(ty-cy)*.08;hcx+=(hx-hcx)*.1;hcy+=(hy-hcy)*.1;
+  objs.forEach(function(o){var k=o.k;o.el.style.transform="translate3d("+(cx*k*26).toFixed(1)+"px,"+(cy*k*22-sy*k*.18).toFixed(1)+"px,0) rotateX("+(-cy*k*9).toFixed(2)+"deg) rotateY("+(cx*k*12).toFixed(2)+"deg)"});
+  if(h1)h1.style.transform="perspective(900px) rotateX("+(-cy*4).toFixed(2)+"deg) rotateY("+(cx*6).toFixed(2)+"deg)";
+  if(home)home.style.transform="perspective(1100px) rotateX("+(-hcy*7).toFixed(2)+"deg) rotateY("+(hcx*9).toFixed(2)+"deg)";
+  if(mock)mock.style.transform="perspective(1200px) rotateX("+(-cy*6).toFixed(2)+"deg) rotateY("+(cx*8).toFixed(2)+"deg) translateY("+(sy*.06).toFixed(1)+"px)";
+  if(Math.abs(tx-cx)+Math.abs(ty-cy)+Math.abs(hx-hcx)+Math.abs(hy-hcy)>.002)kick();
+}
+function onScroll(){
+  sy=W.scrollY;
+  var max=root.scrollHeight-vh;bar.style.transform="scaleX("+(max>0?sy/max:0).toFixed(4)+")";
+  words.forEach(function(o){var r=o.el.getBoundingClientRect();if(r.bottom<-50||r.top>vh+50)return;
+    var p=clamp((vh*.9-r.top)/(vh*.55+r.height*.5),0,1),n=o.ws.length;
+    o.ws.forEach(function(w,i){w.style.opacity=(.18+.82*clamp(p*n*1.15-i,0,1)).toFixed(2)})});
+  if(wall){var r=wall.getBoundingClientRect();if(r.bottom>0&&r.top<vh){var p=clamp((vh-r.top)/(vh+r.height),0,1);
+    rows.forEach(function(row){var dir=+row.getAttribute("data-dir"),extra=Math.max(0,row.scrollWidth/2);var x=dir<0?-p*extra*.55:-(1-p)*extra*.55;row.style.transform="translate3d("+x.toFixed(1)+"px,0,0)"})}}
+  for(var i=0;i<cards.length-1;i++){var a=cards[i].getBoundingClientRect(),b=cards[i+1].getBoundingClientRect();
+    var t=clamp((a.bottom-b.top)/a.height,0,1);cards[i].style.transform="scale("+(1-.06*t).toFixed(3)+")";cards[i].style.filter="brightness("+(1-.4*t).toFixed(2)+")"}
+  kick();
+}
+W.addEventListener("scroll",onScroll,{passive:true});
+W.addEventListener("resize",function(){vh=W.innerHeight;onScroll()});
+if(fine){W.addEventListener("pointermove",function(e){tx=e.clientX/W.innerWidth*2-1;ty=e.clientY/vh*2-1;
+  if(home){var r=home.getBoundingClientRect();var inside=e.clientX>r.left-80&&e.clientX<r.right+80&&e.clientY>r.top-80&&e.clientY<r.bottom+80;
+    hx=inside?clamp((e.clientX-r.left)/r.width*2-1,-1,1):0;hy=inside?clamp((e.clientY-r.top)/r.height*2-1,-1,1):0}
+  kick()},{passive:true});
+  d.addEventListener("pointerleave",function(){tx=ty=hx=hy=0;kick()})}
+onScroll();
+})();
+'''
+
 TILT='''<script>(function(){
 var cards=[].slice.call(document.querySelectorAll(".cs-card"));
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -524,6 +660,32 @@ if(!reduce&&"IntersectionObserver" in window&&nums.length){var done=false,t=new 
 var t0=performance.now();nums.forEach(function(n){n.dataset.final=n.textContent});
 (function step(now){var k=Math.min(1,(now-t0)/1400),e=1-Math.pow(1-k,3);nums.forEach(function(n){var v=parseFloat(n.dataset.to)*e;n.textContent=(k<1?v.toFixed(+n.dataset.dec):n.dataset.final.replace(n.dataset.suf,""))+n.dataset.suf;if(k===1)n.textContent=n.dataset.final});if(k<1)requestAnimationFrame(step)})(t0)},{threshold:.4});t.observe(document.querySelector(".tally"))}
 })();</script>'''
+
+WALL_A=["code-claw/features.webp","transwayz/integrations.webp","3d-demo/about.webp","baridata/dashboard.webp","beatstars/web.webp","3d-demo/projects.webp"]
+WALL_B=["poster-maker/screen-1.webp","singles-connect/screen-1.webp","pdf-converter/screen-1.webp","3d-demo/hero.webp","screen-recorder/screen-2.webp","beatstars/screen-1.webp","transwayz/dispatch.webp","poster-maker/screen-2.webp","singles-connect/screen-2.webp","code-claw/hero.webp"]
+def wall():
+    row=lambda L,d: f'<div class="fx-row" data-dir="{d}">'+''.join(f'<img src="/assets/{f}" alt="" loading="lazy" decoding="async">' for f in L+L)+'</div>'
+    return f'<section class="fx-wall" aria-hidden="true"><div class="fx-plane">{row(WALL_A,-1)}{row(WALL_B,1)}</div></section>'
+
+def spot_visual(p):
+    if p.get("shots"):
+        return '<div class="sv-fan">'+''.join(f'<img src="{ASSET(src)}" alt="" width="535" height="1160" loading="lazy">' for src,cap,alt in p["shots"][:3])+'</div>'
+    if p.get("card_img") or p.get("hero"):
+        src,alt,w,h=p.get("card_img") or p["hero"]; return f'<img class="sv-img" src="{ASSET(src)}" alt="" width="{w}" height="{h}" loading="lazy">'
+    inner=GZ_DASH if p["kind"]=="workspace" else GHOST_CALL
+    return f'<div class="sv-mock"><div class="browser"><div class="bdots"><i></i><i></i><i></i></div>{inner}</div></div>'
+
+def spotlight(href):
+    ai=[p for p in PROJECTS if p.get("ai")]
+    cards=''
+    for i,p in enumerate(ai):
+        st=''.join(f'<li><b>{v}</b>{l}</li>' for v,l in p["stats"][:2])
+        live=f'<a class="ghost" href="{p["links"][0][1]}" target="_blank" rel="noopener">{p["links"][0][0]}</a>' if p.get("links") else ''
+        cards+=f'''<article class="sc" style="--c:{p["color"]};--i:{i}"><div class="sc-txt"><span class="sc-n" aria-hidden="true">0{i+1}</span><div class="cs-meta">{niche_tag(p)}{ai_tag(p)}</div>
+<h3>{p["name"]}</h3><p>{p["oneliner"]}</p><ul class="sc-stats">{st}</ul><div class="links"><a class="btn" href="{href(p["slug"])}">View case study</a>{live}</div></div>
+<div class="sc-vis" aria-hidden="true">{spot_visual(p)}</div></article>'''
+    return f'''<section class="wrap spot" aria-labelledby="spot-h"><div class="spot-head"><span class="ai-tag">{SPARK}Built in-house</span><h2 id="spot-h">AI products we built</h2>
+<p>Our own AI tools, designed, engineered and shipped by the same team that builds for our clients.</p></div><div class="stack">{cards}</div></section>'''
 
 def index_body(href):
     total="11.8M+"
@@ -544,15 +706,20 @@ def index_body(href):
     cards=''
     for i,p in enumerate(PROJECTS):
         chips=''.join(f'<li><b>{v}</b> {l}</li>' for v,l in p["stats"][:2])
-        cards+=f'''<a class="cs-card{" cs-top" if i==0 else ""}" href="{href(p["slug"])}" data-groups="{groups(p)}" style="--c:{p["color"]};--d:{(i%2)*90}ms">{media(p)}
-<div class="cs-body"><div class="cs-meta">{niche_tag(p) or f'<span class="cs-cat">{p["category"]}</span>'}{ai_tag(p)}</div><h3>{p["name"]}</h3><p>{p["oneliner"]}</p><ul class="cs-stats">{chips}</ul>
+        cards+=f'''<a class="cs-card" href="{href(p["slug"])}" data-groups="{groups(p)}" style="--c:{p["color"]};--d:{(i%2)*90}ms">{media(p)}
+<div class="cs-body"><div class="cs-meta">{niche_tag(p) or f'<span class="cs-cat">{p["category"]}</span>'}{ai_tag(p)}{demo_tag(p)}</div><h3>{p["name"]}</h3><p>{p["oneliner"]}</p><ul class="cs-stats">{chips}</ul>
 <span class="cs-go">View case study<i>{ARROW}</i></span></div></a>'''
     n=lambda g: sum(g in groups(p).split() for p in PROJECTS)
     btn=lambda f,label,c,on=False: f'<button type="button" aria-pressed="{"true" if on else "false"}" data-f="{f}">{label} <span>{c}</span></button>' if c else ''
     filt=('<div class="cs-filter" role="group" aria-label="Filter case studies">'+btn("all","All",len(PROJECTS),True)+btn("ai","AI tools",n("ai"))
           +btn("mobile","Mobile apps",n("mobile"))+btn("web","Web platforms",n("web"))+btn("desktop","Desktop apps",n("desktop"))+'</div>')
     return f'''{topbar(href(None))}<main>
-<section class="wrap ihero"><h1>Ideas, engineered into intelligent products.</h1>
+<section class="wrap ihero"><div class="fx-stage" aria-hidden="true">
+<div class="fx-obj o1" data-depth="1.2"><div class="bob"><i class="orb"></i></div></div>
+<div class="fx-obj o2" data-depth=".8"><div class="bob b2"><div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>
+<div class="fx-obj o3" data-depth="1.7"><div class="bob b3"><i class="ring"></i></div></div>
+<div class="fx-obj o4" data-depth=".5"><div class="bob b4"><i class="pill"></i></div></div>
+<div class="fx-obj o5" data-depth="2.2"><div class="bob b2"><i class="orb sm"></i></div></div></div><h1>Ideas, engineered into intelligent products.</h1>
 <p>iApp Technologies is a leading AI development company. Since 2012, our team of 100+ designers, engineers and marketers has taken products from first sketch to millions of users. Today we build AI agents, RAG systems and intelligent apps for businesses around the world.</p>
 <div class="links" style="margin-top:32px"><a class="btn" href="#work">See our work</a><a class="ghost" href="mailto:aziz.k@iapptechnologiesllp.com">Talk to our team</a></div></section>
 <section class="wrap" aria-label="Products"><div class="home">{apps}</div>
@@ -560,11 +727,11 @@ def index_body(href):
 <div><i class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg></i><strong data-to="11.8" data-suf="M+" data-dec="1">{total}</strong><span>downloads across our four consumer apps</span></div>
 <div><i class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8.5 9.5h7M8.5 12.5h4"/></svg></i><strong data-to="108" data-suf="K+" data-dec="0">108K+</strong><span>ratings on the US App Store</span></div>
 <div><i class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></i><strong data-to="4.6" data-suf="" data-dec="1">4.6</strong><span>median App Store rating</span><em class="stars" aria-hidden="true"><b style="width:92%"></b></em></div></div></section>
-<section class="wrap list" id="work"><div class="cs-head"><div><h2>Case studies</h2><p>Products we have designed, built and kept shipping, from freight and healthcare platforms to apps with millions of installs.</p></div>{filt}</div><div class="cs-grid">{cards}</div></section>
-<section class="wrap company"><div class="cohead"><h2>One team. Every stage. Under one roof.</h2><p>Most products stall in the hand-offs between agencies. We keep strategy, design, engineering, AI, QA and growth inside one accountable team, so your product moves from idea to launch to scale without changing hands.</p></div>
+{wall()}{spotlight(href)}<section class="wrap list" id="work"><div class="cs-head"><div><h2>Case studies</h2><p>Products we have designed, built and kept shipping, from freight and healthcare platforms to apps with millions of installs.</p></div>{filt}</div><div class="cs-grid">{cards}</div></section>
+<section class="wrap company"><div class="cohead"><h2>One team. Every stage. Under one roof.</h2><p data-words>Most products stall in the hand-offs between agencies. We keep strategy, design, engineering, AI, QA and growth inside one accountable team, so your product moves from idea to launch to scale without changing hands.</p></div>
 <div class="facts"><div><strong>100+</strong><span>people on staff</span></div><div><strong>2012</strong><span>building since</span></div><div><strong>4</strong><span>offices: USA, India, Canada, Australia</span></div></div>
 <div class="svc">
-<div class="ai"><h3>AI and agentic solutions</h3><p>Autonomous AI agents that run real workflows, RAG systems that answer from your own documents and data, LLM features inside your apps, and chatbots connected to your CRM and ERP.</p><ul><li>AI agents</li><li>RAG</li><li>LLM integration</li><li>Chatbots</li><li>Generative AI</li></ul></div>
+<div class="ai"><h3>AI and agentic solutions</h3><p data-words>Autonomous AI agents that run real workflows, RAG systems that answer from your own documents and data, LLM features inside your apps, and chatbots connected to your CRM and ERP.</p><ul><li>AI agents</li><li>RAG</li><li>LLM integration</li><li>Chatbots</li><li>Generative AI</li></ul></div>
 <div><h3>Product design</h3><p>Research, user journeys, wireframes, prototypes and design systems that make complex products simple to use.</p></div>
 <div><h3>Development</h3><p>iOS, Android, Flutter, web apps, SaaS platforms and cloud back ends built to handle millions of users.</p></div>
 <div><h3>Testing and QA</h3><p>Manual and automated testing across devices, so every release ships stable.</p></div>
@@ -606,11 +773,11 @@ def case_body(p, href, nxt):
     live=''.join(f'<a class="livebtn" href="{u}" target="_blank" rel="noopener">{t}</a>' for t,u in p["links"])
     links=''.join(f'<a class="ghost" href="{u}" target="_blank" rel="noopener">{t}</a>' for t,u in p["links"])
     return f'''<div style="--c:{p["color"]}"><div class="chero on-color">{topbar(href(None),True)}
-<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon{" has-img" if p.get("icon") else ""}">{icon_inner(p)}</div><div><b>Case study</b>{p["category"]}, {p["platform"]}{('<span class="tags">'+niche_tag(p)+ai_tag(p)+'</span>') if (p.get("niche") or p.get("ai")) else ''}</div></div>
+<div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon{" has-img" if p.get("icon") else ""}">{icon_inner(p)}</div><div><b>Case study</b>{p["category"]}, {p["platform"]}{('<span class="tags">'+niche_tag(p)+ai_tag(p)+demo_tag(p)+'</span>') if (p.get("niche") or p.get("ai") or p.get("demo")) else ''}</div></div>
 <h1>{p["name"]}</h1><p class="lede">{p["oneliner"]}</p>{('<div class="live">'+live+'</div>') if live else ''}</div>{mock(p)}</div>
 <div class="storerow">{st}</div></div></div>
 <main class="wrap">
-<section class="sec"><h2>The brief</h2><div class="prose"><p class="big">{p["summary"]}</p><p>{p["brief"]}</p><p class="who">Who it serves: {p["client"]}</p></div></section>
+<section class="sec"><h2>The brief</h2><div class="prose"><p class="big" data-words>{p["summary"]}</p><p>{p["brief"]}</p><p class="who">Who it serves: {p["client"]}</p></div></section>
 {gallery}<section class="sec"><h2>What made it hard</h2><div class="hard">{hard}</div></section>
 <section class="sec"><h2>What we built</h2><div class="feat">{feat}</div></section>
 <section class="sec"><h2>How we worked</h2><ol class="steps">{how}</ol></section>
@@ -624,7 +791,7 @@ def page(title, desc, body, extra_head=""):
 <title>{title}</title><meta name="description" content="{desc}">
 <meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%231A1F2B%22/><text x=%2250%22 y=%2270%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22 font-weight=%22bold%22>i</text></svg>">
-{FONT}<style>{CSS}</style>{extra_head}</head><body>{body}</body></html>'''
+{FONT}<style>{CSS}</style>{extra_head}<script src="/fx.js" defer></script></head><body>{body}</body></html>'''
 
 # ---- multi-page site for Vercel
 out=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -634,5 +801,6 @@ open(f"{out}/index.html","w").write(page("Case studies | iApp Technologies","Pro
 for i,p in enumerate(PROJECTS):
     nxt=PROJECTS[(i+1)%len(PROJECTS)]
     open(f"{out}/{p['slug']}.html","w").write(page(f"{p['name']} case study | iApp Technologies",p["oneliner"],case_body(p,href_site,nxt)))
+open(f"{out}/fx.js","w").write(FX_JS)
 json.dump({"cleanUrls":True,"trailingSlash":False},open(f"{out}/vercel.json","w"),indent=2)
 print("Built", len(PROJECTS), "case studies + index into", out)
