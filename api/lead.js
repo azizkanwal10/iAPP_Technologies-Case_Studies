@@ -15,6 +15,12 @@ module.exports = async (req, res) => {
   const phone = String(b.phone || "").trim().slice(0, 30);
   const digits = phone.replace(/\D/g, "");
   const interest = INTERESTS.includes(b.interest) ? b.interest : "Not specified";
+  const location = String(b.location || "").trim().replace(/\s+/g, " ").slice(0, 80);
+  let email = String(b.email || "").trim().slice(0, 80);
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) email = "";
+  // visitor's own time zone (from their browser), so calls land at a sensible hour
+  let tz = String(b.tz || "").slice(0, 60), localTime = "";
+  try { localTime = new Date().toLocaleString("en-GB", { timeZone: tz, weekday: "short", hour: "numeric", minute: "2-digit", hour12: true }); } catch (e) { tz = ""; }
   const model = String(b.model || "").slice(0, 20);
   const page = String(b.page || "").slice(0, 200);
   if (!name || digits.length < 7 || digits.length > 15 || !/^[+\d\s().-]+$/.test(phone)) return res.status(400).json({ ok: false, error: "invalid" });
@@ -30,6 +36,9 @@ module.exports = async (req, res) => {
 <table cellpadding="6" style="border-collapse:collapse">
 <tr><td style="color:#667">Name</td><td><b>${esc(name)}</b></td></tr>
 <tr><td style="color:#667">Phone</td><td><b><a href="tel:${esc(digits)}">${esc(phone)}</a></b> &middot; <a href="${esc(wa)}">WhatsApp</a></td></tr>
+<tr><td style="color:#667">Location</td><td>${esc(location || "-")}</td></tr>
+<tr><td style="color:#667">Their local time</td><td>${localTime ? `<b>${esc(localTime)}</b> (${esc(tz)}) when they sent this` : "-"}</td></tr>
+<tr><td style="color:#667">Email</td><td>${email ? `<a href="mailto:${esc(email)}">${esc(email)}</a>` : "Not shared"}</td></tr>
 <tr><td style="color:#667">Interested in</td><td>${esc(interest)}</td></tr>
 <tr><td style="color:#667">Chatted with</td><td>${esc(model || "-")}</td></tr>
 <tr><td style="color:#667">Page</td><td>${esc(page || "-")}</td></tr>
@@ -43,9 +52,10 @@ module.exports = async (req, res) => {
       body: JSON.stringify({
         from: process.env.LEAD_FROM || "iApp AI <onboarding@resend.dev>",
         to,
-        subject: `New lead: ${name} (${interest})`,
+        subject: `New lead: ${name}${location ? ", " + location : ""} (${interest})`,
+        ...(email ? { reply_to: email } : {}),
         html,
-        text: `New lead from the iApp AI chat\nName: ${name}\nPhone: ${phone}\nInterested in: ${interest}\nPage: ${page}\nTime (IST): ${when}`,
+        text: `New lead from the iApp AI chat\nName: ${name}\nPhone: ${phone}\nLocation: ${location || "-"}\nTheir local time: ${localTime ? localTime + " (" + tz + ")" : "-"}\nEmail: ${email || "Not shared"}\nInterested in: ${interest}\nPage: ${page}\nTime (IST): ${when}`,
       }),
     });
     if (!r.ok) { console.error("resend", r.status, await r.text()); return res.status(502).json({ ok: false, error: "send_failed" }); }

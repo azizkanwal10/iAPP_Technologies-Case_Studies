@@ -8,7 +8,8 @@
       launch = document.querySelector(".aic-launch"), status = box.querySelector(".aic-st");
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var WA = "917009592313", MAIL = "aziz.k@iapptechnologiesllp.com";
-  var st = { step: "idle", name: "", phone: "", interest: "", t0: 0, opened: false };
+  var st = { step: "idle", name: "", phone: "", location: "", email: "", interest: "", t0: 0, opened: false };
+  var tz = ""; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {}
   var saved = {};
   try { saved = JSON.parse(localStorage.getItem("iappLead") || "{}"); } catch (e) {}
 
@@ -43,11 +44,12 @@
       });
     });
   }
-  function ask(type, placeholder, auto) {
+  function ask(type, placeholder, auto, skip) {
     input.type = type; input.placeholder = placeholder; input.value = "";
     input.setAttribute("autocomplete", auto); input.setAttribute("inputmode", type === "tel" ? "tel" : "text");
-    input.maxLength = type === "tel" ? 20 : 40;
+    input.maxLength = type === "tel" ? 20 : type === "email" ? 80 : 60;
     form.hidden = false; chips.innerHTML = "";
+    if (skip) { var c = document.createElement("button"); c.type = "button"; c.className = "aic-chip"; c.textContent = skip.label; c.addEventListener("click", skip.fn); chips.appendChild(c); }
     if (st.opened && matchMedia("(hover: hover)").matches) input.focus({ preventScroll: true });
   }
   function offer(list, onPick) {
@@ -61,7 +63,7 @@
   }
   function links(name) {
     chips.innerHTML = ""; form.hidden = true;
-    var msg = "Hi iApp team, I'm " + name + ". Please call me on " + st.phone + " about " + (st.interest || "a project") + ".";
+    var msg = "Hi iApp team, I'm " + name + (st.location ? " from " + st.location : "") + ". Please call me on " + st.phone + (st.email ? " or email " + st.email : "") + " about " + (st.interest || "a project") + ".";
     [["Send on WhatsApp", "https://wa.me/" + WA + "?text=" + encodeURIComponent(msg)],
      ["Send by email", "mailto:" + MAIL + "?subject=" + encodeURIComponent("Call me back: " + name) + "&body=" + encodeURIComponent(msg)]]
       .forEach(function (l) { var a = document.createElement("a"); a.className = "aic-chip"; a.href = l[1]; a.target = "_blank"; a.rel = "noopener"; a.textContent = l[0]; chips.appendChild(a); });
@@ -95,9 +97,20 @@
         ask("tel", "+91 98765 43210", "tel");
       });
   }
-  function askInterest() {
-    st.step = "interest";
+  function askLocation() {
+    st.step = "location";
     return say(pick(["Smooth. 😏 Saved somewhere safer than my own memory.", "Got it. I'd wink, but my visor only does text."]))
+      .then(function () { return say("Where in the world are you, " + st.name + "? City and country, so my humans don't ring you at 3 a.m. They need their beauty sleep too."); })
+      .then(function () { ask("text", "e.g. Pune, India", "off"); });
+  }
+  function askEmail() {
+    st.step = "email";
+    return say("Want to drop your email too? Totally optional. I promise not to send you 47 newsletters.")
+      .then(function () { ask("email", "you@company.com", "email", { label: "Skip", fn: function () { bubble("me", "Skip"); st.email = ""; askInterest(true); } }); });
+  }
+  function askInterest(skipped) {
+    st.step = "interest";
+    return say(skipped ? "No problem. A phone call it is. 📞" : pick(["Noted. Your inbox is in safe hands.", "Perfect. I'll make sure it doesn't end up in a spam folder of shame."]))
       .then(function () { return say("Last one, " + st.name + ": what are you dreaming up?"); })
       .then(function () {
         offer(["An AI agent", "A mobile app", "A web platform", "Just exploring"], function (l) { bubble("me", l); st.interest = l; send(); });
@@ -109,7 +122,7 @@
     return say(pick(["Beaming this to my humans… ✨", "Encrypting your number with my finest neural network…"]), 500).then(function () {
       return fetch("/api/lead", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: st.name, phone: st.phone, interest: st.interest, model: meet().model(), page: location.pathname, company_site: hp.value, elapsed: Date.now() - st.t0 }),
+        body: JSON.stringify({ name: st.name, phone: st.phone, location: st.location, email: st.email, tz: tz, interest: st.interest, model: meet().model(), page: location.pathname, company_site: hp.value, elapsed: Date.now() - st.t0 }),
       }).then(function (r) { return r.ok; }, function () { return false; });
     }).then(function (ok) {
       if (ok) {
@@ -141,7 +154,24 @@
       var digits = v.replace(/\D/g, "");
       if (digits.length < 7 || digits.length > 15 || !/^[+\d\s().-]+$/.test(v)) { say("That doesn't look like a number I can pass on. Mind checking it? I'm not judging the area code."); return; }
       bubble("me", v); st.phone = v; form.hidden = true; legal.hidden = true;
-      askInterest();
+      askLocation();
+    } else if (st.step === "location") {
+      var loc = v.replace(/[^\p{L}\p{M}\s,.'()-]/gu, "").replace(/\s+/g, " ").trim().slice(0, 60);
+      if (loc.replace(/[^\p{L}]/gu, "").length < 2) { say("I couldn't find that on my map. City and country, please, like \"Dubai, UAE\"."); return; }
+      if (loc === loc.toLowerCase()) {
+        // "dubai, uae" -> "Dubai, UAE": title-case, and short country codes after the comma in capitals
+        loc = cap(loc);
+        var parts = loc.split(",");
+        if (parts.length > 1) parts.push(parts.pop().replace(/\b\p{L}{2,3}\b/gu, function (w) { return w.toUpperCase(); }));
+        loc = parts.join(",");
+      }
+      bubble("me", loc); st.location = loc; form.hidden = true;
+      var city = loc.split(",")[0].trim();
+      say(pick([city + "! Great choice. I've only ever been inside a GPU, so I'm a little jealous.", city + ", noted. My humans will call at a civilised hour, promise."])).then(askEmail);
+    } else if (st.step === "email") {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) || v.length > 80) { say("Hmm, that email looks like it took a wrong turn. Try again, or tap Skip."); return; }
+      bubble("me", v); st.email = v; form.hidden = true; chips.innerHTML = "";
+      askInterest(false);
     }
   });
 
