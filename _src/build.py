@@ -466,6 +466,55 @@ html.fx-arrive::after{content:"";position:fixed;inset:0;z-index:200;background:v
 .meet-btn:hover{background:#e6e6ea;transform:scale(1.03)}
 .meet-progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.1)}
 .meet-progress i{display:block;height:100%;background:linear-gradient(90deg,#7C3AED,#EC4899);transform-origin:0 50%;transform:scaleX(0)}
+/* AI chat */
+.aic{position:absolute;z-index:4;right:clamp(108px,9vw,140px);top:18%;width:min(370px,calc(100% - 32px));max-height:min(560px,64%);display:flex;flex-direction:column;
+  border-radius:24px;background:rgba(14,11,22,.66);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(1.3);backdrop-filter:blur(18px) saturate(1.3);
+  box-shadow:0 30px 80px -30px rgba(124,58,237,.75),inset 0 1px 0 rgba(255,255,255,.12);font-family:"Space Mono",ui-monospace,monospace;color:#fff;
+  opacity:0;translate:0 24px;scale:.96;pointer-events:none;transition:opacity .5s cubic-bezier(.2,.8,.2,1),translate .5s cubic-bezier(.2,.8,.2,1),scale .5s cubic-bezier(.2,.8,.2,1)}
+.aic.on{opacity:1;translate:none;scale:1;pointer-events:auto}
+.aic::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(140deg,rgba(167,139,250,.9),rgba(236,72,153,.5) 40%,transparent 70%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.aic-head{display:flex;align-items:center;gap:12px;padding:14px 14px 12px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.aic-head b{display:block;font-size:14px;letter-spacing:.04em}
+.aic-st{display:block;font-size:11px;color:#a7f3d0;letter-spacing:.06em}
+.aic-av{flex:none;width:30px;height:30px;border-radius:50%;background:conic-gradient(from 0deg,#7C3AED,#EC4899,#F59E0B,#7C3AED);box-shadow:0 0 18px rgba(236,72,153,.6);animation:aicSpin 6s linear infinite;position:relative}
+.aic-av::after{content:"";position:absolute;inset:5px;border-radius:50%;background:#0e0b16}
+@keyframes aicSpin{to{rotate:360deg}}
+.aic-x{margin-left:auto;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:0;background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+.aic-x svg{width:16px;height:16px}
+.aic-log{flex:1;min-height:0;overflow-y:auto;padding:14px 14px 6px;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;overscroll-behavior:contain}
+.aic-msg{max-width:88%;padding:9px 13px;border-radius:16px;font-size:13.5px;line-height:1.5;animation:aicIn .35s cubic-bezier(.2,.8,.2,1) both;overflow-wrap:anywhere}
+.aic-msg.ai{align-self:flex-start;background:rgba(255,255,255,.09);border-top-left-radius:6px}
+.aic-msg.me{align-self:flex-end;background:linear-gradient(135deg,#7C3AED,#DB2777);border-top-right-radius:6px}
+.aic-msg.typing{display:flex;gap:5px;padding:13px 14px}
+.aic-msg.typing i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.7);animation:aicDot 1s ease-in-out infinite}
+.aic-msg.typing i:nth-child(2){animation-delay:.15s}.aic-msg.typing i:nth-child(3){animation-delay:.3s}
+@keyframes aicDot{0%,100%{opacity:.25;translate:0 0}50%{opacity:1;translate:0 -4px}}
+@keyframes aicIn{from{opacity:0;translate:0 8px;scale:.97}to{opacity:1;translate:none;scale:1}}
+.aic-chips{display:flex;flex-wrap:wrap;gap:8px;padding:4px 14px 12px}
+.aic-chips:empty{display:none}
+.aic-chip{font:inherit;font-size:12.5px;color:#fff;text-decoration:none;padding:8px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.06);cursor:pointer;animation:aicIn .35s both;transition:background .2s,border-color .2s}
+.aic-chip:hover{background:rgba(236,72,153,.25);border-color:rgba(236,72,153,.7)}
+.aic-form{display:flex;gap:8px;padding:10px 12px 12px;border-top:1px solid rgba(255,255,255,.08)}
+.aic-form[hidden]{display:none}
+.aic-in{flex:1;min-width:0;font:inherit;font-size:16px;color:#fff;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:10px 16px;outline:none}
+.aic-in:focus{border-color:#EC4899;box-shadow:0 0 0 3px rgba(236,72,153,.25)}
+.aic-in::placeholder{color:rgba(255,255,255,.4)}
+.aic-send{flex:none;width:44px;height:44px;border-radius:50%;border:0;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#7C3AED,#DB2777);cursor:pointer}
+.aic-send svg{width:18px;height:18px}
+.aic-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.aic-legal{margin:0;padding:0 16px 12px;font-size:10.5px;line-height:1.5;color:rgba(255,255,255,.5)}
+.aic-launch{position:absolute;z-index:4;right:clamp(108px,9vw,140px);top:18%;display:flex;align-items:center;gap:10px;font-family:"Space Mono",monospace;font-size:13px;font-weight:700;color:#fff;
+  padding:10px 18px 10px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(14,11,22,.7);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);cursor:pointer;box-shadow:0 16px 40px -16px rgba(236,72,153,.8)}
+.aic-launch[hidden]{display:none}
+.meet.chatting .r{opacity:0;transition:opacity .4s}
+.meet.chatting .meet-cta{opacity:0!important}
+@media (max-width:760px){.aic{left:12px;right:12px;width:auto;top:auto;bottom:12px;max-height:56%}
+.aic-launch{right:auto;left:50%;translate:-50% 0;top:auto;bottom:196px}
+.meet.chatting .meet-row,.meet.chatting .meet-arrow{opacity:0;pointer-events:none;transition:opacity .4s}
+.meet-track{transition:transform .6s cubic-bezier(.2,.8,.2,1)}.meet.chatting .meet-track{transform:translateY(-27%) scale(.92)}
+.aic{max-height:52%}}
+@media (prefers-reduced-motion:reduce){.aic,.aic-msg,.aic-chip{transition:none;animation:none}.aic-av{animation:none}}
 .nav-ai{display:inline-flex;align-items:center;gap:6px}
 .nav-ai svg{width:14px;height:14px;color:#BE185D}
 @media (max-width:760px){.meet-pin{height:230vh}.meet-tabs button span{display:none}.meet-tabs button{padding:8px 12px}
@@ -761,17 +810,18 @@ def meet():
 <div class="meet-cta" aria-hidden="true"><span class="hand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5l13 6-5.6 1.8L10.6 17z"/></svg></span><span class="t1">Move your cursor</span><span class="t2">It follows you. Try it.</span></div>
 <div class="meet-row"><div class="l"><h2 id="meet-h"><span data-s="Built to">Built to</span><br><span data-s="Think">Think</span></h2>
 <p>We design AI that listens, reasons and acts: agents that run real workflows, assistants that answer from your own data, and apps that get smarter with every user.</p>
-<a class="meet-btn" href="mailto:aziz.k@iapptechnologiesllp.com">Talk to our AI team</a></div>
+<a class="meet-btn" href="#meet" data-aic-open>Talk to our AI</a></div>
 <div class="r"><p class="big" aria-hidden="true"><span data-s="Built by">Built by</span><br><span data-s="iApp">iApp</span></p></div></div>
-<div class="meet-progress" aria-hidden="true"><i></i></div></div></section></div>
+<div class="meet-progress" aria-hidden="true"><i></i></div></div><div class="aic" id="aic" role="dialog" aria-label="Chat with the iApp AI"><div class="aic-head"><span class="aic-av" aria-hidden="true"></span><div><b>iApp AI</b><span class="aic-st">online</span></div><button type="button" class="aic-x" aria-label="Minimise chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button></div><div class="aic-log" role="log" aria-live="polite"></div><div class="aic-chips"></div><form class="aic-form" hidden><label class="vh" for="aic-in">Your reply</label><input id="aic-in" class="aic-in" required><input class="aic-hp" name="company_site" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="aic-send" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button></form><p class="aic-legal" hidden>By sending, you agree iApp Technologies may call or message you about your project. We never share your number.</p></div><button type="button" class="aic-launch" hidden><span class="aic-av" aria-hidden="true"></span>Chat with iApp AI</button></section></div><script src="/assets/ai-chat.js" defer></script>
 <script>(function(){{
 var pin=document.getElementById("meet"),s=pin&&pin.querySelector(".meet");if(!s)return;
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches,touch=!matchMedia("(hover: hover) and (pointer: fine)").matches;
 if(touch){{s.querySelector(".t1").textContent="Touch and drag";s.querySelector(".t2").textContent="It follows your finger. Try it."}}
 var slides=[].slice.call(s.querySelectorAll(".meet-slide")),tabs=[].slice.call(s.querySelectorAll(".meet-tabs button")),n=slides.length;
-var api=[],loading=[],cur=0,chosen=false,visible=false,tried=0,lastScroll=0;
+var api=[],loading=[],cur=0,chosen=false,visible=false,tried=0,lastScroll=0,visor=null;
+window.iappMeet={{look:function(x,y){{var a=api[cur];if(a)a.look(x,y)}},setText:function(t){{visor=t;api.forEach(function(a){{if(a&&a.setText)a.setText(t)}})}},model:function(){{var t=tabs[cur];return t?t.querySelector("span").textContent:""}}}};
 function load(i){{if(api[i]||loading[i])return loading[i];var sl=slides[i];
-  loading[i]=import(sl.getAttribute("data-src")).then(function(m){{return m.mount(s,{{canvas:sl.querySelector("canvas"),manual:true}})}}).then(function(a){{api[i]=a;if(!a)return;sl.classList.add("ready");if(i===cur&&visible)a.start()}}).catch(function(){{sl.classList.add("failed")}});
+  loading[i]=import(sl.getAttribute("data-src")).then(function(m){{return m.mount(s,{{canvas:sl.querySelector("canvas"),manual:true}})}}).then(function(a){{api[i]=a;if(!a)return;if(visor&&a.setText)a.setText(visor);sl.classList.add("ready");if(i===cur&&visible)a.start()}}).catch(function(){{sl.classList.add("failed")}});
   return loading[i]}}
 function go(i,user){{i=(i+n)%n;if(user)chosen=true;if(i===cur&&slides[i].classList.contains("on"))return;
   slides.forEach(function(sl,k){{var d=k-i;sl.classList.toggle("on",d===0);sl.style.setProperty("--d",d);sl.setAttribute("aria-hidden",d===0?"false":"true")}});
@@ -780,8 +830,8 @@ function go(i,user){{i=(i+n)%n;if(user)chosen=true;if(i===cur&&slides[i].classLi
 s.querySelector(".m-prev").addEventListener("click",function(){{go(cur-1,true)}});
 s.querySelector(".m-next").addEventListener("click",function(){{go(cur+1,true)}});
 tabs.forEach(function(t,k){{t.addEventListener("click",function(){{go(k,true)}})}});
-s.addEventListener("keydown",function(e){{if(e.key==="ArrowRight"){{go(cur+1,true);e.preventDefault()}}else if(e.key==="ArrowLeft"){{go(cur-1,true);e.preventDefault()}}}});
-var sx=null,sy0=0;s.addEventListener("touchstart",function(e){{sx=e.touches[0].clientX;sy0=e.touches[0].clientY}},{{passive:true}});
+s.addEventListener("keydown",function(e){{if(e.target.closest("input,textarea,.aic"))return;if(e.key==="ArrowRight"){{go(cur+1,true);e.preventDefault()}}else if(e.key==="ArrowLeft"){{go(cur-1,true);e.preventDefault()}}}});
+var sx=null,sy0=0;s.addEventListener("touchstart",function(e){{if(e.target.closest(".aic")){{sx=null;return}}sx=e.touches[0].clientX;sy0=e.touches[0].clientY}},{{passive:true}});
 s.addEventListener("touchend",function(e){{if(sx===null)return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy0;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.4)go(cur+(dx<0?1:-1),true);sx=null}},{{passive:true}});
 // interaction prompt: hides once the visitor has played with it for a moment
 var lastP=null;s.addEventListener("pointermove",function(e){{if(lastP)tried+=Math.hypot(e.clientX-lastP[0],e.clientY-lastP[1]);lastP=[e.clientX,e.clientY];if(tried>500)s.classList.add("tried")}},{{passive:true}});
@@ -938,5 +988,6 @@ for i,p in enumerate(PROJECTS):
     nxt=PROJECTS[(i+1)%len(PROJECTS)]
     open(f"{out}/{p['slug']}.html","w").write(page(f"{p['name']} case study | iApp Technologies",p["oneliner"],case_body(p,href_site,nxt)))
 open(f"{out}/fx.js","w").write(FX_JS)
+shutil.copyfile(os.path.join(out,"_src","ai-chat.js"),os.path.join(out,"assets","ai-chat.js"))
 json.dump({"cleanUrls":True,"trailingSlash":False},open(f"{out}/vercel.json","w"),indent=2)
 print("Built", len(PROJECTS), "case studies + index into", out)

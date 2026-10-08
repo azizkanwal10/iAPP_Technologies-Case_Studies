@@ -128,8 +128,11 @@ export function displayMaterial(text, sub = "AI  ·  AGENTS  ·  APPS") {
     const c = textTex.image, g = c.getContext("2d");
     g.clearRect(0, 0, c.width, c.height);
     g.textAlign = "center"; g.textBaseline = "middle";
-    g.font = "700 176px 'Archivo', 'Helvetica Neue', Arial, sans-serif";
+    let size = 176;
+    g.font = `700 ${size}px 'Archivo', 'Helvetica Neue', Arial, sans-serif`;
     if ("letterSpacing" in g) g.letterSpacing = "2px";
+    const wMax = sub ? 1780 : 1700, wNow = g.measureText(text).width;
+    if (wNow > wMax) { size = Math.floor((size * wMax) / wNow); g.font = `700 ${size}px 'Archivo', 'Helvetica Neue', Arial, sans-serif`; }
     g.fillStyle = "#ffffff"; g.fillText(text, c.width / 2, c.height / 2 + 8);
     if (!sub) { textTex.needsUpdate = true; return; }
     g.font = "700 48px 'Space Mono', monospace";
@@ -140,7 +143,7 @@ export function displayMaterial(text, sub = "AI  ·  AGENTS  ·  APPS") {
   draw();
   textTex.anisotropy = 16;
   if (document.fonts) Promise.all([document.fonts.load("700 176px Archivo"), document.fonts.load("500 44px 'Space Mono'")]).then(draw, () => {});
-  return new THREE.ShaderMaterial({
+  const mat = new THREE.ShaderMaterial({
     uniforms: { uTime: { value: 0 }, uText: { value: textTex } },
     vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
     fragmentShader: `
@@ -160,6 +163,9 @@ export function displayMaterial(text, sub = "AI  ·  AGENTS  ·  APPS") {
       }`,
     toneMapped: false,
   });
+  // lets the page rewrite the visor, e.g. to greet the visitor by name
+  mat.userData.setText = (t, s = sub) => { text = t; sub = s; draw(); };
+  return mat;
 }
 
 // ---------- the headset ----------
@@ -323,5 +329,6 @@ export function mount(section, opts = {}) {
     document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
   }
   const look = (x, y) => { tx = x; ty = y; lastMove = performance.now(); };
-  return { scene, start, stop, look, render: () => composer.render() };
+  const setText = (t, s) => { hs.disp.userData.setText(t, s); if (!running) composer.render(); };
+  return { scene, start, stop, look, setText, render: () => composer.render() };
 }

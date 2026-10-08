@@ -231,5 +231,6 @@ export async function mount(section, opts = {}) {
     document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
   }
   const look = (x, y) => { tx = x; ty = y; lastMove = performance.now(); };
-  return { scene, start, stop, look, render: () => composer.render() };
+  const setText = (t) => { gog.disp.userData.setText(t, ""); if (!running) composer.render(); };
+  return { scene, start, stop, look, setText, render: () => composer.render() };
 }
