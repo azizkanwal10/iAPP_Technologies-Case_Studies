@@ -423,28 +423,51 @@ box-shadow:0 -1px 0 rgba(255,255,255,.12) inset,0 40px 80px -40px rgba(10,12,20,
 @keyframes fxLoad{0%{transform:scaleX(0)}60%{transform:scaleX(1)}100%{transform:scaleX(1);opacity:0}}
 html.fx-arrive::after{content:"";position:fixed;inset:0;z-index:200;background:var(--fc);pointer-events:none;animation:fxArrive .6s cubic-bezier(.7,0,.2,1) forwards}
 @keyframes fxArrive{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0)}}
-/* Meet our AI: full-screen 3D mascot */
-.meet{display:block;width:100%;position:relative;height:100vh;height:100svh;min-height:640px;margin-top:72px;background:#000;color:#fff;overflow:hidden}
-.meet-stage{position:absolute;inset:0;background:#000 url(/assets/mascot-poster.webp) 50% 100%/cover no-repeat}
-.meet-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.2s ease}
-.meet.live .meet-stage canvas{opacity:1}
-.meet-stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;background:linear-gradient(transparent,#000);pointer-events:none}
-.meet-ui{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(24px,4vw,52px);pointer-events:none;font-family:"Space Mono",ui-monospace,monospace}
-.meet-ui a{pointer-events:auto}
-.meet-tag{align-self:flex-start;padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+/* Meet our AI: pinned 3D carousel */
+.meet-pin{position:relative;height:260vh;margin-top:72px;background:#000}
+.meet{position:sticky;top:0;display:block;width:100%;height:100vh;height:100svh;min-height:560px;background:#000;color:#fff;overflow:hidden;outline:none}
+.meet-track{position:absolute;inset:0;perspective:1600px}
+.meet-slide{position:absolute;inset:0;background:#000 50% 50%/cover no-repeat;transform-origin:50% 50%;
+  transform:translateX(calc(var(--d,1) * 62%)) rotateY(calc(var(--d,1) * -38deg)) scale(.72);opacity:0;filter:blur(6px);
+  transition:transform 1s cubic-bezier(.7,0,.2,1),opacity .8s ease,filter .8s ease;pointer-events:none}
+.meet-slide.on{transform:none;opacity:1;filter:none;pointer-events:auto}
+.meet-slide canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1s ease}
+.meet-slide.ready canvas{opacity:1}
+.meet-track::after{content:"";position:absolute;left:0;right:0;bottom:0;height:30%;background:linear-gradient(transparent,#000);pointer-events:none}
+.meet-ui{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(20px,4vw,52px);pointer-events:none;font-family:"Space Mono",ui-monospace,monospace}
+.meet-ui a,.meet-ui button{pointer-events:auto}
+.meet-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.meet-tag{padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.75);white-space:nowrap}
+.meet-tabs{display:flex;gap:6px;padding:5px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.meet-tabs button{position:relative;overflow:hidden;display:flex;align-items:center;gap:8px;font:inherit;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);background:none;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;transition:background .3s,color .3s}
+.meet-tabs button b{font-weight:700;opacity:.6}
+.meet-tabs button[aria-selected="true"]{background:#fff;color:#000}
+.meet-tabs button i{position:absolute;left:14px;right:14px;bottom:4px;height:2px;border-radius:2px;background:currentColor;transform:scaleX(0);transform-origin:0 50%;opacity:.35}
+.meet-arrow{position:absolute;top:38%;z-index:2;width:58px;height:58px;margin-top:-29px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);cursor:pointer;transition:background .25s,transform .25s}
+.meet-arrow:hover{background:rgba(255,255,255,.2);transform:scale(1.08)}
+.meet-arrow svg{width:24px;height:24px}
+.meet-arrow.m-prev{left:clamp(14px,3vw,40px)}.meet-arrow.m-next{right:clamp(14px,3vw,40px)}
+.meet-cta{position:absolute;left:50%;top:58%;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;transform:translateX(-50%);padding:16px 26px 18px;border-radius:22px;background:rgba(10,8,16,.55);border:1px solid rgba(255,255,255,.22);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 20px 50px -20px rgba(124,58,237,.7);text-align:center;opacity:0;scale:.9;transition:opacity .5s,scale .5s;pointer-events:none}
+.meet.in .meet-cta{opacity:1;scale:1;transition-delay:.6s}
+.meet.tried .meet-cta{opacity:0;scale:.9;transition-delay:0s}
+.meet-cta .hand{width:34px;height:34px;color:#fff;animation:meetHand 2.2s ease-in-out infinite}
+.meet-cta .t1{font-size:15px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.meet-cta .t2{font-size:12px;color:rgba(255,255,255,.65)}
+@keyframes meetHand{0%,100%{translate:-22px 0}50%{translate:22px 6px}}
 .meet-row{display:flex;justify-content:space-between;align-items:flex-end;gap:28px}
 .meet h2,.meet .big{font-family:inherit;font-weight:400;font-size:clamp(40px,7.4vw,100px);line-height:.95;letter-spacing:-.03em;margin:0;color:#fff}
 .meet .r .big{text-align:right}
 .meet .l p{max-width:390px;margin:20px 0 24px;font-size:14px;line-height:1.7;color:rgba(255,255,255,.62)}
 .meet-btn{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;border-radius:999px;background:#fff;color:#000;font-weight:700;font-size:14px;text-decoration:none;transition:transform .2s ease,background .2s ease}
 .meet-btn:hover{background:#e6e6ea;transform:scale(1.03)}
-.meet.v2 .meet-stage{background-image:url(/assets/mascot-v2-poster.webp)}
-.meet-ver{position:absolute;top:clamp(24px,4vw,52px);right:clamp(24px,4vw,52px);display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto}
-.meet-ver button{font:inherit;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);background:none;border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
-.meet-ver button[aria-pressed="true"]{background:#fff;color:#000}
-.meet-hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38)}
-@media (max-width:760px){.meet{height:auto;min-height:0}.meet-stage{position:relative;inset:auto;width:100%;height:68svh;min-height:420px;background-size:cover}
-.meet-ui{position:static;height:auto;padding:0 20px 44px;margin-top:-56px}.meet-tag{position:absolute;top:20px;left:20px;z-index:2}.meet-ver{top:16px;right:16px}.meet-row{position:relative;z-index:1;flex-direction:column;align-items:flex-start;gap:18px}.meet .r{display:none}.meet-hint{display:none}}
+.meet-progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.1)}
+.meet-progress i{display:block;height:100%;background:linear-gradient(90deg,#7C3AED,#EC4899);transform-origin:0 50%;transform:scaleX(0)}
+.nav-ai{display:inline-flex;align-items:center;gap:6px}
+.nav-ai svg{width:14px;height:14px;color:#BE185D}
+@media (max-width:760px){.meet-pin{height:230vh}.meet-tabs button span{display:none}.meet-tabs button{padding:8px 12px}
+.meet-arrow{width:44px;height:44px;margin-top:-22px;top:46%}.meet-cta{top:auto;bottom:196px;flex-direction:row;gap:10px;padding:10px 18px;border-radius:999px;white-space:nowrap}.meet-cta .t2{display:none}.meet-cta .hand{width:22px;height:22px}.meet-cta .t1{font-size:12px}
+.meet .l p{display:none}.meet h2{font-size:clamp(34px,10vw,44px)}.meet .r{display:none}.meet-btn{margin-top:16px}}
+@media (prefers-reduced-motion:reduce){.meet-pin{height:auto}.meet{position:relative}.meet-slide{transition:none;filter:none}.meet-cta .hand{animation:none}}
 @media (prefers-reduced-motion:reduce){.bob,.cube{animation:none}.sc{position:relative;top:auto}}
 /* results panel */
 .tally{position:relative;overflow:hidden;border:0;border-radius:28px;gap:0;color:#fff;
@@ -515,7 +538,7 @@ box-shadow:0 30px 60px -30px rgba(20,25,35,.55),inset 0 0 0 1px rgba(255,255,255
 .gzg i:nth-child(2){background:linear-gradient(135deg,#D4F85A,#3F8F5A)}.gzg i:nth-child(4){background:linear-gradient(135deg,#1B3B5A,#58C4A8)}.gzg i:nth-child(6){background:linear-gradient(135deg,#3F6212,#D4F85A)}
 .gzc{display:flex;justify-content:space-between;color:#9AA196}.gk span{background:#EEF0F8;border-radius:999px;padding:3px 9px;font-weight:600}
 </style><script src="/fx.js" defer></script></head><body><div style="--c:#3E4A89"><div class="chero on-color"><div class="wrap"><header class="bar"><a class="brand" href="/"><i>i</i>iApp Technologies</a>
-<nav aria-label="Main"><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
+<nav aria-label="Main"><a class="lnk nav-ai" href="/#meet"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"/></svg>Meet our AI</a><a class="lnk" href="/">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>
 <div class="wrap"><div class="inner"><div><div class="crumb"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20.5V10a6 6 0 0 1 12 0v10.5l-2-1.6-2 1.6-2-1.6-2 1.6-2-1.6z"/><circle cx="9.8" cy="10.6" r="1.1" fill="currentColor"/><circle cx="14.2" cy="10.6" r="1.1" fill="currentColor"/></svg></div><div><b>Case study</b>AI meeting assistant, Mac app<span class="tags"><span class="niche">Meetings and calls</span><span class="ai-tag"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"/><path d="M19 15.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>AI tool</span></span></div></div>
 <h1>GhostAI</h1><p class="lede">An invisible sidekick that gives you instant answers in meetings, calls and conversations, without anyone knowing.</p><div class="live"><a class="livebtn" href="https://meetghostai.com/" target="_blank" rel="noopener">Visit meetghostai.com</a></div></div><figure class="mock web" style="margin:0"><div class="browser" role="img" aria-label="Illustration of GhostAI suggesting an answer during a video call"><div class="bdots"><i></i><i></i><i></i></div><div class="call">
 <div class="tiles"><i></i><i></i><i></i><i></i></div>

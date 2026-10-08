@@ -128,17 +128,18 @@ export function displayMaterial(text, sub = "AI  ·  AGENTS  ·  APPS") {
     const c = textTex.image, g = c.getContext("2d");
     g.clearRect(0, 0, c.width, c.height);
     g.textAlign = "center"; g.textBaseline = "middle";
-    g.font = "600 176px 'Archivo', 'Helvetica Neue', Arial, sans-serif";
-    if ("letterSpacing" in g) g.letterSpacing = "4px";
-    g.shadowColor = "rgba(255,255,255,.55)"; g.shadowBlur = 30;
+    g.font = "700 176px 'Archivo', 'Helvetica Neue', Arial, sans-serif";
+    if ("letterSpacing" in g) g.letterSpacing = "2px";
     g.fillStyle = "#ffffff"; g.fillText(text, c.width / 2, c.height / 2 + 8);
-    g.shadowBlur = 0; g.font = "500 44px 'Space Mono', monospace";
+    if (!sub) { textTex.needsUpdate = true; return; }
+    g.font = "700 48px 'Space Mono', monospace";
     if ("letterSpacing" in g) g.letterSpacing = "18px";
     g.fillStyle = "rgba(255,255,255,.55)"; g.fillText(sub, c.width / 2, c.height / 2 + 150);
     textTex.needsUpdate = true;
   };
   draw();
-  if (document.fonts) Promise.all([document.fonts.load("600 176px Archivo"), document.fonts.load("500 44px 'Space Mono'")]).then(draw, () => {});
+  textTex.anisotropy = 16;
+  if (document.fonts) Promise.all([document.fonts.load("700 176px Archivo"), document.fonts.load("500 44px 'Space Mono'")]).then(draw, () => {});
   return new THREE.ShaderMaterial({
     uniforms: { uTime: { value: 0 }, uText: { value: textTex } },
     vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
@@ -153,7 +154,7 @@ export function displayMaterial(text, sub = "AI  ·  AGENTS  ·  APPS") {
         col += vec3(1.,.18,.48) * blob(p, vec2(1.7+.25*cos(t*.8),.62+.12*sin(t*1.1)), .85) * .5;
         col += vec3(.2,.45,1.)  * blob(p, vec2(1.2+.3*sin(t*.6+1.),.2+.1*cos(t)), .7) * .35;
         vec4 tx = texture2D(uText, vUv);
-        col = mix(col*1.2, vec3(2.8), tx.a*.97);
+        col = mix(col*1.1, vec3(1.), smoothstep(.25,.6,tx.a));
         float e = smoothstep(0.,.06,vUv.x)*smoothstep(1.,.94,vUv.x)*smoothstep(0.,.14,vUv.y)*smoothstep(1.,.86,vUv.y);
         gl_FragColor = vec4(col*e, 1.);
       }`,
@@ -225,7 +226,7 @@ export const VignetteGrain = {
 };
 
 export function mount(section, opts = {}) {
-  const canvas = section.querySelector("canvas");
+  const canvas = opts.canvas || section.querySelector("canvas");
   const text = opts.text || "iApp Technologies";
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -270,13 +271,12 @@ export function mount(section, opts = {}) {
   composer.addPass(new OutputPass());
 
   function resize() {
-    const r = canvas.getBoundingClientRect();
-    const w = Math.max(1, r.width), h = Math.max(1, r.height);
+    const w = Math.max(1, canvas.clientWidth), h = Math.max(1, canvas.clientHeight);
     const dpr = Math.min(window.devicePixelRatio || 1, w < 700 ? 1.5 : 1.75);
     renderer.setPixelRatio(dpr); renderer.setSize(w, h, false);
     composer.setPixelRatio(dpr); composer.setSize(w, h);
     camera.aspect = w / h;
-    const dist = camera.aspect < 1 ? 6.4 * Math.pow(1 / camera.aspect, 0.9) : 7.2;
+    const dist = camera.aspect < 1 ? 7.6 * Math.pow(1 / camera.aspect, 0.9) : 7.2;
     camera.position.set(0, 1.25, dist);
     camera.lookAt(0, camera.aspect < 1 ? 0.05 : -0.42, 0);
     camera.updateProjectionMatrix();
@@ -318,8 +318,10 @@ export function mount(section, opts = {}) {
   resize();
   if (reduce) { yaw = 0.25; pitch = 0.05; pivot.rotation.set(pitch, yaw, 0); composer.render(); }
   window.addEventListener("resize", () => { resize(); if (!running) composer.render(); });
-  new IntersectionObserver((es) => { es[0].isIntersecting && !document.hidden ? start() : stop(); }).observe(section);
-  document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
-  section.classList.add("live");
-  return { scene, render: () => composer.render() };
+  if (!opts.manual) {
+    new IntersectionObserver((es) => { es[0].isIntersecting && !document.hidden ? start() : stop(); }).observe(section);
+    document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
+  }
+  const look = (x, y) => { tx = x; ty = y; lastMove = performance.now(); };
+  return { scene, start, stop, look, render: () => composer.render() };
 }

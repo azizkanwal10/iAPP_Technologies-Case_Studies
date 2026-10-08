@@ -111,10 +111,10 @@ function furMaterial(layers) {
 function buildGoggles(text) {
   const g = new THREE.Group();
   const GW = 1.56, GH = 0.46, GR = 0.2, BX = 1.05, BY = 3.5;
-  const aluminium = new THREE.MeshPhysicalMaterial({ color: 0xd7d9de, metalness: 1, roughness: 0.5, roughnessMap: brushedRoughness(), anisotropy: 0.5, anisotropyRotation: Math.PI / 2, envMapIntensity: 0.5 });
+  const aluminium = new THREE.MeshPhysicalMaterial({ color: 0xd7d9de, metalness: 1, roughness: 0.58, roughnessMap: brushedRoughness(), anisotropy: 0.4, anisotropyRotation: Math.PI / 2, envMapIntensity: 0.32 });
   const darkMetal = new THREE.MeshPhysicalMaterial({ color: 0x24252a, metalness: 1, roughness: 0.4 });
-  const glass = new THREE.MeshPhysicalMaterial({ color: 0x000000, roughness: 0.03, clearcoat: 1, clearcoatRoughness: 0.02, transparent: true, opacity: 0.38, envMapIntensity: 2.2, alphaMap: roundedMask(GW - 0.02, GH - 0.02, GR - 0.01), alphaTest: 0.5, depthWrite: false });
-  const disp = displayMaterial(text, "AI  ·  AGENTS  ·  APPS");
+  const glass = new THREE.MeshPhysicalMaterial({ color: 0x000000, roughness: 0.06, clearcoat: 1, clearcoatRoughness: 0.05, transparent: true, opacity: 0.3, envMapIntensity: 0.9, alphaMap: roundedMask(GW - 0.02, GH - 0.02, GR - 0.01), alphaTest: 0.5, depthWrite: false });
+  const disp = displayMaterial(text, "");
   g.add(new THREE.Mesh(bend(new THREE.PlaneGeometry(GW - 0.1, GH - 0.1, 120, 30).translate(0, 0, -0.05), BX, BY), disp));
   g.add(new THREE.Mesh(bend(new THREE.PlaneGeometry(GW, GH, 100, 24).translate(0, 0, -0.065), BX, BY), new THREE.MeshBasicMaterial({ color: 0 })));
   const gm = new THREE.Mesh(bend(new THREE.PlaneGeometry(GW - 0.02, GH - 0.02, 120, 30).translate(0, 0, 0.003), BX, BY), glass); gm.renderOrder = 2; g.add(gm);
@@ -127,7 +127,7 @@ function buildGoggles(text) {
 }
 
 export async function mount(section, opts = {}) {
-  const canvas = section.querySelector("canvas");
+  const canvas = opts.canvas || section.querySelector("canvas");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
   const small = Math.min(innerWidth, innerHeight) < 700;
@@ -169,13 +169,12 @@ export async function mount(section, opts = {}) {
 
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  composer.addPass(new UnrealBloomPass(new THREE.Vector2(256, 256), 0.16, 0.3, 2.6));
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(256, 256), 0.1, 0.25, 3.2));
   const grain = new ShaderPass(VignetteGrain); composer.addPass(grain);
   composer.addPass(new OutputPass());
 
   function resize() {
-    const r = canvas.getBoundingClientRect();
-    const w = Math.max(1, r.width), h = Math.max(1, r.height);
+    const w = Math.max(1, canvas.clientWidth), h = Math.max(1, canvas.clientHeight);
     const dpr = Math.min(window.devicePixelRatio || 1, w < 700 ? 1.5 : 1.75);
     renderer.setPixelRatio(dpr); renderer.setSize(w, h, false);
     composer.setPixelRatio(dpr); composer.setSize(w, h);
@@ -227,8 +226,10 @@ export async function mount(section, opts = {}) {
   resize();
   if (reduce) { yaw = 0.22; pitch = 0.04; pose(0); composer.render(); }
   window.addEventListener("resize", () => { resize(); if (!running) composer.render(); });
-  new IntersectionObserver((es) => { es[0].isIntersecting && !document.hidden ? start() : stop(); }).observe(section);
-  document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
-  section.classList.add("live");
-  return { scene, render: () => composer.render() };
+  if (!opts.manual) {
+    new IntersectionObserver((es) => { es[0].isIntersecting && !document.hidden ? start() : stop(); }).observe(section);
+    document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
+  }
+  const look = (x, y) => { tx = x; ty = y; lastMove = performance.now(); };
+  return { scene, start, stop, look, render: () => composer.render() };
 }

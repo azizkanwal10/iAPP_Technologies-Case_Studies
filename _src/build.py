@@ -427,28 +427,51 @@ box-shadow:0 -1px 0 rgba(255,255,255,.12) inset,0 40px 80px -40px rgba(10,12,20,
 @keyframes fxLoad{0%{transform:scaleX(0)}60%{transform:scaleX(1)}100%{transform:scaleX(1);opacity:0}}
 html.fx-arrive::after{content:"";position:fixed;inset:0;z-index:200;background:var(--fc);pointer-events:none;animation:fxArrive .6s cubic-bezier(.7,0,.2,1) forwards}
 @keyframes fxArrive{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0)}}
-/* Meet our AI: full-screen 3D mascot */
-.meet{display:block;width:100%;position:relative;height:100vh;height:100svh;min-height:640px;margin-top:72px;background:#000;color:#fff;overflow:hidden}
-.meet-stage{position:absolute;inset:0;background:#000 url(/assets/mascot-poster.webp) 50% 100%/cover no-repeat}
-.meet-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.2s ease}
-.meet.live .meet-stage canvas{opacity:1}
-.meet-stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;background:linear-gradient(transparent,#000);pointer-events:none}
-.meet-ui{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(24px,4vw,52px);pointer-events:none;font-family:"Space Mono",ui-monospace,monospace}
-.meet-ui a{pointer-events:auto}
-.meet-tag{align-self:flex-start;padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+/* Meet our AI: pinned 3D carousel */
+.meet-pin{position:relative;height:260vh;margin-top:72px;background:#000}
+.meet{position:sticky;top:0;display:block;width:100%;height:100vh;height:100svh;min-height:560px;background:#000;color:#fff;overflow:hidden;outline:none}
+.meet-track{position:absolute;inset:0;perspective:1600px}
+.meet-slide{position:absolute;inset:0;background:#000 50% 50%/cover no-repeat;transform-origin:50% 50%;
+  transform:translateX(calc(var(--d,1) * 62%)) rotateY(calc(var(--d,1) * -38deg)) scale(.72);opacity:0;filter:blur(6px);
+  transition:transform 1s cubic-bezier(.7,0,.2,1),opacity .8s ease,filter .8s ease;pointer-events:none}
+.meet-slide.on{transform:none;opacity:1;filter:none;pointer-events:auto}
+.meet-slide canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1s ease}
+.meet-slide.ready canvas{opacity:1}
+.meet-track::after{content:"";position:absolute;left:0;right:0;bottom:0;height:30%;background:linear-gradient(transparent,#000);pointer-events:none}
+.meet-ui{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(20px,4vw,52px);pointer-events:none;font-family:"Space Mono",ui-monospace,monospace}
+.meet-ui a,.meet-ui button{pointer-events:auto}
+.meet-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.meet-tag{padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.75);white-space:nowrap}
+.meet-tabs{display:flex;gap:6px;padding:5px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.meet-tabs button{position:relative;overflow:hidden;display:flex;align-items:center;gap:8px;font:inherit;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);background:none;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;transition:background .3s,color .3s}
+.meet-tabs button b{font-weight:700;opacity:.6}
+.meet-tabs button[aria-selected="true"]{background:#fff;color:#000}
+.meet-tabs button i{position:absolute;left:14px;right:14px;bottom:4px;height:2px;border-radius:2px;background:currentColor;transform:scaleX(0);transform-origin:0 50%;opacity:.35}
+.meet-arrow{position:absolute;top:38%;z-index:2;width:58px;height:58px;margin-top:-29px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);cursor:pointer;transition:background .25s,transform .25s}
+.meet-arrow:hover{background:rgba(255,255,255,.2);transform:scale(1.08)}
+.meet-arrow svg{width:24px;height:24px}
+.meet-arrow.m-prev{left:clamp(14px,3vw,40px)}.meet-arrow.m-next{right:clamp(14px,3vw,40px)}
+.meet-cta{position:absolute;left:50%;top:58%;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;transform:translateX(-50%);padding:16px 26px 18px;border-radius:22px;background:rgba(10,8,16,.55);border:1px solid rgba(255,255,255,.22);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 20px 50px -20px rgba(124,58,237,.7);text-align:center;opacity:0;scale:.9;transition:opacity .5s,scale .5s;pointer-events:none}
+.meet.in .meet-cta{opacity:1;scale:1;transition-delay:.6s}
+.meet.tried .meet-cta{opacity:0;scale:.9;transition-delay:0s}
+.meet-cta .hand{width:34px;height:34px;color:#fff;animation:meetHand 2.2s ease-in-out infinite}
+.meet-cta .t1{font-size:15px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.meet-cta .t2{font-size:12px;color:rgba(255,255,255,.65)}
+@keyframes meetHand{0%,100%{translate:-22px 0}50%{translate:22px 6px}}
 .meet-row{display:flex;justify-content:space-between;align-items:flex-end;gap:28px}
 .meet h2,.meet .big{font-family:inherit;font-weight:400;font-size:clamp(40px,7.4vw,100px);line-height:.95;letter-spacing:-.03em;margin:0;color:#fff}
 .meet .r .big{text-align:right}
 .meet .l p{max-width:390px;margin:20px 0 24px;font-size:14px;line-height:1.7;color:rgba(255,255,255,.62)}
 .meet-btn{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;border-radius:999px;background:#fff;color:#000;font-weight:700;font-size:14px;text-decoration:none;transition:transform .2s ease,background .2s ease}
 .meet-btn:hover{background:#e6e6ea;transform:scale(1.03)}
-.meet.v2 .meet-stage{background-image:url(/assets/mascot-v2-poster.webp)}
-.meet-ver{position:absolute;top:clamp(24px,4vw,52px);right:clamp(24px,4vw,52px);display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto}
-.meet-ver button{font:inherit;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);background:none;border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
-.meet-ver button[aria-pressed="true"]{background:#fff;color:#000}
-.meet-hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38)}
-@media (max-width:760px){.meet{height:auto;min-height:0}.meet-stage{position:relative;inset:auto;width:100%;height:68svh;min-height:420px;background-size:cover}
-.meet-ui{position:static;height:auto;padding:0 20px 44px;margin-top:-56px}.meet-tag{position:absolute;top:20px;left:20px;z-index:2}.meet-ver{top:16px;right:16px}.meet-row{position:relative;z-index:1;flex-direction:column;align-items:flex-start;gap:18px}.meet .r{display:none}.meet-hint{display:none}}
+.meet-progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.1)}
+.meet-progress i{display:block;height:100%;background:linear-gradient(90deg,#7C3AED,#EC4899);transform-origin:0 50%;transform:scaleX(0)}
+.nav-ai{display:inline-flex;align-items:center;gap:6px}
+.nav-ai svg{width:14px;height:14px;color:#BE185D}
+@media (max-width:760px){.meet-pin{height:230vh}.meet-tabs button span{display:none}.meet-tabs button{padding:8px 12px}
+.meet-arrow{width:44px;height:44px;margin-top:-22px;top:46%}.meet-cta{top:auto;bottom:196px;flex-direction:row;gap:10px;padding:10px 18px;border-radius:999px;white-space:nowrap}.meet-cta .t2{display:none}.meet-cta .hand{width:22px;height:22px}.meet-cta .t1{font-size:12px}
+.meet .l p{display:none}.meet h2{font-size:clamp(34px,10vw,44px)}.meet .r{display:none}.meet-btn{margin-top:16px}}
+@media (prefers-reduced-motion:reduce){.meet-pin{height:auto}.meet{position:relative}.meet-slide{transition:none;filter:none}.meet-cta .hand{animation:none}}
 @media (prefers-reduced-motion:reduce){.bob,.cube{animation:none}.sc{position:relative;top:auto}}
 /* results panel */
 .tally{position:relative;overflow:hidden;border:0;border-radius:28px;gap:0;color:#fff;
@@ -611,7 +634,7 @@ def mock(p):
 
 def topbar(home_href, on_color=False):
     return f'''<div class="wrap"><header class="bar"><a class="brand" href="{home_href}"><i>i</i>iApp Technologies</a>
-<nav aria-label="Main"><a class="lnk" href="{home_href}">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>'''
+<nav aria-label="Main"><a class="lnk nav-ai" href="{home_href}#meet"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z"/></svg>Meet our AI</a><a class="lnk" href="{home_href}">Case studies</a><a class="lnk" href="https://iapptechnologies.com/about">About</a><a class="btn" href="https://iapptechnologies.com/business-enquiry">Start a project</a></nav></header></div>'''
 
 FOOT='''<footer><div class="wrap"><span>© 2012–2026 iApp Technologies LLP</span>
 <span><a href="mailto:aziz.k@iapptechnologiesllp.com">aziz.k@iapptechnologiesllp.com</a></span>
@@ -725,27 +748,60 @@ def wall():
     row=lambda L,d: f'<div class="fx-row" data-dir="{d}">'+''.join(f'<img src="/assets/{f}" alt="" loading="lazy" decoding="async">' for f in L+L)+'</div>'
     return f'<section class="fx-wall" aria-hidden="true"><div class="fx-plane">{row(WALL_A,-1)}{row(WALL_B,1)}</div></section>'
 
+MEET_SLIDES=[("1","/assets/mascot.js","/assets/mascot-poster.webp","Headset","A studio-lit AI headset"),
+             ("2","/assets/mascot-v2.js","/assets/mascot-v2-poster.webp","Giraffe","A furred giraffe in iApp goggles")]
 def meet():
-    return '''<section class="meet" id="meet" aria-labelledby="meet-h"><div class="meet-stage" aria-hidden="true"><canvas></canvas></div>
-<div class="meet-ui"><span class="meet-tag">Meet our AI</span>
+    slides=''.join(f'<div class="meet-slide" data-i="{i}" data-src="{src}" style="background-image:url({poster})" aria-hidden="{"false" if i==0 else "true"}"><canvas></canvas></div>' for i,(v,src,poster,name,alt) in enumerate(MEET_SLIDES))
+    tabs=''.join(f'<button type="button" role="tab" data-i="{i}" aria-selected="{"true" if i==0 else "false"}" aria-label="{alt}"><b>0{i+1}</b><span>{name}</span><i></i></button>' for i,(v,src,poster,name,alt) in enumerate(MEET_SLIDES))
+    ARR=lambda d: f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{"M15 5l-7 7 7 7" if d<0 else "M9 5l7 7-7 7"}"/></svg>'
+    return f'''<div class="meet-pin" id="meet"><section class="meet" aria-labelledby="meet-h" aria-roledescription="carousel">
+<div class="meet-track" aria-live="polite">{slides}</div>
+<div class="meet-ui"><div class="meet-top"><span class="meet-tag">Meet our AI</span><div class="meet-tabs" role="tablist" aria-label="Choose a 3D model">{tabs}</div></div>
+<button type="button" class="meet-arrow m-prev" aria-label="Previous model">{ARR(-1)}</button><button type="button" class="meet-arrow m-next" aria-label="Next model">{ARR(1)}</button>
+<div class="meet-cta" aria-hidden="true"><span class="hand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5l13 6-5.6 1.8L10.6 17z"/></svg></span><span class="t1">Move your cursor</span><span class="t2">It follows you. Try it.</span></div>
 <div class="meet-row"><div class="l"><h2 id="meet-h"><span data-s="Built to">Built to</span><br><span data-s="Think">Think</span></h2>
 <p>We design AI that listens, reasons and acts: agents that run real workflows, assistants that answer from your own data, and apps that get smarter with every user.</p>
 <a class="meet-btn" href="mailto:aziz.k@iapptechnologiesllp.com">Talk to our AI team</a></div>
 <div class="r"><p class="big" aria-hidden="true"><span data-s="Built by">Built by</span><br><span data-s="iApp">iApp</span></p></div></div>
-<span class="meet-hint" aria-hidden="true">Move your cursor</span>
-<div class="meet-ver" role="group" aria-label="Choose mascot version"><button type="button" data-v="1">V1 Headset</button><button type="button" data-v="2">V2 Giraffe</button></div></div></section>
-<script>(function(){var s=document.getElementById("meet");if(!s)return;var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-var CH="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~|}{[]:;?><";
-function scr(el,delay){var t=el.getAttribute("data-s");el.innerHTML="&nbsp;";setTimeout(function(){var p=0,id=setInterval(function(){p+=.5;var o="";for(var i=0;i<t.length;i++){if(t[i]===" "){o+=" ";continue}if(i<p)o+=t[i];else if(i<p+3)o+=CH[Math.random()*CH.length|0]}el.textContent=o||"\u00a0";if(p>=t.length){clearInterval(id);el.textContent=t}},25)},delay)}
-var ver="2";try{ver=new URLSearchParams(location.search).get("mascot")||localStorage.getItem("mascotV")||"2"}catch(e){}
-if(ver==="2")s.classList.add("v2");
-[].forEach.call(s.querySelectorAll(".meet-ver button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-v")===ver?"true":"false");
-  b.addEventListener("click",function(){try{localStorage.setItem("mascotV",b.getAttribute("data-v"))}catch(e){}var u=new URL(location.href);u.searchParams.set("mascot",b.getAttribute("data-v"));u.hash="meet";location.replace(u.href)})});
-var load=function(){import(ver==="2"?"/assets/mascot-v2.js":"/assets/mascot.js").then(function(m){m.mount(s)}).catch(function(){s.classList.add("no-webgl")})};
-if(!("IntersectionObserver" in window)){load();return}
-var a=new IntersectionObserver(function(e){if(e[0].isIntersecting){a.disconnect();load()}},{rootMargin:"700px 0px"});a.observe(s);
-if(!reduce){var b=new IntersectionObserver(function(e){if(e[0].isIntersecting){b.disconnect();[].forEach.call(s.querySelectorAll("[data-s]"),function(el,i){scr(el,150+i*260)})}},{threshold:.35});b.observe(s)}
-})();</script>'''
+<div class="meet-progress" aria-hidden="true"><i></i></div></div></section></div>
+<script>(function(){{
+var pin=document.getElementById("meet"),s=pin&&pin.querySelector(".meet");if(!s)return;
+var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches,touch=!matchMedia("(hover: hover) and (pointer: fine)").matches;
+if(touch){{s.querySelector(".t1").textContent="Touch and drag";s.querySelector(".t2").textContent="It follows your finger. Try it."}}
+var slides=[].slice.call(s.querySelectorAll(".meet-slide")),tabs=[].slice.call(s.querySelectorAll(".meet-tabs button")),n=slides.length;
+var api=[],loading=[],cur=0,chosen=false,visible=false,tried=0,lastScroll=0;
+function load(i){{if(api[i]||loading[i])return loading[i];var sl=slides[i];
+  loading[i]=import(sl.getAttribute("data-src")).then(function(m){{return m.mount(s,{{canvas:sl.querySelector("canvas"),manual:true}})}}).then(function(a){{api[i]=a;if(!a)return;sl.classList.add("ready");if(i===cur&&visible)a.start()}}).catch(function(){{sl.classList.add("failed")}});
+  return loading[i]}}
+function go(i,user){{i=(i+n)%n;if(user)chosen=true;if(i===cur&&slides[i].classList.contains("on"))return;
+  slides.forEach(function(sl,k){{var d=k-i;sl.classList.toggle("on",d===0);sl.style.setProperty("--d",d);sl.setAttribute("aria-hidden",d===0?"false":"true")}});
+  tabs.forEach(function(t,k){{t.setAttribute("aria-selected",k===i?"true":"false")}});
+  if(api[cur]&&cur!==i)api[cur].stop();cur=i;load(i);if(api[i]&&visible)api[i].start();load((i+1)%n)}}
+s.querySelector(".m-prev").addEventListener("click",function(){{go(cur-1,true)}});
+s.querySelector(".m-next").addEventListener("click",function(){{go(cur+1,true)}});
+tabs.forEach(function(t,k){{t.addEventListener("click",function(){{go(k,true)}})}});
+s.addEventListener("keydown",function(e){{if(e.key==="ArrowRight"){{go(cur+1,true);e.preventDefault()}}else if(e.key==="ArrowLeft"){{go(cur-1,true);e.preventDefault()}}}});
+var sx=null,sy0=0;s.addEventListener("touchstart",function(e){{sx=e.touches[0].clientX;sy0=e.touches[0].clientY}},{{passive:true}});
+s.addEventListener("touchend",function(e){{if(sx===null)return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy0;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.4)go(cur+(dx<0?1:-1),true);sx=null}},{{passive:true}});
+// interaction prompt: hides once the visitor has played with it for a moment
+var lastP=null;s.addEventListener("pointermove",function(e){{if(lastP)tried+=Math.hypot(e.clientX-lastP[0],e.clientY-lastP[1]);lastP=[e.clientX,e.clientY];if(tried>500)s.classList.add("tried")}},{{passive:true}});
+// pinned scroll: progress turns the head and, unless the visitor picked one, moves through the models
+var bar=s.querySelector(".meet-progress i");
+function onScroll(){{var r=pin.getBoundingClientRect(),span=pin.offsetHeight-innerHeight,p=span>0?Math.min(1,Math.max(0,-r.top/span)):0;
+  bar.style.transform="scaleX("+p.toFixed(3)+")";
+  if(!visible)return;
+  if(!chosen)go(Math.min(n-1,Math.floor(p*n*.999)),false);
+  var a=api[cur];if(a&&!reduce&&performance.now()-lastScroll<1200&&tried<200){{var q=(p*n)%1;a.look(Math.sin(q*Math.PI*2)*.85,Math.cos(q*Math.PI*2)*.25-.1)}}}}
+addEventListener("scroll",function(){{lastScroll=performance.now();onScroll()}},{{passive:true}});
+new IntersectionObserver(function(e){{visible=e[0].isIntersecting&&!document.hidden;s.classList.toggle("in",visible);if(api[cur])visible?api[cur].start():api[cur].stop();if(visible)load(cur)}},{{threshold:.2}}).observe(s);
+document.addEventListener("visibilitychange",function(){{if(api[cur])document.hidden?api[cur].stop():(visible&&api[cur].start())}});
+new IntersectionObserver(function(e){{if(e[0].isIntersecting)load(0)}},{{rootMargin:"900px 0px"}}).observe(pin);
+go(0,false);onScroll();
+// scrambled headings
+var CH="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~|}}{{[]:;?><";
+function scr(el,delay){{var t=el.getAttribute("data-s");el.innerHTML="&nbsp;";setTimeout(function(){{var p=0,id=setInterval(function(){{p+=.5;var o="";for(var i=0;i<t.length;i++){{if(t[i]===" "){{o+=" ";continue}}if(i<p)o+=t[i];else if(i<p+3)o+=CH[Math.random()*CH.length|0]}}el.textContent=o||"\\u00a0";if(p>=t.length){{clearInterval(id);el.textContent=t}}}},25)}},delay)}}
+if(!reduce){{var b=new IntersectionObserver(function(e){{if(e[0].isIntersecting){{b.disconnect();[].forEach.call(s.querySelectorAll("[data-s]"),function(el,i){{scr(el,150+i*260)}})}}}},{{threshold:.35}});b.observe(s)}}
+}})();</script>'''
 
 def spot_visual(p):
     if p.get("shots"):
