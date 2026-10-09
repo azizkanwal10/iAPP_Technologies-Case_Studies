@@ -8,7 +8,7 @@
   var n = cards.length, cur = 0, pos = 0, raf = 0, drag = null;
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
-  var tiltX = 0, tiltY = 0;
+  var tiltX = 0, tiltY = 0, tiltRaf = 0;
 
   function wrap(d) { d = ((d % n) + n) % n; return d > n / 2 ? d - n : d; }
   function spacing() { return Math.min(260, Math.max(120, stage.clientWidth * 0.2)); }
@@ -23,7 +23,6 @@
       c.style.transform = "translate(-50%,-50%) translateX(" + x.toFixed(1) + "px) translateZ(" + z.toFixed(1) + "px) rotateY(" + ry.toFixed(2) + "deg) scale(" + s.toFixed(3) + ")" + tilt;
       c.style.zIndex = String(100 - Math.round(a * 10));
       c.style.opacity = a > 3.6 ? "0" : String(Math.min(1, 4 - a));
-      c.style.setProperty("--g", String(Math.min(1, a)));
       c.classList.toggle("on", a < 0.5);
     });
   }
@@ -41,9 +40,9 @@
     var t = pos + wrap(target - pos);
     if (reduce) { pos = t; layout(pos); return; }
     cancelAnimationFrame(raf);
-    var from = pos, t0 = performance.now(), dur = 620;
+    var from = pos, t0 = performance.now(), dur = 760;
     (function step(now) {
-      var k = Math.min(1, (now - t0) / dur), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 4);
       pos = from + (t - from) * e; layout(pos);
       if (k < 1) raf = requestAnimationFrame(step); else { pos = ((t % n) + n) % n; layout(pos); }
     })(t0);
@@ -75,7 +74,7 @@
       var r = stage.getBoundingClientRect();
       if (e.clientY > r.top && e.clientY < r.bottom) {
         tiltX = ((e.clientX - r.left) / r.width - 0.5) * 10; tiltY = -((e.clientY - r.top) / r.height - 0.5) * 8;
-        if (!raf) layout(pos);
+        if (!raf && !tiltRaf) tiltRaf = requestAnimationFrame(function () { tiltRaf = 0; if (!raf) layout(pos); });
       }
     }
     if (!drag || e.pointerId !== drag.id) return;
@@ -101,13 +100,32 @@
   // horizontal trackpad / shift+wheel moves one person at a time (vertical scrolling is left to the page)
   var wheelLock = 0;
   stage.addEventListener("wheel", function (e) {
-    var dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+    var dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.2 ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
     if (!dx) return;
-    e.preventDefault();
     var now = performance.now();
     if (now < wheelLock || Math.abs(dx) < 4) return;
-    wheelLock = now + 420; select(cur + (dx > 0 ? 1 : -1));
-  }, { passive: false });
+    wheelLock = now + 520; select(cur + (dx > 0 ? 1 : -1));
+  }, { passive: true });
+
+  // centre photo zooms in as the section reaches the middle of the screen, and out as it leaves;
+  // when the visitor comes back to the section, Jagwinder (the first card) is back in the middle
+  var zoom = 1, zoomGoal = 1, zRaf = 0, wasAway = false, HOME = 0;
+  function zoomFrame() {
+    zRaf = 0; zoom += (zoomGoal - zoom) * 0.12;
+    sec.style.setProperty("--zoom", zoom.toFixed(4));
+    if (Math.abs(zoomGoal - zoom) > 0.0005) zRaf = requestAnimationFrame(zoomFrame);
+  }
+  function onScroll() {
+    var r = sec.getBoundingClientRect(), vh = window.innerHeight;
+    if (r.bottom < 0 || r.top > vh) { if (!wasAway) wasAway = true; return; }
+    if (wasAway) { wasAway = false; if (cur !== HOME && !drag) select(HOME, { quiet: true }); }
+    var p = (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2);   // -1 .. 1, 0 = centred
+    zoomGoal = reduce ? 1 : 1 + 0.14 * Math.max(0, 1 - Math.abs(p) * 1.25);
+    if (!zRaf) zRaf = requestAnimationFrame(zoomFrame);
+  }
+  var sTick = 0;
+  window.addEventListener("scroll", function () { if (!sTick) { sTick = 1; requestAnimationFrame(function () { sTick = 0; onScroll(); }); } }, { passive: true });
+  onScroll();
 
   window.addEventListener("resize", function () { layout(pos); });
   sec.classList.add("ready");

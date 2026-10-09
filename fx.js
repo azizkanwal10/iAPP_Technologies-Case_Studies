@@ -66,7 +66,7 @@ function onScroll(){
     var t=clamp((a.bottom-b.top)/a.height,0,1);cards[i].style.transform="scale("+(1-.06*t).toFixed(3)+")";cards[i].style.filter="brightness("+(1-.4*t).toFixed(2)+")"}
   kick();
 }
-W.addEventListener("scroll",onScroll,{passive:true});
+var sTick=0;W.addEventListener("scroll",function(){if(!sTick){sTick=1;requestAnimationFrame(function(){sTick=0;onScroll()})}},{passive:true});
 W.addEventListener("resize",function(){vh=W.innerHeight;onScroll()});
 if(fine){W.addEventListener("pointermove",function(e){tx=e.clientX/W.innerWidth*2-1;ty=e.clientY/vh*2-1;
   if(home){var r=home.getBoundingClientRect();var inside=e.clientX>r.left-80&&e.clientX<r.right+80&&e.clientY>r.top-80&&e.clientY<r.bottom+80;

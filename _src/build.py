@@ -523,13 +523,14 @@ html.fx-arrive::after{content:"";position:fixed;inset:0;z-index:200;background:v
 .tm-kicker b{color:var(--tc);transition:color .6s}
 .tm-head h2{font-size:clamp(36px,5vw,64px);line-height:1;letter-spacing:-.03em;font-weight:850;font-variation-settings:'wdth' 118;margin:0 0 12px}
 .tm-head p{margin:0 auto;max-width:52ch;color:var(--muted)}
-.tm-stage{position:relative;height:clamp(420px,52vw,560px);margin-top:28px;perspective:1400px;transform-style:preserve-3d;touch-action:pan-y;cursor:grab;outline:none;user-select:none;-webkit-user-select:none}
+.tm-stage{position:relative;height:clamp(420px,52vw,560px);margin-top:28px;perspective:1400px;transform-style:preserve-3d;touch-action:pan-y;overscroll-behavior-x:contain;cursor:grab;outline:none;user-select:none;-webkit-user-select:none}
 .tm-stage.dragging{cursor:grabbing}
 .tm-stage:focus-visible .tm-card.on{outline:3px solid var(--tc);outline-offset:6px}
 .tm-card{position:absolute;left:50%;top:50%;width:clamp(220px,26vw,330px);aspect-ratio:4/5;margin:0;border-radius:18px;overflow:hidden;background:#2a2a2f;
   box-shadow:0 30px 60px -28px rgba(10,12,20,.55),0 0 0 1px rgba(255,255,255,.06);transform-style:preserve-3d;will-change:transform;cursor:pointer;--g:0}
 .tm-card img,.tm-ini{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;
-  filter:grayscale(var(--g)) brightness(calc(1 - var(--g) * .22)) contrast(calc(1 + var(--g) * .05));transition:filter .35s}
+  filter:grayscale(1) brightness(.78) contrast(1.05);transition:filter .45s ease;transform-origin:50% 38%;will-change:transform;backface-visibility:hidden}
+.tm-card.on img,.tm-card.on .tm-ini{filter:none;transform:scale(var(--zoom,1))}
 .tm-ini{display:grid;place-items:center;background:radial-gradient(80% 70% at 50% 38%,#4e4e55,#1c1c20)}
 .tm-ini span{font-size:clamp(64px,8vw,110px);font-weight:850;font-variation-settings:'wdth' 120;letter-spacing:-.04em;color:transparent;background:linear-gradient(180deg,#fff,color-mix(in srgb,var(--a) 50%,#fff));-webkit-background-clip:text;background-clip:text}
 .tm-card::after{content:"";position:absolute;inset:auto 0 0 0;height:46%;background:linear-gradient(transparent,rgba(8,8,12,.86));pointer-events:none}
@@ -801,7 +802,7 @@ function onScroll(){
     var t=clamp((a.bottom-b.top)/a.height,0,1);cards[i].style.transform="scale("+(1-.06*t).toFixed(3)+")";cards[i].style.filter="brightness("+(1-.4*t).toFixed(2)+")"}
   kick();
 }
-W.addEventListener("scroll",onScroll,{passive:true});
+var sTick=0;W.addEventListener("scroll",function(){if(!sTick){sTick=1;requestAnimationFrame(function(){sTick=0;onScroll()})}},{passive:true});
 W.addEventListener("resize",function(){vh=W.innerHeight;onScroll()});
 if(fine){W.addEventListener("pointermove",function(e){tx=e.clientX/W.innerWidth*2-1;ty=e.clientY/vh*2-1;
   if(home){var r=home.getBoundingClientRect();var inside=e.clientX>r.left-80&&e.clientX<r.right+80&&e.clientY>r.top-80&&e.clientY<r.bottom+80;
@@ -932,7 +933,7 @@ def team():
         cards+=f'<figure class="tm-card" data-name="{name}" data-role="{role}" data-accent="{acc}" style="--a:{acc}">{pic}<figcaption><b>{name}</b><span>{role}</span></figcaption><i class="tm-idx">0{i+1}</i></figure>'
     dashes=''.join(f'<button type="button" class="tm-dash" aria-label="Show {name}"></button>' for name,_,_,_ in TEAM)
     return f'''<section class="team" id="team" aria-labelledby="team-h" aria-roledescription="carousel" style="--tc:{TEAM[0][3]}">
-<div class="wrap tm-head"><span class="tm-kicker">iApp Technologies · <b>{len(TEAM):02d}</b> people</span><h2 id="team-h">Our Team</h2>
+<div class="wrap tm-head"><span class="tm-kicker">iApp Technologies · <b>Main Pillars</b></span><h2 id="team-h">Our Team</h2>
 <p>The people who plan, build and look after your product, from first call to long after launch.</p></div>
 <div class="tm-stage" tabindex="0" aria-label="Team members. Use the arrow keys to browse.">{cards}</div>
 <div class="tm-ctl"><div class="tm-count"><b class="tm-now">01</b> / {len(TEAM):02d}</div>
