@@ -916,10 +916,10 @@ def spotlight(href):
 # Our Team carousel: photos in assets/team/<slug>.webp (studio-treated, 900x1125). photo=None shows an initials card.
 TEAM=[("Jagwinder Singh","CEO and Founder","jagwinder-singh","#2F4F86"),
       ("Jagmeet Singh","Director of Operations","jagmeet-singh","#24427A"),
-      ("Ajay Negi","Solution Architect","ajay-negi","#6B6458"),
       ("Tijender Singh","Product Team Lead","tijender-singh","#B0185E"),
       ("Pritpal Singh","Service Team Lead","pritpal-singh","#475569"),
       ("Shahnawaz Jameel","Project Manager","shahnawaz-jameel","#1D4FC4"),
+      ("Ajay Negi","Solution Architect","ajay-negi","#6B6458"),
       ("Heena Khullar","Head HR","heena-khullar","#8E2D52"),
       ("Amisha Bhardwaj","HR","amisha-bhardwaj","#0E6E86"),
       ("Aziz Kanwal","VP Sales","aziz-kanwal","#5B3F8C")]
