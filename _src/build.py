@@ -913,9 +913,9 @@ def spotlight(href):
 <p>Our own AI tools, designed, engineered and shipped by the same team that builds for our clients.</p></div><div class="stack">{cards}</div></section>'''
 
 # Our Team carousel: photos in assets/team/<slug>.webp (studio-treated, 900x1125). photo=None shows an initials card.
-TEAM=[("Jagwinder Singh","CEO and Founder","jagwinder-singh","#B4232A"),
+TEAM=[("Jagwinder Singh","CEO and Founder","jagwinder-singh","#2F4F86"),
       ("Jagmeet Singh","Director of Operations","jagmeet-singh","#24427A"),
-      ("Aziz Kanwal","VP Sales",None,"#6D28D9"),
+      ("Aziz Kanwal","VP Sales","aziz-kanwal","#5B3F8C"),
       ("Tijender Singh","Product Team Lead","tijender-singh","#B0185E"),
       ("Pritpal Singh","Service Team Lead","pritpal-singh","#475569"),
       ("Shahnawaz Jameel","Project Manager","shahnawaz-jameel","#1D4FC4"),
