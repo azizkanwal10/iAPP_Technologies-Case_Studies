@@ -515,6 +515,46 @@ html.fx-arrive::after{content:"";position:fixed;inset:0;z-index:200;background:v
 .meet-track{transition:transform .6s cubic-bezier(.2,.8,.2,1)}.meet.chatting .meet-track{transform:translateY(-27%) scale(.92)}
 .aic{max-height:52%}}
 @media (prefers-reduced-motion:reduce){.aic,.aic-msg,.aic-chip{transition:none;animation:none}.aic-av{animation:none}}
+/* Our Team carousel */
+.team{position:relative;overflow:hidden;padding:clamp(64px,8vw,104px) 0 clamp(40px,5vw,64px);
+  background:radial-gradient(70% 60% at 50% 55%,color-mix(in srgb,var(--tc) 14%,transparent),transparent 70%),linear-gradient(180deg,var(--paper),color-mix(in srgb,var(--tc) 7%,var(--paper)));transition:background .8s ease}
+.tm-head{text-align:center}
+.tm-kicker{display:block;font-size:13px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.tm-kicker b{color:var(--tc);transition:color .6s}
+.tm-head h2{font-size:clamp(36px,5vw,64px);line-height:1;letter-spacing:-.03em;font-weight:850;font-variation-settings:'wdth' 118;margin:0 0 12px}
+.tm-head p{margin:0 auto;max-width:52ch;color:var(--muted)}
+.tm-stage{position:relative;height:clamp(420px,52vw,560px);margin-top:28px;perspective:1400px;transform-style:preserve-3d;touch-action:pan-y;cursor:grab;outline:none;user-select:none;-webkit-user-select:none}
+.tm-stage.dragging{cursor:grabbing}
+.tm-stage:focus-visible .tm-card.on{outline:3px solid var(--tc);outline-offset:6px}
+.tm-card{position:absolute;left:50%;top:50%;width:clamp(220px,26vw,330px);aspect-ratio:4/5;margin:0;border-radius:18px;overflow:hidden;background:#2a2a2f;
+  box-shadow:0 30px 60px -28px rgba(10,12,20,.55),0 0 0 1px rgba(255,255,255,.06);transform-style:preserve-3d;will-change:transform;cursor:pointer;--g:0}
+.tm-card img,.tm-ini{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;
+  filter:grayscale(var(--g)) brightness(calc(1 - var(--g) * .22)) contrast(calc(1 + var(--g) * .05));transition:filter .35s}
+.tm-ini{display:grid;place-items:center;background:radial-gradient(80% 70% at 50% 38%,#4e4e55,#1c1c20)}
+.tm-ini span{font-size:clamp(64px,8vw,110px);font-weight:850;font-variation-settings:'wdth' 120;letter-spacing:-.04em;color:transparent;background:linear-gradient(180deg,#fff,color-mix(in srgb,var(--a) 50%,#fff));-webkit-background-clip:text;background-clip:text}
+.tm-card::after{content:"";position:absolute;inset:auto 0 0 0;height:46%;background:linear-gradient(transparent,rgba(8,8,12,.86));pointer-events:none}
+.tm-card figcaption{position:absolute;left:18px;right:18px;bottom:16px;z-index:1;color:#fff;transition:opacity .3s}
+.tm-card figcaption b{display:block;font-size:clamp(17px,1.6vw,21px);font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.tm-card figcaption span{display:block;font-size:13.5px;opacity:.82;margin-top:2px}
+.tm-card:not(.on) figcaption{opacity:.6}
+.tm-card.on{box-shadow:0 40px 80px -30px color-mix(in srgb,var(--a) 60%,rgba(10,12,20,.6)),0 0 0 1px rgba(255,255,255,.08)}
+.tm-idx{position:absolute;left:4px;bottom:-26px;font-style:normal;font-size:12px;letter-spacing:.12em;color:var(--muted);opacity:0}
+.tm-ctl{display:grid;justify-items:center;gap:14px;margin-top:22px}
+.tm-count{font-size:14px;font-weight:700;letter-spacing:.14em;color:var(--muted);font-variant-numeric:tabular-nums}
+.tm-count b{color:var(--tc);transition:color .6s}
+.tm-nav{display:flex;align-items:center;gap:16px}
+.tm-btn{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--rule);background:var(--paper2);color:var(--ink);cursor:pointer;transition:transform .2s,background .2s}
+.tm-btn.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tm-btn:hover{transform:scale(1.07)}
+.tm-btn svg{width:20px;height:20px}
+.tm-dashes{display:flex;gap:7px}
+.tm-dash{width:26px;height:16px;border:0;padding:0;background:none;cursor:pointer;position:relative}
+.tm-dash::before{content:"";position:absolute;left:0;right:0;top:7px;height:2px;border-radius:2px;background:color-mix(in srgb,var(--ink) 22%,transparent);transition:background .4s,height .3s,top .3s}
+.tm-dash[aria-current="true"]::before{background:var(--tc);height:3px;top:6px}
+.tm-dash:hover::before{background:color-mix(in srgb,var(--ink) 45%,transparent)}
+.tm-hint{font-size:12px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:color-mix(in srgb,var(--muted) 80%,transparent)}
+@media (max-width:700px){.tm-card{width:min(64vw,280px)}.tm-stage{height:min(108vw,460px)}.tm-dashes{gap:3px}.tm-dash{width:18px}.tm-nav{gap:10px}}
+@media (prefers-reduced-motion:reduce){.tm-card img,.tm-ini,.team,.tm-dash::before{transition:none}}
 .nav-ai{display:inline-flex;align-items:center;gap:6px}
 .nav-ai svg{width:14px;height:14px;color:#BE185D}
 @media (max-width:760px){.meet-pin{height:230vh}.meet-tabs button span{display:none}.meet-tabs button{padding:8px 12px}
@@ -872,6 +912,34 @@ def spotlight(href):
     return f'''<section class="wrap spot" aria-labelledby="spot-h"><div class="spot-head"><span class="ai-tag">{SPARK}Built in-house</span><h2 id="spot-h">AI products we built</h2>
 <p>Our own AI tools, designed, engineered and shipped by the same team that builds for our clients.</p></div><div class="stack">{cards}</div></section>'''
 
+# Our Team carousel: photos in assets/team/<slug>.webp (studio-treated, 900x1125). photo=None shows an initials card.
+TEAM=[("Jagwinder Singh","CEO and Founder","jagwinder-singh","#B4232A"),
+      ("Jagmeet Singh","Director of Operations","jagmeet-singh","#24427A"),
+      ("Aziz Kanwal","VP Sales",None,"#6D28D9"),
+      ("Tijender Singh","Product Team Lead","tijender-singh","#B0185E"),
+      ("Pritpal Singh","Service Team Lead","pritpal-singh","#475569"),
+      ("Shahnawaz Jameel","Project Manager","shahnawaz-jameel","#1D4FC4"),
+      ("Heena Khullar","Head HR","heena-khullar","#8E2D52"),
+      ("Amisha Bhardwaj","HR","amisha-bhardwaj","#0E6E86"),
+      ("Ajay Negi","Solution Architect","ajay-negi","#6B6458")]
+def team():
+    ARR=lambda d: f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{"M15 5l-7 7 7 7" if d<0 else "M9 5l7 7-7 7"}"/></svg>'
+    cards=''
+    for i,(name,role,photo,acc) in enumerate(TEAM):
+        ini=''.join(w[0] for w in name.split()[:2])
+        pic=(f'<img src="/assets/team/{photo}.webp" alt="{name}, {role}" width="900" height="1125" loading="lazy" decoding="async" draggable="false">' if photo
+             else f'<div class="tm-ini" role="img" aria-label="{name}"><span>{ini}</span></div>')
+        cards+=f'<figure class="tm-card" data-name="{name}" data-role="{role}" data-accent="{acc}" style="--a:{acc}">{pic}<figcaption><b>{name}</b><span>{role}</span></figcaption><i class="tm-idx">0{i+1}</i></figure>'
+    dashes=''.join(f'<button type="button" class="tm-dash" aria-label="Show {name}"></button>' for name,_,_,_ in TEAM)
+    return f'''<section class="team" id="team" aria-labelledby="team-h" aria-roledescription="carousel" style="--tc:{TEAM[0][3]}">
+<div class="wrap tm-head"><span class="tm-kicker">iApp Technologies · <b>{len(TEAM):02d}</b> people</span><h2 id="team-h">Our Team</h2>
+<p>The people who plan, build and look after your product, from first call to long after launch.</p></div>
+<div class="tm-stage" tabindex="0" aria-label="Team members. Use the arrow keys to browse.">{cards}</div>
+<div class="tm-ctl"><div class="tm-count"><b class="tm-now">01</b> / {len(TEAM):02d}</div>
+<div class="tm-nav"><button type="button" class="tm-btn tm-prev" aria-label="Previous person">{ARR(-1)}</button><div class="tm-dashes">{dashes}</div><button type="button" class="tm-btn tm-next dark" aria-label="Next person">{ARR(1)}</button></div>
+<div class="tm-hint" aria-hidden="true">Drag · Swipe · Arrows</div></div><p class="vh tm-live" aria-live="polite"></p>
+</section><script src="/assets/team.js" defer></script>'''
+
 def index_body(href):
     total="11.8M+"
     apps=''.join(f'<a class="app" href="{href(p["slug"])}" style="--c:{p["color"]}"><div class="icon{" has-img" if p.get("icon") else ""}">{icon_inner(p)}</div><b>{p["name"]}{'<em class="ai-mini">AI</em>' if p.get("ai") else ''}</b><span>{p["card_stat"][0]}</span></a>' for p in PROJECTS)
@@ -923,7 +991,7 @@ def index_body(href):
 <div><h3>Maintenance and support</h3><p>Ongoing updates, monitoring, OS compatibility and performance work long after launch.</p></div>
 <div><h3>SEO and marketing</h3><p>App store optimisation, SEO and performance marketing that bring users in and keep them.</p></div>
 </div></section>
-{cta()}</main>{FOOT}'''+TILT
+{team()}{cta()}</main>{FOOT}'''+TILT
 
 def case_body(p, href, nxt):
     st=''.join(f'<div><strong>{v}</strong><span>{l}</span></div>' for v,l in p["stats"])
@@ -988,5 +1056,6 @@ for i,p in enumerate(PROJECTS):
     open(f"{out}/{p['slug']}.html","w").write(page(f"{p['name']} case study | iApp Technologies",p["oneliner"],case_body(p,href_site,nxt)))
 open(f"{out}/fx.js","w").write(FX_JS)
 shutil.copyfile(os.path.join(out,"_src","ai-chat.js"),os.path.join(out,"assets","ai-chat.js"))
+shutil.copyfile(os.path.join(out,"_src","team.js"),os.path.join(out,"assets","team.js"))
 json.dump({"cleanUrls":True,"trailingSlash":False},open(f"{out}/vercel.json","w"),indent=2)
 print("Built", len(PROJECTS), "case studies + index into", out)
